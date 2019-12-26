@@ -31,11 +31,11 @@ googleAnalytics = "UA-93485976-3"
   dateformNumTime = "2006-01-02 15:04 -0700"
 
   # Metadata mostly used in document's head
-  description = "MOSN is a powerful proxy acting as a Service Mesh's data plane written in Golang."
+  description = "MOSN is a powerful cloud-native proxy acts as edge proxy or service mesh's data plane."
   # images = ["https://tva1.sinaimg.cn/large/006tNbRwly1ga7vdteiu6j315d0nan06.jpg"]
   themeColor = "#494f5c"
 
-  homeSubtitle = "A powerful proxy acting as a Service Mesh's data plane written in Golang."
+  homeSubtitle = "A powerful cloud-native proxy acts as edge proxy or service mesh's data plane."
   homeIntro = "The website is under construction."
   footerCopyright = ' &#183; <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a>'
   bgImg = "https://tva1.sinaimg.cn/large/006tNbRwly1ga7vdteiu6j315d0nan06.jpg"  # Homepage background-image URL
@@ -58,7 +58,7 @@ googleAnalytics = "UA-93485976-3"
 
   [[params.social]]
     name = "github"
-    url = "https://github.com/mosn"
+    url = "https://github.com/mosn/mosn"
 
 [menu]
 
