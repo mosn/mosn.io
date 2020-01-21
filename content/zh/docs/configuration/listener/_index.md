@@ -53,7 +53,7 @@ bool 类型，用于透明代理。
 
 ## filter_chains
 
-一组 [FilterChain](../filter-chain) 配置，但是目前 MOSN 仅支持一个 `filter_chain`。
+一组 [FilterChain](./filter-chain) 配置，但是目前 MOSN 仅支持一个 `filter_chain`。
 
 ## stream_filters
 
@@ -65,4 +65,4 @@ bool 类型，当此值为 true 时，表示即便 listener 在 `filter_chain` �
 
 ## connection_idle_timeout
 
-[Duration String](../../custom#duration-string)，空闲连接超时配置。当 listener 上建立的连接空闲超过配置的超时时间以后，MOSN 会将此连接关闭。
+[Duration String](../custom#duration-string)，空闲连接超时配置。当 listener 上建立的连接空闲超过配置的超时时间以后，MOSN 会将此连接关闭。

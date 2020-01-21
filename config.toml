@@ -86,7 +86,7 @@ copyright = "The MOSN Authors"
 version_menu = "Releases"
 
 # Repository configuration (URLs for in-page links to opening issues and suggesting changes)
-github_repo = "https://github.com/mosn/mosn"
+github_repo = "https://github.com/mosn/mosn.io"
 # An optional link to a related project repo. For example, the sibling repository where your product code lives.
 github_project_repo = "https://github.com/mosn/mosn"
 
