@@ -1,6 +1,6 @@
 ---
-title: "MOSN 介绍"
-linkTitle: "MOSN 介绍"
+title: "MOSN 简介"
+linkTitle: "简介"
 weight: 1
 date: 2020-01-20
 description: >

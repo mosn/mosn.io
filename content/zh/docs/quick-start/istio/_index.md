@@ -1,5 +1,6 @@
 ---
 title: "MOSN 作为 Istio 的数据平面"
+linkTitle: "集成 Istio"
 date: 2020-01-20
 weight: 2
 description: >
@@ -24,7 +25,6 @@ MOSN 已通过 Istio 1.1.4 的 bookinfo 测试，关于最新版 Istio 的支持
 下图是 Istio 整体框架下，MOSN 的工作示意图。
 
 <div align=center><img src="mosn-with-service-mesh.png" width = "450" height = "400" alt="MOSN 介绍" /></div>
-
 ## 准备工作
 
 本文以 macOS 为例 ，其他环境可以安装对应版本的软件。
@@ -149,7 +149,6 @@ BookInfo 是一个类似豆瓣的图书应用，它包含四个基础服务：
 -  Details：图书详情，由 ruby 开发
 
 <div align=center><img src="bookinfo.png" width = "550" height = "400" alt="bookinfo" /></div>
-
 ### 部署 BookInfo 应用并注入 MOSN
 
 > 详细过程可以参考 [https://istio.io/docs/examples/bookinfo/](https://istio.io/docs/examples/bookinfo/)

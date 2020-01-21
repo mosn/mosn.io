@@ -59,7 +59,7 @@ description:
 
 ## graceful_timeout
 
-- [Duration String ](../../custom#duration-string)的字符串配置，表示 MOSN 在进行平滑升级时，等待连接关闭的最大时间。
+- [Duration String ](../custom#duration-string)的字符串配置，表示 MOSN 在进行平滑升级时，等待连接关闭的最大时间。
 - 如果没有配置，默认为 30s。
 
 ### processor
@@ -70,4 +70,4 @@ MOSN 使用的 `GOMAXPROCS` 数量
 
 ## Listeners
 
-一组 [Listener](../../listener/overview) 的配置。
+一组 [Listener](../listener) 的配置。

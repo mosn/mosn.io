@@ -1,6 +1,6 @@
 ---
-title: "核心概念"
-linkTitle: "MOSN 核心概念"
+title: "MOSN 核心概念"
+linkTitle: "核心概念"
 date: 2019-01-20
 description: >
   MOSN 的核心概念解析。
