@@ -16,7 +16,7 @@ MOSN是基于Go开发的sidecar，用于service mesh中的数据面代理，建�
 
 [使用 MOSN 作为 HTTP 代理](https://github.com/mosn/mosn/tree/master/examples/cn_readme/http-sample)。
 
-通过设置 log level 为debug， 代码中加更多日志 来辅助分析代码。**本文主要以http-example 为例来分析**。
+通过设置 log level 为debug，代码中加更多日志来辅助分析代码。**本文主要以http-example 为例来分析**。
 
 ### 基本使用
 
@@ -104,13 +104,13 @@ support apis:
 
 ![](mosn_package.png)
 
-几乎所有的interface 定义在 `pkg/types` 中，mosn 基于四层 架构实现（见下文），每一个layer 在types 中有一个go 文件，在`pkg` 下有一个专门的文件夹。
+几乎所有的interface 定义在 `pkg/types` 中，MOSN 基于四层 架构实现（见下文），每一个layer 在types 中有一个go 文件，在`pkg` 下有一个专门的文件夹。
 
 ## 分层架构
 
 ![](mosn_layer_process.png)
 
-一般的服务端编程，二级制数据经过协议解析为 协议对应的model（比如HttpServletRequest） 进而交给上层业务方处理，对于 MOSN 。
+一般的服务端编程，二级制数据经过协议解析为协议对应的model（比如HttpServletRequest） 进而交给上层业务方处理，对于 MOSN 。
 
 1. 协议上数据统一划分为 `header/data/Trailers` 三个部分，转发也是以这三个子部分为基本单位
 2. 借鉴了http2 的stream 的理念（所以Stream interface 上有一个方法是`ID()`），Stream 可以理解为一个子Connection，Stream 之间可以并行请求和响应，通过StreamId关联，用来实现在一个Connection 之上的“多路复用”。PS：为了连接数量与请求数量解耦。
@@ -119,12 +119,12 @@ support apis:
 
 ![](mosn_layer.png)
 
-1. `pkg/types/connection.go` Connection
-2. `pkg/types/stream.go` StreamConnection is a connection runs multiple streams
+1. `pkg/types/connection.go` Connection.
+2. `pkg/types/stream.go` StreamConnection is a connection runs multiple streams.
 3. `pkg/types/stream.go` Stream is a generic protocol stream
 4. 一堆listener 和filter 比较好理解：Method in listener will be called on event occur, but not effect the control flow.Filters are called on event occurs, it also returns a status to effect control flow. Currently 2 states are used: Continue to let it go, Stop to stop the control flow.
-5. protocol 和 stream 两个layer 因和协议有关，不同协议之间实现差异很大，层次不是很清晰
-6. 跨层次调用/数据传输通过跨层次struct 的“组合”来实现。也有一些特别的，比如http net/io 和 stream 分别启动goroutine read/write loop，通过共享数据来 变相的实现跨层调用
+5. protocol 和 stream 两个layer 因和协议有关，不同协议之间实现差异很大，层次不是很清晰。
+6. 跨层次调用/数据传输通过跨层次struct 的“组合”来实现。也有一些特别的，比如http net/io 和 stream 分别启动goroutine read/write loop，通过共享数据来 变相的实现跨层调用。
 
 [MOSN的核心概念解析](https://mosn.io/zh/docs/concept/core-concept/)。
 
@@ -136,7 +136,7 @@ support apis:
 4. Proxy 挑选到后端后，会根据后端使用的协议，将数据发送到对应协议的 Protocol 层，对数据重新做 Encode。
 5. Encode 后的数据会发经过 write filter 并最终使用 IO 的 write 发送出去。
 
-一个请求可能会触发多次 读取操作，因此单个请求可能会多次调用插件的onData 函数。
+一个请求可能会触发多次读取操作，因此单个请求可能会多次调用插件的onData 函数。
 
 ## 连接管理
 
@@ -144,8 +144,8 @@ support apis:
 
 ![](mosn_object.png)
 
-1. 不同颜色 表示所处的 package 不同。
-2. 因为mosn主要是的用途是“代理”， 所以笔者一开始一直在找代理如何实现，但其实呢，mosn 首先是一个tcp server，像tomcat一样，mosn 主要分为连接管理和业务处理两个部分。
+1. 不同颜色表示所处的 package 不同。
+2. 因为MOSN主要是的用途是“代理”， 所以笔者一开始一直在找代理如何实现，但其实呢，MOSN 首先是一个tcp server，像tomcat一样，MOSN 主要分为连接管理和业务处理两个部分。
 3. 业务处理的入口 就是filterManager， 主要由`filterManager.onRead` 和 `filterManager.onWrite` 来实现。 filterManager 聚合ReadFilter 链和WriterFilter链，构成对数据的处理。
 
 ![](mosn_start.png)
@@ -174,7 +174,7 @@ Envoy 对应逻辑 [深入解读Service Mesh的数据面Envoy](https://sq.163yun
 2. 必须要能够正确的拆包，然后以请求为单位进行转发，这是负载均衡的基础。
 3. 可选的RequestId，这是开启多路复用的基础。
 
-[深入解读Service Mesh的数据面Envoy](https://sq.163yun.com/blog/article/213361303062011904)下文以envoy 实现做一下类比 用来辅助理解mosn 相关代码的理念：
+[深入解读Service Mesh的数据面Envoy](https://sq.163yun.com/blog/article/213361303062011904)下文以envoy 实现做一下类比 用来辅助理解MOSN 相关代码的理念：
 
 ![](envoy_on_data.jpg)
 
@@ -201,7 +201,6 @@ func (s *downStream) OnReceive(ctx context.Context,..., data types.IoBuffer, ...
         phase := types.InitPhase
         for i := 0; i < 10; i++ {
             s.cleanNotify()
-
             phase = s.receive(ctx, id, phase)
             switch phase {
             case types.End:
