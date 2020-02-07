@@ -4,7 +4,7 @@
 {{ else }}
 {{$.Scratch.Set "blog-pages" .Pages }}
 {{ end }}
-{{ $pag := .Paginate (( $.Scratch.Get "blog-pages").GroupByDate "2006")}}
+{{ $pag := .Paginate (( $.Scratch.Get "blog-pages").GroupByDate (i18n "year" ))}}
 {{ $pageGroups := $pag.PageGroups}}
 {{ if eq $pag.PageNumber 1 }}
 {{ end }}

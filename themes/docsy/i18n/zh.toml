@@ -39,3 +39,6 @@ other = "创建文档 issue"
 other = "创建项目 issue"
 [post_posts_in]
 other = "发布于"
+
+[year]
+other = "2006 年"
