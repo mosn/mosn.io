@@ -41,3 +41,6 @@ other = "Create documentation issue"
 other = "Create project issue"
 [post_posts_in]
 other = "Posts in"
+
+[year]
+other = "2006"
