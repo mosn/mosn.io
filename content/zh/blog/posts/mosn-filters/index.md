@@ -94,41 +94,48 @@ func GetNetworkFilters(c *v2.FilterChain) []types.NetworkFilterChainFactory {
 
 那么，配置信息又是从哪里来的呢？
 
-1. 配置。用户可以通过定义 MOSN 的 config.json，MOSN 启动时会根据 listener 指定的 filter 数组进行 filters 的初始化。
-    - [https://github.com/mosn/mosn/blob/0.9.0/pkg/mosn/starter.go#L173](https://github.com/mosn/mosn/blob/0.9.0/pkg/mosn/starter.go#L173)
-      ```go
-        func NewMosn(c *config.MOSNConfig) *Mosn {
-        ...
-        
-            var nfcf []types.NetworkFilterChainFactory
-        	var sfcf []types.StreamFilterChainFactory
-        
-            // Note: as we use fasthttp and net/http2.0, the IO we created in mosn should be disabled
-            // network filters
-        	if !lc.UseOriginalDst {
-        	    // network and stream filters
-                nfcf = config.GetNetworkFilters(&lc.FilterChains[0])
-        		sfcf = config.GetStreamFilters(lc.StreamFilters)
+来源1： **配置文件**。
 
-        ...
-      ```
-2. XDS 信息解析。MOSN 里的 XDS client 会将 XDS resources 解析成 MOSN 的 config，当 downstream client 连接进来的时候根据 config 进行组装需要用到的 filters。
-    - [https://github.com/mosn/mosn/blob/0.9.0/pkg/xds/conv/update.go#L71](https://github.com/mosn/mosn/blob/0.9.0/pkg/xds/conv/update.go#L71)
-      ```go
-      // ConvertAddOrUpdateListeners converts listener configuration, used to  add or update listeners
-      func ConvertAddOrUpdateListeners(listeners []*envoy_api_v2.Listener) {
-      ...
-      		var streamFilters []types.StreamFilterChainFactory
-      		var networkFilters []types.NetworkFilterChainFactory
+用户可以通过定义 MOSN 的 config.json，MOSN 启动时会根据 listener 指定的 filter 数组进行 filters 的初始化。
+
+[https://github.com/mosn/mosn/blob/0.9.0/pkg/mosn/starter.go#L173](https://github.com/mosn/mosn/blob/0.9.0/pkg/mosn/starter.go#L173)
+```go
+func NewMosn(c *config.MOSNConfig) *Mosn {
+    ...
+  
+    var nfcf []types.NetworkFilterChainFactory
+  	var sfcf []types.StreamFilterChainFactory
+  
+    // Note: as we use fasthttp and net/http2.0, the IO we created in mosn should be disabled
+    // network filters
+  	if !lc.UseOriginalDst {
+  	    // network and stream filters
+        nfcf = config.GetNetworkFilters(&lc.FilterChains[0])
+  		sfcf = config.GetStreamFilters(lc.StreamFilters)
+
+    ...
+```
       
-      		if !mosnListener.UseOriginalDst {
-      			for _, filterChain := range mosnListener.FilterChains {
-      				nf := config.GetNetworkFilters(&filterChain)
-      				networkFilters = append(networkFilters, nf...)
-      			}
-      			streamFilters = config.GetStreamFilters(mosnListener.StreamFilters)
-      ...
-      ```
+来源2：**XDS 信息解析**。
+
+MOSN 里的 XDS client 会将 XDS resources 解析成 MOSN 的 config，当 downstream client 连接进来的时候根据 config 进行组装需要用到的 filters。
+    
+[https://github.com/mosn/mosn/blob/0.9.0/pkg/xds/conv/update.go#L71](https://github.com/mosn/mosn/blob/0.9.0/pkg/xds/conv/update.go#L71)
+```go
+// ConvertAddOrUpdateListeners converts listener configuration, used to  add or update listeners
+func ConvertAddOrUpdateListeners(listeners []*envoy_api_v2.Listener) {
+...
+		var streamFilters []types.StreamFilterChainFactory
+		var networkFilters []types.NetworkFilterChainFactory
+
+		if !mosnListener.UseOriginalDst {
+			for _, filterChain := range mosnListener.FilterChains {
+				nf := config.GetNetworkFilters(&filterChain)
+				networkFilters = append(networkFilters, nf...)
+			}
+			streamFilters = config.GetStreamFilters(mosnListener.StreamFilters)
+...
+```
 
 所以，filters 的配置主要是来源于配置文件。
 
@@ -138,70 +145,72 @@ filters 的配置是在 listener 之下的，配置解析会将每个 listener �
 
 MOSN 会将连接的上下文信息放在 context 内传给 filter，并将 stream 传给 filter。下面是代码流程：
 
-1. 连接 accept
+1. 连接 accept：
 
     [https://github.com/mosn/mosn/blob/0.9.0/pkg/server/handler.go#L394](https://github.com/mosn/mosn/blob/0.9.0/pkg/server/handler.go#L394)
     ```go
-   func (al *activeListener) OnAccept(rawc net.Conn, useOriginalDst bool, oriRemoteAddr net.Addr, ch chan types.Connection, buf []byte) {
-   ...
-   arc.ContinueFilterChain(ctx, true)
+    func (al *activeListener) OnAccept(rawc net.Conn, useOriginalDst bool, oriRemoteAddr net.Addr, ch chan types.Connection, buf []byte) {
+    ...
+    arc.ContinueFilterChain(ctx, true)
     ```
    
 1. 将连接上下文放入 context，并用以创建 filter chain，并初始化 filter manager，执行 filters 的 `OnNewConnection` 函数。
-    filter manager 是 filters 的代理，外部会在不同阶段调用 filter manager 的不同函数，filter manager 管理 filters 的执行逻辑
+    filter manager 是 filters 的代理，外部会在不同阶段调用 filter manager 的不同函数，filter manager 管理 filters 的执行逻辑：
 
-    1. [https://github.com/mosn/mosn/blob/0.9.0/pkg/server/handler.go#L394](https://github.com/mosn/mosn/blob/0.9.0/pkg/server/handler.go#L394)
+    [https://github.com/mosn/mosn/blob/0.9.0/pkg/server/handler.go#L394](https://github.com/mosn/mosn/blob/0.9.0/pkg/server/handler.go#L394)
 
-       ```go
-       func (al *activeListener) OnAccept(rawc net.Conn, useOriginalDst bool, oriRemoteAddr net.Addr, ch chan types.Connection, buf []byte) {
-       ...
+    ```go
+    func (al *activeListener) OnAccept(rawc net.Conn, useOriginalDst bool, oriRemoteAddr net.Addr, ch chan types.Connection, buf []byte) {
+    ...
    
-   	   ctx := mosnctx.WithValue(context.Background(), types.ContextKeyListenerPort, al.listenPort)
-   	   ctx = mosnctx.WithValue(ctx, types.ContextKeyListenerType, al.listener.Config().Type)
-   	   ctx = mosnctx.WithValue(ctx, types.ContextKeyListenerName, al.listener.Name())
-   	   ctx = mosnctx.WithValue(ctx, types.ContextKeyNetworkFilterChainFactories, al.networkFiltersFactories)
-   	   ctx = mosnctx.WithValue(ctx, types.ContextKeyStreamFilterChainFactories, &al.streamFiltersFactoriesStore)
-   	   ctx = mosnctx.WithValue(ctx, types.ContextKeyAccessLogs, al.accessLogs)
-   	   if rawf != nil {
-   		   ctx = mosnctx.WithValue(ctx, types.ContextKeyConnectionFd, rawf)
-   	   }
-   	   if ch != nil {
-   		   ctx = mosnctx.WithValue(ctx, types.ContextKeyAcceptChan, ch)
-   		   ctx = mosnctx.WithValue(ctx, types.ContextKeyAcceptBuffer, buf)
-   	   }
-   	   if oriRemoteAddr != nil {
-   		   ctx = mosnctx.WithValue(ctx, types.ContextOriRemoteAddr, oriRemoteAddr)
-   	   }
-   	   ...
-       
-       ```
+       ctx := mosnctx.WithValue(context.Background(), types.ContextKeyListenerPort, al.listenPort)
+       ctx = mosnctx.WithValue(ctx, types.ContextKeyListenerType, al.listener.Config().Type)
+       ctx = mosnctx.WithValue(ctx, types.ContextKeyListenerName, al.listener.Name())
+       ctx = mosnctx.WithValue(ctx, types.ContextKeyNetworkFilterChainFactories, al.networkFiltersFactories)
+       ctx = mosnctx.WithValue(ctx, types.ContextKeyStreamFilterChainFactories, &al.streamFiltersFactoriesStore)
+       ctx = mosnctx.WithValue(ctx, types.ContextKeyAccessLogs, al.accessLogs)
+       if rawf != nil {
+          ctx = mosnctx.WithValue(ctx, types.ContextKeyConnectionFd, rawf)
+       }
+       if ch != nil {
+          ctx = mosnctx.WithValue(ctx, types.ContextKeyAcceptChan, ch)
+          ctx = mosnctx.WithValue(ctx, types.ContextKeyAcceptBuffer, buf)
+       }
+       if oriRemoteAddr != nil {
+          ctx = mosnctx.WithValue(ctx, types.ContextOriRemoteAddr, oriRemoteAddr)
+       }
+    ...
+    
+    ```
+    ↓
    
-    1. [https://github.com/mosn/mosn/blob/0.9.0/pkg/server/handler.go#L454](https://github.com/mosn/mosn/blob/0.9.0/pkg/server/handler.go#L454)
-       ```go
-       func (al *activeListener) OnNewConnection(ctx context.Context, conn types.Connection) {
-   	    //Register Proxy's Filter
-   	    filterManager := conn.FilterManager()
-   	    for _, nfcf := range al.networkFiltersFactories {
-   		    nfcf.CreateFilterChain(ctx, al.handler.clusterManager, filterManager)
-   	    }
-   	    filterManager.InitializeReadFilters()
-       ...
-       ```
+    [https://github.com/mosn/mosn/blob/0.9.0/pkg/server/handler.go#L454](https://github.com/mosn/mosn/blob/0.9.0/pkg/server/handler.go#L454)
+    ```go
+    func (al *activeListener) OnNewConnection(ctx context.Context, conn types.Connection) {
+       //Register Proxy's Filter
+       filterManager := conn.FilterManager()
+       for _, nfcf := range al.networkFiltersFactories {
+           nfcf.CreateFilterChain(ctx, al.handler.clusterManager, filterManager)
+       }
+       filterManager.InitializeReadFilters()
+    ...
+    ```
    
 1. 执行 filter 的 `OnData` 方法
     
     [https://github.com/mosn/mosn/blob/0.9.0/pkg/network/connection.go#L428](https://github.com/mosn/mosn/blob/0.9.0/pkg/network/connection.go#L428) -> 
+    
     [https://github.com/mosn/mosn/blob/0.9.0/pkg/network/connection.go#L484](https://github.com/mosn/mosn/blob/0.9.0/pkg/network/connection.go#L484)
    
     ```go
     func (c *connection) doRead() (err error) {
-    ...
-    	c.onRead()
-    ...
+       ...
+       c.onRead()
+       ...
     
     func (c *connection) onRead() {
-    ...
-    c.filterManager.OnRead()
+       ...
+       c.filterManager.OnRead()
     ```
 
 至此，filter 就实现了对连接的干预，filter 就像中间件，可以返回 [type.Continue](https://github.com/mosn/mosn/blob/0.9.0/pkg/types/network.go#L148) 控制连接继续进行，
