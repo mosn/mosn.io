@@ -5,7 +5,7 @@ date: 2019-11-24
 weight: 1
 author: trainyao [@trainyao](https://trainyao.github.io) 
 authorlink: "https://trainyao.github.io"
-originallink: "https://trainyao.github.io/post/sofastack/mosn/reconfig/"
+originallink: "https://trainyao.github.io/post/mosn/reconfig/"
 
 ---
 
