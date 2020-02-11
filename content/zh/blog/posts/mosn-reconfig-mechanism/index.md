@@ -3,7 +3,7 @@ title: mosn 的reconfig 机制
 linkTitle: mosn 的reconfig 机制
 date: 2019-11-24
 weight: 1
-author: trainyao [@trainyao](https://trainyao.github.io) 
+author: "[@trainyao](https://trainyao.github.io)"
 authorlink: "https://trainyao.github.io"
 originallink: "https://trainyao.github.io/post/mosn/reconfig/"
 

@@ -2,7 +2,7 @@
 title: "工程示例"
 linkTitle: "工程示例"
 date: 2020-01-20
-weight: 5
+weight: 4
 description: >
   MOSN 代码中提供的示例工程。
 ---

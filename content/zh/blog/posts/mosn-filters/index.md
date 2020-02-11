@@ -3,7 +3,7 @@ title: MOSN 源码分析 - 插件机制
 linkTitle: MOSN 源码分析 - 插件机制
 date: 2020-02-09
 weight: 1
-author: trainyao [@trainyao](https://trainyao.github.io) 
+author: "[@trainyao](https://trainyao.github.io)"
 authorlink: "https://trainyao.github.io"
 originallink: "https://trainyao.github.io/post/mosn/source_filter/"
 

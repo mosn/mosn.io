@@ -3,7 +3,7 @@ title: "MOSN 源码浅析"
 linkTitle: "MOSN 源码浅析"
 date: 2020-02-02
 weight: 2
-author: 李乾坤 [qiankunli](http://qiankunli.github.io)
+author: "[李乾坤](http://qiankunli.github.io)"
 description: >
   本文主要以http-example 为例来分析。
 ---
