@@ -51,7 +51,7 @@ $ curl -LO https://storage.googleapis.com/minikube/releases/latest/docker-machin
 && sudo chmod u+s /usr/local/bin/docker-machine-driver-hyperkit
 ```
 
-### 安装 Minikube(也可以购买商业 k8s 集群)
+### 安装 Minikube（也可以购买商业 k8s 集群）
 
 推荐使用 Minikube v0.28 以上来体验，请参考 [https://github.com/kubernetes/minikube](https://github.com/kubernetes/minikube)
 
@@ -91,13 +91,17 @@ $ brew install kubernetes-helm
 
 ## 源码方式部署 Istio
 
-### 下载 Istio 源码
+{{% pageinfo color="primary" %}}
+当前 SOFAMesh 已停止 fork 的方式开发，而是转为直接基于 Istio 开发，向 Istio 社区贡献，未来将可以通过 Istio 直接支持。MOSN 已通过 Istio 1.1.4 的 bookinfo 测试，关于最新版 Istio 的支持请参考 [Issue #933](https://github.com/mosn/mosn/issues/933)。
+{{% /pageinfo %}}
+
+### 下载 SOFAMesh 源码
 
 ```bash
-$ git clone https://github.com/istio/istio.git
+$ git clone https://github.com/sofastack/sofa-mesh.git
 ```
 
-### 通过 Helm 安装 Istio
+### 通过 Helm 安装 SOFAMesh
 
 
 **使用 `helm template` 安装**
@@ -113,7 +117,7 @@ $ helm template install/kubernetes/helm/istio --name istio --namespace istio-sys
 ### 验证安装
 
 `istio-system` 命名空间下的 pod 状态都是 Running 时，说明已经部署成功。
-如果仅仅是为了运行bookinfo，只需要pilot,injector,citadel这三个pods运行成功就可以满足最低要求
+如果仅仅是为了运行bookinfo，只需要pilot、injector、citadel这三个pod运行成功就可以满足最低要求
 
 ```bash
 $ kubectl get pods -n istio-system
@@ -132,7 +136,7 @@ prometheus-84bd4b9796-nq8lg                 1/1     Running   0          5m
 
 ### 卸载安装
 
-卸载Istio
+卸载 SOFAMesh。
 
 ```bash
 $ helm template install/kubernetes/helm/istio --name istio --namespace istio-system | kubectl delete -f -
@@ -177,7 +181,7 @@ ratings                    10.0.0.15    <none>        9080/TCP             6m
 reviews                    10.0.0.170   <none>        9080/TCP             6m
 ```
 
-等待所有的 pods 等成功运行起来。
+等待所有的 pod 等成功运行起来。
 
 ```bash
 $ kubectl get pods
