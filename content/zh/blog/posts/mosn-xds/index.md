@@ -1,27 +1,27 @@
 ---
 title: MOSN 源码分析
-linkTitle: MOSN 源码分析 - xds
+linkTitle: MOSN 源码分析 - XDS
 date: 2020-02-13
 weight: 1
 author: "sunfuze@kanzhun.com"
 description: >
-  对mosn xds模块的源码解析。
+  对MOSN XDS模块的源码解析。
   
 ---
 
-  _本文记录了对 MOSN 的源码研究 MOSN的XDS模块_
+  _本文记录了对 MOSN 的源码研究 MOSN的XDS模块。_
   
-  _本文的内容基于 MOSN v0.9.0_
+  _本文的内容基于 MOSN v0.9.0。_
 
 
-**xds用来与pilot-discovery通讯做服务发现功能**
+**XDS用来与pilot-discovery通讯做服务发现功能。**
 
 ## 配置文件&解析
 
-if len(DynamicResources) > 0 && len(StaticResources) > 0 进入xds模式
+if len(DynamicResources) > 0 && len(StaticResources) > 0 进入XDS模式
 
-xds模式下的mosn配置文件mosn_config.json:
-```bash
+XDS模式下的MOSN配置文件mosn_config.json:
+```json
 {
   "dynamic_resources": {
     "lds_config": {
@@ -137,7 +137,7 @@ func init() {
 }
 ```
 
-接受数据类型，将xds类型转换成mosn数据类型，并且加入对应的manager
+接受数据类型，将XDS类型转换成MOSN数据类型，并且加入对应的manager
 
 以HandlerListener为例：
 ```go
@@ -175,7 +175,7 @@ switch(type):
 
 
 ## XDS类型转换
-xds类型转化为mosn类型
+XDS类型转化为MOSN类型
 
 代码如下： 
 [https://github.com/mosn/mosn/blob/master/pkg/xds/conv/convertxds.go](https://github.com/mosn/mosn/blob/master/pkg/xds/conv/convertxds.go)
