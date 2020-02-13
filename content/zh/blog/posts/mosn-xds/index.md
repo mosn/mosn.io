@@ -18,7 +18,7 @@ description: >
 
 ## 配置文件&解析
 
-if len(DynamicResources) > 0 && len(StaticResources) > 0 进入XDS模式
+if len(DynamicResources) > 0 && len(StaticResources) > 0 进入XDS模式。
 
 XDS模式下的MOSN配置文件mosn_config.json:
 ```json
@@ -60,9 +60,9 @@ XDS模式下的MOSN配置文件mosn_config.json:
 }
 ```
 
-解析配置文件构建XDSConfig（XDS客户端的配置）
+解析配置文件构建XDSConfig（XDS客户端的配置）。
 
-构建adsClient（XDS客户端）
+构建adsClient（XDS客户端）。
 
 ```go
 func (c *Client) Start(config *config.MOSNConfig) error {
@@ -126,7 +126,7 @@ func (adsClient *ADSClient) Start() {
 
 ## XDS消息处理和发送
 
-四种类型处理器注册
+四种类型处理器注册。
 
 ```go
 func init() {
@@ -137,7 +137,7 @@ func init() {
 }
 ```
 
-接受数据类型，将XDS类型转换成MOSN数据类型，并且加入对应的manager
+接受数据类型，将XDS类型转换成MOSN数据类型，并且加入对应的manager。
 
 以HandlerListener为例：
 ```go
@@ -175,7 +175,7 @@ switch(type):
 
 
 ## XDS类型转换
-XDS类型转化为MOSN类型
+XDS类型转化为MOSN类型。
 
 代码如下： 
 [https://github.com/mosn/mosn/blob/master/pkg/xds/conv/convertxds.go](https://github.com/mosn/mosn/blob/master/pkg/xds/conv/convertxds.go)
