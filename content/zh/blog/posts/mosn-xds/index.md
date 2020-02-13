@@ -18,7 +18,7 @@ description: >
 
 ## 配置文件&解析
 
-1. 当len(DynamicResources) > 0 && len(StaticResources) > 0 进入xds模式
+if len(DynamicResources) > 0 && len(StaticResources) > 0 进入xds模式
 
 xds模式下的mosn配置文件mosn_config.json:
 ```bash
@@ -60,9 +60,9 @@ xds模式下的mosn配置文件mosn_config.json:
 }
 ```
 
-2. 解析配置文件构建XDSConfig，用作xds连接的配置.
+解析配置文件构建XDSConfig（XDS客户端的配置）
 
-3. 构建adsClient，XDS客户端
+构建adsClient（XDS客户端）
 
 ```go
 func (c *Client) Start(config *config.MOSNConfig) error {
@@ -105,10 +105,10 @@ func (c *Client) Start(config *config.MOSNConfig) error {
 
 
 ## 初始化和启动xds连接
-1. adsClient.start()
-2. adsClient.AdsConfig.GetStreamClient() 构建grpc双向流连接。
+adsClient.start() 
 ```go
 func (adsClient *ADSClient) Start() {
+    //构建grpc双向流连接。
 	adsClient.StreamClient = adsClient.AdsConfig.GetStreamClient()
 	utils.GoWithRecover(func() {
         //认证和开启xds传输，并且设置定时重传
@@ -125,7 +125,9 @@ func (adsClient *ADSClient) Start() {
 
 
 ## XDS消息处理和发送
-1. 四种类型处理器注册
+
+四种类型处理器注册
+
 ```go
 func init() {
 	RegisterTypeURLHandleFunc(EnvoyListener, HandleEnvoyListener)
@@ -135,7 +137,7 @@ func init() {
 }
 ```
 
-2. 接受数据类型，将xds类型转换成mosn数据类型，并且加入对应的manager
+接受数据类型，将xds类型转换成mosn数据类型，并且加入对应的manager
 
 以HandlerListener为例：
 ```go
@@ -155,7 +157,7 @@ func HandleEnvoyListener(client *ADSClient, resp *envoy_api_v2.DiscoveryResponse
 [https://github.com/mosn/mosn/blob/master/pkg/xds/v2/default_handler.go](https://github.com/mosn/mosn/blob/master/pkg/xds/v2/default_handler.go)
 
 
-3. 请求与处理流程简单所示，也可接受pilot-discovery的推送
+请求与处理流程简单所示，也可接受pilot-discovery的推送：
 
 ```
 switch(type):
