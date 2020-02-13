@@ -24,7 +24,8 @@ MOSN 是一款使用 Go 语言开发的网络代理软件，作为云原生的�
 + 多协议
     + 支持 HTTP/1.1，HTTP/2
     + 支持 SOFARPC
-    + 支持 Dubbo 协议（开发中）
+    + 支持 Dubbo 协议
+    + 支持 Tars 协议
 + 核心路由
     + 支持 Virtual Host 路由
     + 支持 Headers/URL/Prefix 路由
@@ -52,6 +53,6 @@ MOSN 是一款使用 Go 语言开发的网络代理软件，作为云原生的�
 
 ## 社区
 
-MOSN 仍处在初级阶段，有很多能力需要补全，所以我们欢迎所有人参与进来与我们一起共建。
+MOSN 开源仍在高速发展中，有很多能力需要补全，欢迎所有人参与进来与我们一起共建。
 
 如有任何疑问欢迎[提交 Issue](https://github.com/mosn/mosn/issues)。
