@@ -3,7 +3,7 @@ title: MOSN 源码分析
 linkTitle: MOSN 源码分析 - XDS
 date: 2020-02-13
 weight: 1
-author: "sunfuze@kanzhun.com"
+author: "[peacocktrain](https://github.com/peacocktrain)"
 description: >
   对MOSN XDS模块的源码解析。
   
