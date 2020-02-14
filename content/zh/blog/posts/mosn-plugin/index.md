@@ -3,7 +3,7 @@ title: MOSN 源码解析 - Plugin 机制
 linkTitle: MOSN 源码解析 - plugin 机制
 date: 2020-02-14
 weight: 1
-author: "[taoyuanyuan(蚂蚁金服)](https://github.com/taoyuanyuan)"
+author: "[烈元（蚂蚁金服）](https://github.com/taoyuanyuan)"
 description: 对 MOSN Plugin 机制的源码解析。
 
 ---
