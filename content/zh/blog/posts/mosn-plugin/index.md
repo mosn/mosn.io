@@ -1,16 +1,15 @@
 ---
-title: MOSN 源码解析
-linkTitle: MOSN 源码解析 - plugin
+title: MOSN 源码解析 - Plugin机制
+linkTitle: MOSN 源码解析 - plugin机制
 date: 2020-02-14
 weight: 1
-author: [taoyuanyuan](https://github.com/taoyuanyuan)
-description: >
-    对MOSN扩展机制的源码解析
-  
+author: "[taoyuanyuan](https://github.com/taoyuanyuan)"
+description: 对MOSN Plugin机制的源码解析
+
 ---
 
 ## 概述
-插件机制是MOSN提供一种方式，可以让MOSN和一个独立的进程进行交互，这个进程可以用任何语言开发，只要满足GRPC的proto定义。
+Plugin机制是MOSN提供一种方式，可以让MOSN和一个独立的进程进行交互，这个进程可以用任何语言开发，只要满足GRPC的proto定义。
 ![undefined](plugin.png) 
 
 为什么我们支持这个功能，跟我们遇到的一些业务场景有关：
@@ -25,7 +24,7 @@ description: >
 `pkg/filter/stream/pluginfilter/`提供了一个使用示例，通过streamfilter把数据传递给一个独立进程处理并反馈。
 我们这儿简单看下`pkg/plugin/exmple/`：
 #### client
-```
+```go
 	client, err := plugin.Register("plugin-server", nil)
 	if err != nil {
 		fmt.Println(err)
@@ -40,7 +39,7 @@ description: >
 * 调用 `client.Call` 发送请求给server进程，然后收到响应并处理。
 
 #### server
-```
+```go
 type filter struct{}
 
 func (s *filter) Call(request *proto.Request) (*proto.Response, error) {
@@ -63,7 +62,7 @@ func main() {
 
 #### 运行
 执行如下命令：
-```
+```bash
 $ go build -o plugin-client client/plugin.go
 $ go build -o plugin-server server/plugin.go
 $ ./plugin-client  2> /tmp/1
@@ -74,7 +73,7 @@ success! response body: world
 MOSN的plugin底层使用了`github.com/hashicorp/go-plugin`库，该库是HashiCorp公司提供的一个成熟的扩展系统，可以方便的扩展自己的插件机制。
 
 先看一下配置文件：
-```
+```json
 	"plugin": {
 		"enable": true,
 		"port_value": 34905,
@@ -86,7 +85,7 @@ MOSN的plugin底层使用了`github.com/hashicorp/go-plugin`库，该库是Hashi
 * `log_dir` plugin扩展的日志目录
 
 在看一下proto定义，Request和Resonse定义了几个通用的数据结构，在使用的时候可以选择使用，比如打印log就需要使用Request的boy字段。Call方法就是我们需要实现的，来进行请求的发送和处理处理。
-```
+```proto
 syntax = "proto3";
 package proto;
 
@@ -110,7 +109,7 @@ service Plugin {
 ```
 
 `Client`管理agent-client的整个生命周期，用户使用该结构体发送请求。
-```
+```go
 // Client is a plugin client, It's primarily used to call request.
 type Client struct {
 	pclient  *plugin.Client
@@ -126,7 +125,7 @@ type Client struct {
 ```
 
 `Config`初始化Client的时候使用，`MaxProcs`表示独立进程的GOMAXPROCS配置，`Args`表示独立进程的启动参数。
-```
+```go
 type Config struct {
 	MaxProcs int
 	Args     []string
@@ -135,7 +134,7 @@ type Config struct {
 
 ## 启动
 `Register`用于client端注册plugin，参数`name`表示server的二进制名字，文件路径同于client的二进制路径。返回的Client用于管理整个agent-client的生命周期。
-```
+```go
 // Register called by plugin client and start up the plugin main process.
 func Register(name string, config *Config) (*Client, error) {
 	pluginLock.Lock()
@@ -158,7 +157,7 @@ func Register(name string, config *Config) (*Client, error) {
 *  `plugin.NewClient`开启plugin框架之后， `pclient.Client()`启动server子进程。
 *   `rpcClient.Dispense("MOSN_SERVICE")` 返回真正的实例client。
 client的整个启动过程就完成了，主要就是启动了server子进程，然后初始化了client GRPC的实例，用于请求发送和接收。
-```
+```go
 func (c *Client) Check() error {
 	.
 	.
@@ -194,7 +193,7 @@ func (c *Client) Check() error {
 * 首先执行`checkParentAlive()`主要是检查父进程(也就是client)是否退出，如果退出了，自己也需要退出。
 * 然后读取环境变量，来设置`GOMAXPROCS`。
 * 最后调用`plugin.Serve`启动GRPC Server服务接收处理请求。
-```
+```go
 // Serve is a function used to serve a plugin. This should be ran on the plugin's main process.
 func Serve(service Service) {
 	checkParentAlive()
@@ -214,7 +213,7 @@ func Serve(service Service) {
 }
 ```
 server最主要的就是实现`Service`接口，用于处理请求，之前的exmple就有一个简单的实现。
-```
+```go
 // Service is a service that Implemented by plugin main process
 type Service interface {
 	Call(request *proto.Request) (*proto.Response, error)
@@ -222,7 +221,7 @@ type Service interface {
 ```
 ## 执行
 client只需要执行`Call`函数就可以发送和接收请求，实现会先通过`Check()`来检查server是否健康，如果不健康会先启动server，然后调用真正的实现。
-```
+```go
 // Call invokes the function synchronously.
 func (c *Client) Call(request *proto.Request, timeout time.Duration) (*proto.Response, error) {
 	if err := c.Check(); err != nil {
@@ -248,7 +247,7 @@ func (c *client) Call(request *proto.Request, timeout time.Duration) (*proto.Res
 }
 ```
 在server端会直接执行我们实现的Call接口。
-```
+```go
 func (s *server) Call(ctx context.Context, req *proto.Request) (*proto.Response, error) {
 	return s.Impl.Call(req)
 }
@@ -256,7 +255,7 @@ func (s *server) Call(ctx context.Context, req *proto.Request) (*proto.Response,
 
 ## 管理
 MOSN提供了HTTP接口来查看plugin的运行状态，以及开启关闭Plugin。
-```
+```bash
 Usage:
 /plugin?status=all
 /plugin?status=pluginname
