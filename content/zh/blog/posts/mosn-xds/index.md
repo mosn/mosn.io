@@ -13,8 +13,14 @@ description: >
   
   _本文的内容基于 MOSN v0.9.0。_
 
-
 **XDS用来与pilot-discovery通讯做服务发现功能。**
+
+**XDS是一类发现服务的总称，包含LDS， RDS， CDS， EDS以及SDS。**
+
+**MOSN通过XDS API可以动态获取Listener（监听器），Route（路由）， Cluster（集群）， Endpoint（集群成员）以及Secret（证书）配置。**
+
+**XDS的基本流程:**
+**Pilot-Discovery的Model -> XDS.pb -> GRPC -> XDS.pb -> MOSN的Model （GRPC包括序列化和网络传输）。**
 
 ## 配置文件&解析
 
@@ -175,9 +181,13 @@ switch(type):
 
 
 ## XDS类型转换
-XDS类型转化为MOSN类型。
 
-代码如下： 
+XDS.pd数据结构类型在：
+[https://github.com/envoyproxy/go-control-plane](https://github.com/envoyproxy/go-control-plane)
+
+收到数据并反序列化为XDS的Model之后，进行结构体转换。
+
+类型转换代码如下： 
 [https://github.com/mosn/mosn/blob/master/pkg/xds/conv/convertxds.go](https://github.com/mosn/mosn/blob/master/pkg/xds/conv/convertxds.go)
 
 
