@@ -1,5 +1,5 @@
 ---
-title: MOSN 源码析 - Plugin机制
+title: MOSN 源码解析 - Plugin机制
 linkTitle: MOSN 源码解析 - plugin机制
 date: 2020-02-14
 weight: 1
@@ -17,7 +17,7 @@ Plugin机制是MOSN提供一种方式，可以让MOSN和一个独立的进程进
 * 比如log打印，在io卡顿的时候会影响Go Runtime的调度，导致请求延迟。我们需要把log独立成进程做隔离。
 * 我们会有一些异构语言的扩展，比如streamfilter的实际逻辑是一个Java语言实现的。
 * 我们需要快速更新一些业务逻辑，但不能频繁的去更新MOSN的代码。
-* 作为类似supervisor的管理工具，管理一些其他进程。
+* 作为类似Supervisor的管理工具，管理一些其他进程。
 
 总结下来就是隔离性，支持异构语言扩展，模块化，进程管理等场景，大家也可以看看还有那些场景可以用到。
 
