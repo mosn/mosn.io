@@ -1,5 +1,5 @@
 ---
-title: MOSN 源码解析 - Plugin机制
+title: MOSN 源码析 - Plugin机制
 linkTitle: MOSN 源码解析 - plugin机制
 date: 2020-02-14
 weight: 1
@@ -12,7 +12,8 @@ description: 对MOSN Plugin机制的源码解析
 Plugin机制是MOSN提供一种方式，可以让MOSN和一个独立的进程进行交互，这个进程可以用任何语言开发，只要满足GRPC的proto定义。
 ![undefined](plugin.png) 
 
-为什么我们支持这个功能，跟我们遇到的一些业务场景有关：
+为什么我们支持这个功能，跟我们遇到的一些业务场景有关： 
+
 * 比如log打印，在io卡顿的时候会影响Go Runtime的调度，导致请求延迟。我们需要把log独立成进程做隔离。
 * 我们会有一些异构语言的扩展，比如streamfilter的实际逻辑是一个jAVA语言实现的。
 * 我们需要快速更新一些业务逻辑，但不能频繁的去更新MOSN的代码。
@@ -153,6 +154,7 @@ func Register(name string, config *Config) (*Client, error) {
 }
 ```
 `newClient`生成Client，其中最重要的是`Check`方法，用于启动server。
+
 *   首先把`GOMAXPROCS`和日志路径通过环境变量传递给server进程。
 *  `plugin.NewClient`开启plugin框架之后， `pclient.Client()`启动server子进程。
 *   `rpcClient.Dispense("MOSN_SERVICE")` 返回真正的实例client。
@@ -190,6 +192,7 @@ func (c *Client) Check() error {
 ```
 
 接下来是server，server端的代码也可以用其他语言实现，只要满足一定的规范，下面看看Go的实现：
+
 * 首先执行`checkParentAlive()`主要是检查父进程(也就是client)是否退出，如果退出了，自己也需要退出。
 * 然后读取环境变量，来设置`GOMAXPROCS`。
 * 最后调用`plugin.Serve`启动GRPC Server服务接收处理请求。
@@ -265,6 +268,6 @@ Usage:
 在disable之后，server就会被关闭，并且不会再启动，主要为了防止server有问题的时候可以关闭掉。
 
 ## 总结
-寄托于开源社区，我们方便的搭建了自己的扩展机制，MOSN也在逐步把自己的想法反馈给社区，共同进步。
+寄托于开源社区，我们方便的搭建了自己的扩展机制，MOSN也把自己的想法反馈给社区，共同进步。
 
 拥抱开源，反哺开源。
