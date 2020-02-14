@@ -15,7 +15,7 @@ Plugin机制是MOSN提供一种方式，可以让MOSN和一个独立的进程进
 为什么我们支持这个功能，跟我们遇到的一些业务场景有关： 
 
 * 比如log打印，在io卡顿的时候会影响Go Runtime的调度，导致请求延迟。我们需要把log独立成进程做隔离。
-* 我们会有一些异构语言的扩展，比如streamfilter的实际逻辑是一个jAVA语言实现的。
+* 我们会有一些异构语言的扩展，比如streamfilter的实际逻辑是一个Java语言实现的。
 * 我们需要快速更新一些业务逻辑，但不能频繁的去更新MOSN的代码。
 * 作为类似supervisor的管理工具，管理一些其他进程。
 
@@ -158,6 +158,7 @@ func Register(name string, config *Config) (*Client, error) {
 *   首先把`GOMAXPROCS`和日志路径通过环境变量传递给server进程。
 *  `plugin.NewClient`开启plugin框架之后， `pclient.Client()`启动server子进程。
 *   `rpcClient.Dispense("MOSN_SERVICE")` 返回真正的实例client。
+
 client的整个启动过程就完成了，主要就是启动了server子进程，然后初始化了client GRPC的实例，用于请求发送和接收。
 ```go
 func (c *Client) Check() error {
@@ -196,6 +197,7 @@ func (c *Client) Check() error {
 * 首先执行`checkParentAlive()`主要是检查父进程(也就是client)是否退出，如果退出了，自己也需要退出。
 * 然后读取环境变量，来设置`GOMAXPROCS`。
 * 最后调用`plugin.Serve`启动GRPC Server服务接收处理请求。
+
 ```go
 // Serve is a function used to serve a plugin. This should be ran on the plugin's main process.
 func Serve(service Service) {
@@ -235,7 +237,7 @@ func (c *Client) Call(request *proto.Request, timeout time.Duration) (*proto.Res
 ```
 
 首先设置timeout请求超时时间，然后在调用GRPC的接口发送请求。
-```
+```go
 func (c *client) Call(request *proto.Request, timeout time.Duration) (*proto.Response, error) {
 	var ctx context.Context
 	var cancel context.CancelFunc
