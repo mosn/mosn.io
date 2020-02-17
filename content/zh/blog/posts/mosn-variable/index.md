@@ -7,7 +7,7 @@ author: "[黄润豪](https://github.com/glyasai)"
 description: 对 MOSN 变量机制的源码解析。
 ---
 
-本文的目的是分析 MOSN 源码中的`变量机制`.
+本文的目的是分析 MOSN 源码中的`变量机制`。
 
 ## 什么是变量机制
 
