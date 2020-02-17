@@ -77,22 +77,30 @@ func registerTestVarDefs() {
 }
 ```
 
-- 通过 `variable.NewBasicVariable` 实例化各种 `variable.Variable`
-- 再利用 `variable.RegisterVariable` 或 `RegisterPrefixVariable` 函数注册已实例化的变量
+- 通过 `variable.NewBasicVariable` 初始化各种 `variable.Variable` 的定义，再利用 `variable.RegisterVariable` 或 `RegisterPrefixVariable` 函数进行注册
 
-结构体 `variable.Variable` 的定义如下, 完整代码清参考[这里](https://github.com/mosn/mosn/blob/1609ae144136039508dda6d0c5d03c1f732cb107/pkg/variable/var.go#L21)：
+接口 `variable.Variable` 的定义如下, 完整代码清参考[这里](https://github.com/mosn/mosn/blob/1609ae144136039508dda6d0c5d03c1f732cb107/pkg/variable/types.go#L43)：
 
 ```golang
-type BasicVariable struct {
-    getter GetterFunc
-    setter SetterFunc
-    name  string
-    data  interface{}
-    flags uint32
+type Variable interface {
+	// variable name
+	Name() string
+	// variable data, which is useful for getter/setter
+	Data() interface{}
+	// variable flags
+	Flags() uint32
+	// value getter
+	Getter() GetterFunc
+	// value setter
+	Setter() SetterFunc
 }
 ```
 
-该结构体定义了变量的获取方式 `getter`, 设置方式 `setter`, 变量名 `name`, 变量值 `data` 和是否需要缓存的标志 `flags`.
+- Name: 获取变量名
+- Data: 获取变量的实际值
+- Flags: 是否需要缓存的标志
+- Getter: 获取变量值的函数
+- Setter: 设置变量值的函数
 
 再来看函数 `variable.RegisterVariable`, 完整代码清参考[这里](https://github.com/mosn/mosn/blob/1609ae144136039508dda6d0c5d03c1f732cb107/pkg/variable/factory.go#L75)：
 
