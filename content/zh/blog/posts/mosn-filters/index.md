@@ -1,6 +1,6 @@
 ---
-title: MOSN 源码分析 - 插件机制
-linkTitle: MOSN 源码分析 - 插件机制
+title: MOSN 源码解析 - filter扩展机制
+linkTitle: MOSN 源码解析 - filter扩展机制
 date: 2020-02-09
 weight: 1
 author: "[@trainyao](https://trainyao.github.io)"
@@ -9,7 +9,7 @@ originallink: "https://trainyao.github.io/post/mosn/source_filter/"
 
 ---
 
-本文记录了对 MOSN 的源码研究 - MOSN 的插件机制, 以及如何创建自己的插件来扩展 MOSN。
+本文记录了对 MOSN 的源码研究 - MOSN 的filter扩展机制, 以及如何创建自己的filter来扩展 MOSN。
 
 本文的内容基于 MOSN v0.9.0。
 
@@ -259,7 +259,7 @@ drwxr-xr-x   4 mac  staff  128 Feb  5 08:52 payloadlimit // 限流相关
 
 ## 总结
 
-本文通过分析 MOSN 源码，简述了 MOSN 的插件扩展机制，并简述了实现自己的 filter 需要做的东西。大家可以通过该机制，使用 MONS 轻松 cover 自己具体的使用场景。
+本文通过分析 MOSN 源码，简述了 MOSN 的filter扩展机制，并简述了实现自己的 filter 需要做的东西。大家可以通过该机制，使用 MONS 轻松 cover 自己具体的使用场景。
 
 ---
 
