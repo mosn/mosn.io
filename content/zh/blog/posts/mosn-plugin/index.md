@@ -76,7 +76,7 @@ MOSN 的 plugin 底层使用了`github.com/hashicorp/go-plugin`库，该库是 H
 先看一下配置文件：
 ```json
 	"plugin": {
-		"log_dir": "/home/admin/mosn/logs/"
+		"log_base": "/home/admin/mosn/logs/"
 	}
 ```
 * `log_dir` plugin 传递给扩展进程的日志目录
@@ -167,7 +167,7 @@ func (c *Client) Check() error {
 		procs = c.config.MaxProcs
 	}
 	cmd.Env = append(cmd.Env, fmt.Sprintf("MOSN_PROCS=%d", procs))
-	cmd.Env = append(cmd.Env, fmt.Sprintf("MOSN_LOGDIR=%s", pluginLogDir))
+	cmd.Env = append(cmd.Env, fmt.Sprintf("MOSN_LOGBASE=%s", pluginLogBase))
 
 	pclient := plugin.NewClient(&plugin.ClientConfig{
 		HandshakeConfig: Handshake,
