@@ -79,7 +79,7 @@ MOSN 的 plugin 底层使用了`github.com/hashicorp/go-plugin`库，该库是 H
 		"log_base": "/home/admin/mosn/logs/"
 	}
 ```
-* `log_dir` plugin 传递给扩展进程的日志目录
+* `log_base` plugin 传递给扩展进程的日志目录
 
 在看一下 proto 定义，Request 和 Resonse 定义了几个通用的数据结构，在使用的时候可以选择使用，比如打印 log 就需要使用 Request 的 boy 字段。Call 方法就是我们需要实现的，来进行请求的发送和处理处理。
 ```proto
