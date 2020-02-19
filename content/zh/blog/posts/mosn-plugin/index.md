@@ -22,7 +22,7 @@ Plugin 机制是 MOSN 提供的一种方式，可以让 MOSN 和一个独立的�
 总结下来就是隔离性，支持异构语言扩展，模块化，进程管理等场景，大家也可以看看还有哪些场景可以用到。
 
 ## 使用方法
-`pkg/filter/stream/pluginfilter/`提供了一个使用示例，通过 streamfilter 把数据传递给一个独立进程处理并反馈。
+`examples/codes/plugin/pluginfilter/`提供了一个使用示例，通过 streamfilter 把数据传递给一个独立进程处理并反馈。  
 我们这儿简单看下`pkg/plugin/example/`：
 #### client
 ```go
@@ -76,14 +76,10 @@ MOSN 的 plugin 底层使用了`github.com/hashicorp/go-plugin`库，该库是 H
 先看一下配置文件：
 ```json
 	"plugin": {
-		"enable": true,
-		"port_value": 34905,
-		"log_dir": "/home/admin/mosn/logs/"
+		"log_base": "/home/admin/mosn/logs/"
 	}
 ```
-* `enable`用于开启 plugin 的 admin api 接口
-* `port_value`启动的端口
-* `log_dir` plugin 扩展的日志目录
+* `log_base` plugin 传递给扩展进程的日志目录
 
 在看一下 proto 定义，Request 和 Resonse 定义了几个通用的数据结构，在使用的时候可以选择使用，比如打印 log 就需要使用 Request 的 boy 字段。Call 方法就是我们需要实现的，来进行请求的发送和处理处理。
 ```proto
@@ -171,7 +167,7 @@ func (c *Client) Check() error {
 		procs = c.config.MaxProcs
 	}
 	cmd.Env = append(cmd.Env, fmt.Sprintf("MOSN_PROCS=%d", procs))
-	cmd.Env = append(cmd.Env, fmt.Sprintf("MOSN_LOGDIR=%s", pluginLogDir))
+	cmd.Env = append(cmd.Env, fmt.Sprintf("MOSN_LOGBASE=%s", pluginLogBase))
 
 	pclient := plugin.NewClient(&plugin.ClientConfig{
 		HandshakeConfig: Handshake,
