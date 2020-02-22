@@ -24,7 +24,7 @@ MOSN 在内存管理复用方面有 `内存对象注册/管理` 和 `ByteBuffer/
 MOSN 在 go `sync` 包外，对 `sync.Pool` 对象进行了进一步封装，增加了管理和易用性。
 
 MOSN 的 buffer 包提供了注册函数和统一的接口。将实现了接口的不同类型的 buffer 对象注册到 buffer 包，
-在用到的使用通过 buffer 包导出的方法进行初始化和管理，增强了内存对象的管理。
+在用到的时候通过 buffer 包导出的方法进行初始化和管理，增强了内存对象的管理。
 
 而易用性方面，MOSN 封装了 `bufferValue` 对象，管理上面初始化出来的对象，并且将 bufferValue 对象也进行了池化管理。在这之上，封装出方法 
 `NewBufferPoolContext` 和 `PoolContext`，使内部根据 context 传值的场景更加易用。MOSN 里面在不同协程协作（比如连接被协程1 accept 后，
@@ -42,7 +42,7 @@ MOSN 的 buffer 包提供了注册函数和统一的接口。将实现了接口�
 
 ### 1. 内存对象注册/管理
 
-#### 注册管理：
+#### 注册管理
 
 这是 bufferPool 相关的简单类图。
 
@@ -52,7 +52,7 @@ MOSN 定义了 `bufferPoolCtx` 接口，使用 buffer 包需要将实现了这�
 
 其中 `Index()` 方法返回注册时写入的 index 值；`New()` 方法是用来初始化待缓存对象的；而 `Reest()` 方法是将内存对象放回 pool 前的重置逻辑。
 
-[https://github.com/mosn/mosn/blob/master/pkg/buffer/buffer.go#L70](https://github.com/mosn/mosn/blob/master/pkg/buffer/buffer.go#L70)
+[https://github.com/mosn/mosn/blob/1609ae1441/pkg/buffer/buffer.go#L70](https://github.com/mosn/mosn/blob/1609ae1441/pkg/buffer/buffer.go#L70)
 ```go
 RegisterBuffer(poolCtx types.BufferPoolCtx) {
 	...
@@ -61,16 +61,16 @@ RegisterBuffer(poolCtx types.BufferPoolCtx) {
 	...
 ```
 
-注册过程大致是将传入的对象保存在全局变量 bPool 中，并给它分配一个全局唯一的 index 值作为标记。
+注册过程大致是将传入的对象保存在全局变量 bPool 中，并给它分配一个全局唯一标记。
 
 注册后的结构图大概是这样的：
 
 ![](./struct.png)
 
-bPool 全局变量保存着已注册的 index 值 到 bufferPool 对象的索引, 在需要获取对象时根据 index 值找到对应的 pool，调用 ctx.New()，或 sync.Pool.Get()；
+bPool 全局变量保存着已注册的 ctx, 在需要获取对象时找到对应的 pool，调用 ctx.New()，或 sync.Pool.Get()；
 在需要 give 对象时，先调用 ctx.Reset() 方法对复用对象进行重置，然后调用 sync.Pool.Put()，至此实现了对 sync.Pool 的封装管理和扩展。
 
-[https://github.com/mosn/mosn/blob/master/pkg/buffer/buffer.go#L91](https://github.com/mosn/mosn/blob/master/pkg/buffer/buffer.go#L91)
+[https://github.com/mosn/mosn/blob/1609ae1441/pkg/buffer/buffer.go#L91](https://github.com/mosn/mosn/blob/1609ae1441/pkg/buffer/buffer.go#L91)
 ```go
 // Take returns a buffer from buffer pool
 func (p *bufferPool) take() (value interface{}) {
@@ -88,11 +88,11 @@ func (p *bufferPool) give(value interface{}) {
 }
 ```
 
-#### 易用性：
+#### 易用性
 
 然后是结构图右边的 valuePool 部分。`valuePool` 是 `bufferValue` 对象的 sync.Pool。我们先来看 valuePool 的结构：
 
-[http://github.com/mosn/mosn/blob/master/pkg/buffer/buffer.go#L105](https://github.com/mosn/mosn/blob/master/pkg/buffer/buffer.go#L105)
+[http://github.com/mosn/mosn/blob/1609ae1441/pkg/buffer/buffer.go#L105](https://github.com/mosn/mosn/blob/1609ae1441/pkg/buffer/buffer.go#L105)
 ```go
 // bufferValue is buffer pool's Value
 type bufferValue struct {
@@ -101,11 +101,25 @@ type bufferValue struct {
 }
 ```
 
-其中 `value/transmit` 域用来保存从注册表初始化出来的内存对象（transmit 域保存着从其他 context 复制过来的内存对象），数组的索引与上文说的 index 值对应，而数组值即待复用对象的指针。全局变量 `vPool` 保存了 bufferValue 的 sync.Pool，即 bufferValue 本身也是可以复用的。
+其中 `value/transmit` 域用来保存从注册表初始化出来的内存对象的指针（transmit 域保存着从其他 context 复制过来的内存对象）。
+全局变量 `vPool` 保存了 bufferValue 的 sync.Pool，即 bufferValue 本身也是可以复用的。
 
-使用时，通过 `NewBufferPoolContext` 方法新建一个 bufferValue：
+这里为什么要一个 transmit 域和复制功能呢？可以从使用到的地方看到，在接收到 upstream response 的时候，因为还没解析 stream，
+goroutine 还不能知道对应的 downstream request 和其 context 的 bufferValue，这时需要分配一个 bufferValue  保存解析 stream 的信息，
+等能够关联上的时候再拷贝到 transmit 域，等释放的时候统一释放。
 
-[https://github.com/mosn/mosn/blob/master/pkg/buffer/buffer.go#L112](https://github.com/mosn/mosn/blob/master/pkg/buffer/buffer.go#L112)
+[https://github.com/mosn/mosn/blob/1609ae1441/pkg/stream/http2/stream.go#L652](https://github.com/mosn/mosn/blob/1609ae1441/pkg/stream/http2/stream.go#L652)
+```go
+
+func (conn *clientStreamConnection) handleFrame(ctx context.Context, i interface{}, err error) {
+	...
+	mbuffer.TransmitBufferPoolContext(stream.ctx, ctx)
+
+```
+
+回到易用性的介绍，在使用时，通过 `NewBufferPoolContext` 方法新建一个 bufferValue：
+
+[https://github.com/mosn/mosn/blob/1609ae1441/pkg/buffer/buffer.go#L112](https://github.com/mosn/mosn/blob/1609ae1441/pkg/buffer/buffer.go#L112)
 
 ```go
 // NewBufferPoolContext returns a context with bufferValue
@@ -127,9 +141,9 @@ func newBufferValue() (value *bufferValue) {
 }
 ```
 
-获取内存对象时，调用 `PoolContext` 方法获取 bufferValue 对象，传入注册表对象调用其 `Find` 方法，Find 方法会根据注册表对象获取 index，并且初始化一个内存对象放在 value 域里。
+获取内存对象时，调用 `PoolContext` 方法获取 bufferValue 对象，传入注册表对象调用其 `Find` 方法，Find 方法会根据注册表对象获取对应的 pool，并且初始化一个内存对象放在 value 域里。
 
-[https://github.com/mosn/mosn/blob/master/pkg/buffer/buffer.go#L182](https://github.com/mosn/mosn/blob/master/pkg/buffer/buffer.go#L182)
+[https://github.com/mosn/mosn/blob/1609ae1441/pkg/buffer/buffer.go#L182](https://github.com/mosn/mosn/blob/1609ae1441/pkg/buffer/buffer.go#L182)
 
 ```go
 PoolContext(ctx context.Context) *bufferValue {
@@ -142,7 +156,7 @@ PoolContext(ctx context.Context) *bufferValue {
 }
 ```
 
-[https://github.com/mosn/mosn/blob/master/pkg/buffer/buffer.go#L138](https://github.com/mosn/mosn/blob/master/pkg/buffer/buffer.go#L138)
+[https://github.com/mosn/mosn/blob/1609ae1441/pkg/buffer/buffer.go#L138](https://github.com/mosn/mosn/blob/1609ae1441/pkg/buffer/buffer.go#L138)
 ```go
 (bv *bufferValue) Find(poolCtx types.BufferPoolCtx, x interface{}) interface{} {
 	i := poolCtx.Index()
@@ -157,7 +171,7 @@ PoolContext(ctx context.Context) *bufferValue {
 
 // Take returns buffer from buffer pools
 func (bv *bufferValue) Take(poolCtx types.BufferPoolCtx) (value interface{}) {
-	i := poolCtx.Index() // 获取 index 值
+	i := poolCtx.Index() // 获取全局唯一标记
 	value = bPool[i].take() // 调用注册表获取对象
 	bv.value[i] = value // 放入 value
 	return
@@ -166,7 +180,7 @@ func (bv *bufferValue) Take(poolCtx types.BufferPoolCtx) (value interface{}) {
 
 使用完毕，只需调用 bufferValue 的 `Give` 方法，该方法会将其下管理的内存对象都归还到对应的 Pool 去，并且将自己归还到 vPool。
 
-[https://github.com/mosn/mosn/blob/master/pkg/buffer/buffer.go#L158](https://github.com/mosn/mosn/blob/master/pkg/buffer/buffer.go#L158)
+[https://github.com/mosn/mosn/blob/1609ae1441/pkg/buffer/buffer.go#L158](https://github.com/mosn/mosn/blob/1609ae1441/pkg/buffer/buffer.go#L158)
 ```go
 // Give returns buffer to buffer pools
 func (bv *bufferValue) Give() {
@@ -191,6 +205,38 @@ func (bv *bufferValue) Give() {
 	// Give bufferValue to Pool
 	// 归还自己
 	vPool.Put(bv)
+}
+```
+
+#### 使用场景
+
+上述的方法会在哪里用到呢？
+
+MOSN 的请求处理是交给不同的 goroutine 来进行的，而请求上下文信息，如 host、header、body 等信息通过 context 来在不同的协程之间传递。
+而内存复用 bufferValue 与 context 进行绑定，意味着在请求处理期间不同的协程都可以通过 context 获取到请求上下文信息。
+所以，bufferValue 在请求 accept 时申请，在请求处理结束时释放。
+
+[https://github.com/mosn/mosn/blob/1609ae1441/pkg/stream/http/stream.go#L338](https://github.com/mosn/mosn/blob/1609ae1441/pkg/stream/http/stream.go#L338)
+```go
+func newServerStreamConnection(ctx context.Context, connection api.Connection,
+	...
+
+	// init first context
+	// Next 方法会调用上文的 NewBufferPoolContext 方法
+	ssc.contextManager.Next()
+    ...
+```
+
+使用完毕，清理 downstream 时清理 bufferValue：
+
+[https://github.com/mosn/mosn/blob/1609ae1441/pkg/proxy/downstream.go#L1325](https://github.com/mosn/mosn/blob/1609ae1441/pkg/proxy/downstream.go#L1325)
+```go
+func (s *downStream) giveStream() {
+	...
+	// Give buffers to bufferPool
+	if ctx := mbuffer.PoolContext(s.context); ctx != nil {
+		ctx.Give()
+	}
 }
 ```
 
@@ -219,11 +265,36 @@ type bufferSlot struct {
 ```
 每个 slot 对应一种尺寸的 byteBuffer 的 pool，以及 `defaultSize` 域保存着尺寸。`byteBufferPool` 对象的 `pool` 域保存着多个 slot。
 
+再来看操作方法 `GetBytes` `PutBytes`，具体逻辑主要是操作 `take` 和 `give` 方法。这两个方法后面会分析。
+
+[https://github.com/mosn/mosn/blob/1609ae1441/vendor/mosn.io/pkg/buffer/bytebuffer_pool.go#L28](https://github.com/mosn/mosn/blob/1609ae1441/vendor/mosn.io/pkg/buffer/bytebuffer_pool.go#L28)
+
+[https://github.com/mosn/mosn/blob/1609ae1441/vendor/mosn.io/pkg/buffer/bytebuffer_pool.go#L145](https://github.com/mosn/mosn/blob/1609ae1441/vendor/mosn.io/pkg/buffer/bytebuffer_pool.go#L145)
+
+```go
+...
+// global bbPool
+var bbPool *byteBufferPool
+...
+
+// GetBytes returns *[]byte from byteBufferPool
+func GetBytes(size int) *[]byte {
+	return bbPool.take(size)
+}
+
+// PutBytes Put *[]byte to byteBufferPool
+func PutBytes(buf *[]byte) {
+	bbPool.give(buf)
+}
+...
+
+```
+
 为了提高复用率，当申请一个非 64 字节对齐尺寸的 byte buffer 时（如 200），MOSN 实际上会从 slot 2，即 defaultSize = 256 的 slot 返回对象，并返回切片 len = 200 的 byte 切片。
 
 初始化时，将 64、128、256... 以此类推的尺寸的 byte slot 初始化到 byteBufferPool 的 pool 域内：
 
-[https://github.com/mosn/mosn/blob/master/vendor/mosn.io/pkg/buffer/bytebuffer_pool.go#L49](https://github.com/mosn/mosn/blob/master/vendor/mosn.io/pkg/buffer/bytebuffer_pool.go#L49)
+[https://github.com/mosn/mosn/blob/1609ae1441/vendor/mosn.io/pkg/buffer/bytebuffer_pool.go#L49](https://github.com/mosn/mosn/blob/1609ae1441/vendor/mosn.io/pkg/buffer/bytebuffer_pool.go#L49)
 ```go
 // newByteBufferPool returns byteBufferPool
 func newByteBufferPool() *byteBufferPool {
@@ -247,7 +318,7 @@ func newByteBufferPool() *byteBufferPool {
 
 使用时，根据尺寸算出对应的 slot，从对应的 slot 返回该尺寸的 byte 数组：
 
-[https://github.com/mosn/mosn/blob/master/vendor/mosn.io/pkg/buffer/bytebuffer_pool.go#L65](https://github.com/mosn/mosn/blob/master/vendor/mosn.io/pkg/buffer/bytebuffer_pool.go#L65)
+[https://github.com/mosn/mosn/blob/1609ae1441/vendor/mosn.io/pkg/buffer/bytebuffer_pool.go#L65](https://github.com/mosn/mosn/blob/1609ae1441/vendor/mosn.io/pkg/buffer/bytebuffer_pool.go#L65)
 ```go
 func (p *byteBufferPool) slot(size int) int {
 	// 比如要获取 200 size 的 buffer
@@ -271,7 +342,7 @@ func (p *byteBufferPool) slot(size int) int {
 	return slot
 }
 ```
-[https://github.com/mosn/mosn/blob/master/vendor/mosn.io/pkg/buffer/bytebuffer_pool.go#L87](https://github.com/mosn/mosn/blob/master/vendor/mosn.io/pkg/buffer/bytebuffer_pool.go#L87)
+[https://github.com/mosn/mosn/blob/1609ae1441/vendor/mosn.io/pkg/buffer/bytebuffer_pool.go#L87](https://github.com/mosn/mosn/blob/1609ae1441/vendor/mosn.io/pkg/buffer/bytebuffer_pool.go#L87)
 ```go
 // take returns *[]byte from byteBufferPool
 func (p *byteBufferPool) take(size int) *[]byte {
@@ -294,17 +365,19 @@ func (p *byteBufferPool) take(size int) *[]byte {
 	return b
 }
 ```
-使用完毕时，对应的就是将 byte 数组放回对应的 slot 里，这里比较好理解，各位可以自行看源码：
 
-[https://github.com/mosn/mosn/blob/master/vendor/mosn.io/pkg/buffer/bytebuffer_pool.go#L106](https://github.com/mosn/mosn/blob/master/vendor/mosn.io/pkg/buffer/bytebuffer_pool.go#L106)
+byte 数组使用完毕时，对应的就是将 byte 数组放回对应的 slot 里，这里比较好理解，各位可以自行看源码：
 
+[https://github.com/mosn/mosn/blob/1609ae1441/vendor/mosn.io/pkg/buffer/bytebuffer_pool.go#L106](https://github.com/mosn/mosn/blob/1609ae1441/vendor/mosn.io/pkg/buffer/bytebuffer_pool.go#L106)
+
+这两处使用切片指针，主要考虑操作 sync.Pool 的 `Get`、`Put` 方法时避免参数拷贝问题。
 
 #### IOBuffer
 
 IOBuffer 及 IO buffer pool 就比较好理解了，主要是定义了与 IO 相关的接口，然后实现方法是基于上文 byte buffer 的使用方法的封装，即 read 是从 byte buffer 里读取、write 是将数据 copy 进 byte buffer。
 有了上文的基础，这里大家可以根据源码去看具体的实现，并不难。
 
-[https://github.com/mosn/mosn/blob/master/vendor/mosn.io/pkg/buffer/types.go#L34](https://github.com/mosn/mosn/blob/master/vendor/mosn.io/pkg/buffer/types.go#L34)
+[https://github.com/mosn/mosn/blob/1609ae1441/vendor/mosn.io/pkg/buffer/types.go#L34](https://github.com/mosn/mosn/blob/1609ae1441/vendor/mosn.io/pkg/buffer/types.go#L34)
 
 IO 相关的接口：
 
