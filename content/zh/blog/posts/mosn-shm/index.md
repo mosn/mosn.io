@@ -20,9 +20,48 @@ MOSN 用共享内存来存储 metrics 信息。MOSN 用 mmap 将文件映射到�
 
 ## 创建共享内存：Mmap
 
-和共享内存相关的逻辑都在 `pkg/shm` 文件夹目录下。里面内容比较少，`types.go` 定义了内存共享相关的 
+操作共享内存的方法主要在 `pkg/shm/shm.go` 文件下：
+
+```go
+func Alloc(name string, size int) (*ShmSpan, error) {
+	...
+	return NewShmSpan(name, data), nil
+}
+
+func Free(span *ShmSpan) error {
+	Clear(span.name)
+	return syscall.Munmap(span.origin)
+}
+
+func Clear(name string) error {
+	return os.Remove(path(name))
+}
+```
+
+都是围绕着 `ShmSpan` 结构体的几个操作方法。再来看 `ShmSpan` 结构体：
+
+```go
+type ShmSpan struct {
+	origin []byte // mmap 返回的数组
+	name   string // span 名, 创建时指定
+
+	data   uintptr // 保存 mmap 内存段的首指针
+	offset int // span 已经使用的字节长度
+	size   int // span 大小
+}
+```
+
+`Alloc` 方法按照给定的 `name` 参数，在配置文件的目录下创建文件，并执行 `sync.Mmap`，其文件尺寸即 `size` 参数大小。Mmap 过后，将信息保存在 ShmSpan结构内返回。
+
+由此看出，一个 ShmSpan 可以看做是一个共享内存块。
 
 ## 操作共享内存
+
+下面来看共享内存块的使用方法，我们可以从 MOSN 里的使用场景：metrics，来追踪到使用方法。
+
+metrics 相关的逻辑在 `pkg/metrics` 包下。
+
+
 
 
 ## 总结
