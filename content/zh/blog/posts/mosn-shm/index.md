@@ -63,6 +63,7 @@ type ShmSpan struct {
 
 在分析如何通过共享内存存取 metrics 之前，首先看这相关的功能是如何配置的。
 
+
 ## 操作共享内存：metrics
 
 metrics 相关的逻辑在 `pkg/metrics` 包下。
@@ -83,7 +84,69 @@ metrics 相关的逻辑在 `pkg/metrics` 包下。
 
 下面是源码步骤，大家可以自行跟踪调试：
 
+[https://github.com/mosn/mosn/blob/b2a239f5/pkg/metrics/shm/zone.go#L81](https://github.com/mosn/mosn/blob/b2a239f5/pkg/metrics/shm/zone.go#L81)
 
+```go
+func newSharedMetrics(name string, size int) (*zone, error) {
+	alignedSize := align(size, pageSize)
+
+    // 申请 ShmSpan
+	span, err := shm.Alloc(name, alignedSize)
+	if err != nil {
+		return nil, err
+	}
+	// 1. mutex and ref
+	// 从 span 里取 4 个字节做互斥锁
+	mutex, err := span.Alloc(4)
+	if err != nil {
+		return nil, err
+	}
+
+    // 从 span 里取 4 个字节做引用计数
+	ref, err := span.Alloc(4)
+	if err != nil {
+		return nil, err
+	}
+
+	zone := &zone{
+		span:  span,
+		mutex: (*uint32)(unsafe.Pointer(mutex)),
+		ref:   (*uint32)(unsafe.Pointer(ref)),
+	}
+
+	// 2. hashSet
+	// 划分哈希表过程
+
+	// assuming that 100 entries with 50 slots, so the ratio of occupied memory is
+	// entries:slots  = 100 x 128 : 50 x 4 = 64 : 1
+	// so assuming slots memory size is N, total allocated memory size is M, then we have:
+	// M - 1024 < 65N + 28 <= M
+
+	slotsNum := (alignedSize - 28) / (65 * 4)
+	slotsSize := slotsNum * 4
+	entryNum := slotsNum * 2
+	entrySize := slotsSize * 64
+	
+	hashSegSize := entrySize + 20 + slotsSize
+	hashSegment, err := span.Alloc(hashSegSize)
+	if err != nil {
+		return nil, err
+	}
+
+	// if zones's ref > 0, no need to initialize hashset's value
+	set, err := newHashSet(hashSegment, hashSegSize, entryNum, slotsNum, atomic.LoadUint32(zone.ref) == 0)
+	if err != nil {
+		return nil, err
+	}
+	zone.set = set
+
+	// add ref
+	atomic.AddUint32(zone.ref, 1)
+
+	return zone, nil
+}
+
+```
 
 
 
