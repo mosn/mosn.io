@@ -12,7 +12,8 @@ description: >
 
 ![](concept.jpg)
 
-MOSN中的概念比较多，以`sofarpc-sample`下面的`config.json`为例，结合上图依次看下：
+ MOSN 中的概念比较多，以`sofarpc-sample`下面的`config.json`为例，结合上图依次看下：
+
 1. Downstream：调用端的数据流向统称。
 2. Upstream：服务端的数据流向统称。
 3. clientListener：用于接收调用端（业务进程）请求数据的监听端口。
@@ -25,17 +26,18 @@ MOSN中的概念比较多，以`sofarpc-sample`下面的`config.json`为例，�
 ![](eventloop.png)
 
 这是官方提供的一张流程图，已经很清晰了，这里简要说明一下：
-1. MOSN无论是收到调用端（Downstream）发来的请求还是服务端（Upstream）发来的响应，都需要通过网络层，然后根据指定协议解码request跟response，最后交给stream层处理（当然这中间会有各式各样的过滤器链可以进行扩展，后面跟着源码会说）。
-2. 由于MOSN夹在调用端跟服务端中间，分别跟调用端、服务端都会建立连接，因此在stream层采用的是`异步阻塞`的方式，也就是说调用端的请求转发出去以后对应的协程就会挂起，在收到服务端发来的响应以后再唤醒该等待协程，而关联请求跟响应的关键就是requestID（类似于TCP中的SYN）。
+
+1. MOSN 无论是收到调用端（Downstream）发来的请求还是服务端（Upstream）发来的响应，都需要通过网络层，然后根据指定协议解码request跟response，最后交给stream层处理（当然这中间会有各式各样的过滤器链可以进行扩展，后面跟着源码会说）。
+2. 由于 MOSN 夹在调用端跟服务端中间，分别跟调用端、服务端都会建立连接，因此在stream层采用的是`异步阻塞`的方式，也就是说调用端的请求转发出去以后对应的协程就会挂起，在收到服务端发来的响应以后再唤醒该等待协程，而关联请求跟响应的关键就是 requestID（类似于TCP中的seq）。
 
 明白了大致流程以后，下面就通过源码来分析一下整个过程。
 # 三、源码分析
-为了便于理解，这里从下往上看，也就是先从网络层接收数据的逻辑开始，一步一步来分析MOSN是怎么做编解码，怎么转发请求。
+为了便于理解，这里从下往上看，也就是先从网络层接收数据的逻辑开始，一步一步来分析 MOSN 是怎么做编解码，怎么转发请求。
 
 ##### A、发起请求
-MOSN对于网络层的操作，无论是调用端还是服务端，都封装在`eventloop.go`文件中，每当连接建立以后，MOSN都会开启两个协程分别处理该连接上的读写操作，分别对应`startReadLoop`跟`startWriteLoop`两个方法。
+MOSN 对于网络层的操作，无论是调用端还是服务端，都封装在`eventloop.go`文件中，每当连接建立以后，MOSN 都会开启两个协程分别处理该连接上的读写操作，分别对应`startReadLoop`跟`startWriteLoop`两个方法。
 
-当调用端（业务进程）发起请求时，根据`clientListener`指定的地址跟MOSN建立连接，然后发起调用。MOSN在建立连接以后，会等待请求数据的道理，这部分逻辑就在`startReadLoop `中：
+当调用端（业务进程）发起请求时，根据`clientListener`指定的地址跟 MOSN 建立连接，然后发起调用。MOSN 在建立连接以后，会等待请求数据的到达，这部分逻辑就在`startReadLoop `中：
 ```go
 func (c *connection) startReadLoop() {
 	var transferTime time.Time
@@ -830,7 +832,7 @@ func (s *downStream) receive(ctx context.Context, id uint32, phase types.Phase) 
 上面的receiveXXX方法会把响应数据转发给业务进程，之前分析过了，这里就不再赘述。
 
 # 四、协程池
-前面在请求处理过程中提到了会把请求任务交给一个协程池去处理，这里就简单看一下MOSN中线程池的实现原理：
+前面在请求处理过程中提到了会把请求任务交给一个协程池去处理，这里就简单看一下 MOSN 中协程池的实现原理：
 ```go
 type workerPool struct {
 	work chan func()
@@ -887,4 +889,4 @@ func (p *workerPool) spawnWorker(task func()) {
 
 # 五、总结
 
-MOSN对于数据的处理及转发这块非常复杂，如果是概念很多，尤其是stream部分，对象之间互相引用，错综复杂，考虑到篇幅原因，本文只说明了流程，其他比如路由策略的细节等需要通过其他文章进行分析。
+MOSN 对于数据的处理及转发这块非常复杂，主要是概念很多，尤其是stream部分，对象之间互相引用，错综复杂，考虑到篇幅原因，本文只说明了流程，其他比如路由策略的细节等需要通过其他文章进行分析。
