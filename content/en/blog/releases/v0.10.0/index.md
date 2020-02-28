@@ -1,6 +1,6 @@
 ---
 title: "Announcing MOSN v0.10.0"
-linkTitle: "MOSN v0.10.0 changelog"
+linkTitle: "Announcing MOSN v0.10.0"
 date: 2020-02-28
 author: MOSN Team
 description: >
