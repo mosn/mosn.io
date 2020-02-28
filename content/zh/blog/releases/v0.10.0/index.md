@@ -5,13 +5,13 @@ date: 2020-02-28
 weight: 2
 author: MOSN 团队
 description: >
-  MOSN v0.10.0 变更日志
+  MOSN v0.10.0 变更日志。
 ---
 
 ### 新功能
 
-- 支持多进程插件模式 ( [#979](https://github.com/mosn/mosn/pull/979), [taoyuanyuan](https://github.com/taoyuanyuan) )
-- 启动参数支持service-meta参数 ( [#952](https://github.com/mosn/mosn/pull/952),[trainyao](https://github.com/trainyao) )
+- 支持多进程插件模式 ( [#979](https://github.com/mosn/mosn/pull/979), [@taoyuanyuan](https://github.com/taoyuanyuan) )
+- 启动参数支持service-meta参数 ( [#952](https://github.com/mosn/mosn/pull/952),[@trainyao](https://github.com/trainyao) )
 - 支持abstract uds模式挂载sds socket
 
 ### 重构
@@ -22,7 +22,7 @@ description: >
 ### 优化
 
 - 日志基础模块分离到mosn.io/pkg，mosn的日志实现优化
-- 优化FeatureGate ( [#927](https://github.com/mosn/mosn/pull/927), [nejisama](https://github.com/nejisama) )
+- 优化FeatureGate ( [#927](https://github.com/mosn/mosn/pull/927), [@nejisama](https://github.com/nejisama) )
 - 新增处理获取SDS配置失败时的处理
 - CDS动态删除Cluster时，会同步停止对应Cluster的健康检查
 - sds触发证书更新时的回调函数新增证书配置作为参数
