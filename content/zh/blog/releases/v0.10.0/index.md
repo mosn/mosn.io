@@ -2,7 +2,6 @@
 title: "MOSN v0.10.0 变更日志"
 linkTitle: "MOSN v0.10.0 变更日志"
 date: 2020-02-28
-weight: 2
 author: MOSN 团队
 description: >
   MOSN v0.10.0 变更日志。

@@ -28,9 +28,8 @@ pygmentsUseClassic = false
 pygmentsStyle = "tango"
 
 # Configure how URLs look like per section.
-[permalinks]
-#blog = "/:section/:year/:month/:day/:slug/"
-blog = "/:section/:year/:filename/"
+#[permalinks]
+#blog = "/:section/:year/:filename/"
 
 ## Configuration for BlackFriday markdown parser: https://github.com/russross/blackfriday
 [blackfriday]
