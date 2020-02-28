@@ -15,8 +15,8 @@ description: >
 
 ### 重构
 
-- 分离部分mosn基础库代码到[mosn.io/pkg](github.com/mosn/pkg)
-- 分离部分mosn接口定义到[mosn.io/api](github.com/mosn/api)
+- 分离部分mosn基础库代码到[mosn.io/pkg](https://github.com/mosn/pkg)
+- 分离部分mosn接口定义到[mosn.io/api](https://github.com/mosn/api)
 
 ### 优化
 
