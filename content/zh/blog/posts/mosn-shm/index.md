@@ -92,6 +92,32 @@ metrics 相关的逻辑在 `pkg/metrics` 包下。
 
 上文说的 ShmSpan 是保存共享内存信息的结构体，而要理解 MOSN metrics 对共享内存的使用，还要先理解 MOSN 封装的几个结构体：`zone`、`hashSet` 和 `hashEntry`。
 
+```go
+type zone struct {
+	span *shm.ShmSpan
+
+	
+	ref   *uint32
+
+	set *hashSet // mutex + ref = 64bit, so atomic ops has no problem
+}
+...
+type hashSet struct {
+	entry []hashEntry
+	meta  *meta
+	slots []uint32
+}
+...
+type hashEntry struct {
+	metricsEntry
+	next uint32
+
+	// Prevents false sharing on widespread platforms with
+	// 128 mod (cache line size) = 0 .
+	pad [128 - unsafe.Sizeof(metricsEntry{})%128 - 4]byte
+}
+```
+
 这几个结构体与 `ShmSpan` 的关系大致是这样的：
 
 ![](./shm.png)
@@ -103,6 +129,11 @@ metrics 相关的逻辑在 `pkg/metrics` 包下。
 - `zone` 对 `ShmSpan` 进行了划分，划分出了一个 `int32` 值作为互斥锁；一个 `int32` 值作为 `zone` 的引用计数；也划分出了一片空间保存 `hashSet`
 
 以上步骤做好后，创建一个 metrics 就可以通过创建对应的哈希 key value，拿到对应的共享内存地址，存取 metrics 信息。
+
+> ***实现小细节***
+> 
+> 1. hashEntry 内部有一个 `pad` 字段，其作用是保持 hashEntry 结构体大小是 128 的倍数，避免 false sharing
+> 2. 结构体内的字段顺序和大小是调整过的，比如 `hashEntry.value`、`zone.set`，目的是满足原子操作的内存对齐
 
 下面是源码步骤，大家可以自行跟踪调试：
 
@@ -366,16 +397,20 @@ func (z *zone) lock() {
 
 是通过设置进程 ID 来获取锁的，由此能看出 MOSN 的用意：**这个以文件作为 mmap 的共享内存是可以被多个 MOSN 进程共用的**。
 
-例如像同一台机器多个 MOSN 作为 sidecar 的场景，我们完全可以挂载宿主机同一个文件作为不同 sidecar 的共享内存文件映射，
-除了能达到 metrics 信息共享的效果外，也避免了 metrics 重复的内存占用，这里应该是有优化考虑在的。而且这个文件可以看作是一种文件格式，
-在任何时候都可以被持久化保存和提取分析使用的。
+例如 MOSN 支持跨容器热重启的场景，基于内存共享的 metrics 可以保证热重启过程中不出现指标抖动而造成监控异常。
+而且这个文件可以看作是一种文件格式，在任何时候都可以被持久化保存和提取分析使用的。
+
+当你不需要这个功能时，可以关闭内存共享 metrics 的配置即可，MOSN 会 fallback 到 go-metrics 的实现，该实现就是通过堆分配内存保存 metrics 信息。
 
 ## 总结
 
 本文通过分析 MOSN 源码，简述了 MOSN 的共享内存模型，分析了 MOSN 创建共享内存、配置 metrics 和 metrics 对共享内存块的使用。
+
+最后，**不鼓励在 Go 里面使用共享内存，除非你有明确的使用场景**，例如 MOSN 热升级场景下的 metrics 共享。
 
 ---
 
 参考资料:
 
 - [MOSN 源码](https://github.com/mosn/mosn)
+
