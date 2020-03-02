@@ -8,7 +8,7 @@ menu:
 {{< blocks/cover title="加入 MOSN 社区" image_anchor="bottom" height="min" >}}
 
 <p class="lead mt-5">
-MOSN 是一个开源项目，由蚂蚁金服开源，任何人都可以使用和改进。 MOSN 社区期待您的加入！
+MOSN 是一个开源项目，2018 年 7 月由蚂蚁金服开源，任何人都可以使用和改进。 MOSN 社区期待您的加入！
 </p>
 
 {{< /blocks/cover >}}

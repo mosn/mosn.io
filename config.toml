@@ -28,9 +28,8 @@ pygmentsUseClassic = false
 pygmentsStyle = "tango"
 
 # Configure how URLs look like per section.
-[permalinks]
-#blog = "/:section/:year/:month/:day/:slug/"
-blog = "/:section/:year/:filename/"
+#[permalinks]
+#blog = "/:section/:year/:filename/"
 
 ## Configuration for BlackFriday markdown parser: https://github.com/russross/blackfriday
 [blackfriday]
@@ -57,6 +56,8 @@ id = "UA-93485976-3"
 title = "MOSN"
 description = "An Open Source Cloud Native Proxy for Edge and Service Mesh"
 languageName ="English"
+time_format_blog = "Jan 2, 2006"
+
 # Weight used for sorting.
 weight = 1
 [languages.zh]
@@ -132,6 +133,11 @@ no = 'Sorry to hear that. Please <a href="https://github.com/mosn/mosn/issues/ne
 	url = "https://twitter.com/MosnProxy"
 	icon = "fab fa-twitter"
         desc = "Follow us on Twitter to get the latest news!"
+[[params.links.user]]
+	name ="Slack"
+	url = "https://mosnproxy.slack.com"
+	icon = "fab fa-slack"
+        desc = "Join us!"
 # Developer relevant links. These will show up on right side of footer and in the community page if you have one.
 [[params.links.developer]]
 	name = "GitHub"
