@@ -17,7 +17,45 @@ MOSN 在基于 Kubernetes 的 service mesh 中通常扮演数据平面的角色�
 
 ## 二、MOSN 启动流程
 
-在进入到具体的启动流程之前，我们先看 MOSN 的结构：
+我们先找到程序的入口，很多 go 的项目都将 程序入口写在 `cmd` 文件夹中，然后具体的实现写在 `pkg` 中。MOSN 项目也正好如此。在 `cmd/mosn/main/mosn.go` 
+中有我们要的 `main` 函数，提供了 `start`, `stop` 和 `reload` 命令。其中 `stop` 和 `reload` 还未做实现。
+
+```go
+//commands
+app.Commands = []cli.Command{
+	cmdStart,
+	cmdStop,
+	cmdReload,
+}
+```
+
+在 `cmd/mosn/main/control.go` 中，有　`mosn start` 执行的代码部分。`mosn start` 当前有5个参数：
+
+- `config, c`: 提供配置文件的路径，默认值是 `configs/mosn_config.json`
+- `service-cluster, s`: xdsclient 的初始化参数：服务集群名称，这里的集群是 MOSN 连接到的一组逻辑上相似的上游主机 
+- `service-node, n`: xdsclient 的初始化参数：服务集群中的节点
+- `service-meta, sm`: xdsclient 的初始化参数：元数据
+- `feature-gates, f`: feature-gates 是 MOSN 的特性开关，当前有三个特性： `XdsMtlsEnable`, `PayLoadLimitEnable` 和 `MultiTenantMode`。
+
+最终可以在 `pkg/mosn/starter.go` 中找到启动方法：
+
+```go
+// Start mosn project
+// step1. NewMosn
+// step2. Start Mosn
+func Start(c *v2.MOSNConfig) {
+	//log.StartLogger.Infof("[mosn] [start] start by config : %+v", c)
+	Mosn := NewMosn(c)
+	Mosn.Start()
+	Mosn.wg.Wait()
+}
+```
+
+启动方法很简单，`Mosn := NewMosn(c)` 实例化了一个 `Mosn` 实例。`Mosn.Start()` 开始运行。 下面主要就 `NewMosn(c)` 和 `Start()` 方法做分析。
+
+### 2.1 MOSN 的初始化
+
+在进入到具体初始化之前，我们先看 MOSN 的结构：
 
 ```go
 type Mosn struct {
@@ -46,23 +84,12 @@ type Mosn struct {
 
 `inheritListeners` 和 `reconfigure` 都是为了实现 MOSN 的平滑升级和重启。
 
-现在我们开始具体分析。首先我们找到程序的入口，很多 go 的项目都将 程序入口写在 `cmd` 文件夹中，然后具体的实现写在 `pkg` 中。MOSN 项目也正好如此。在 `cmd/control.go` 中，有　`mosn start` 执行的代码部分。最终可以在 `pkg/mosn/starter.go` 中找到启动方法：
+这里我们也要注意到 `inheritListeners` 和 `reconfigure` 参数，MOSN 在启动时分为两种情况：
 
-```go
-// Start mosn project
-// step1. NewMosn
-// step2. Start Mosn
-func Start(c *v2.MOSNConfig) {
-	//log.StartLogger.Infof("[mosn] [start] start by config : %+v", c)
-	Mosn := NewMosn(c)
-	Mosn.Start()
-	Mosn.wg.Wait()
-}
-```
+- `普通启动`流程：这种情况下是 MOSN 作为 sidecar 第一次在 Pod 中启动，不需要考虑长连接转移等情况。
+- `热升级/重启`流程：在 MOSN 已经作为 sidecar 运行的情况下，如果此时要做 MOSN 的升级/重启，则必须要考虑当前 MOSN 上已有的长连接，如果直接断开连接重启，肯定会对业务有影响。所以 MOSN 在升级/重启时，会进行比较复杂的长连接转移的工作。
 
-启动方法很简单，`Mosn := NewMosn(c)` 实例化了一个 `Mosn` 实例。`Mosn.Start()` 开始运行。 下面主要就 `NewMosn(c)` 和 `Start()` 方法做分析。
-
-### 2.1 MOSN 的初始化
+在了解以上内容的前提下，现在我们开始具体分析。
 
 NewMosn函数在63行左右，一上来就开始初始化各种配置。比如日志，进程id路径，unix socket 路径，trace的开关（SOFATracer）以及日志插件等等。这里的代码比较简单，就不具体分析每个方法了。
 
@@ -93,7 +120,7 @@ if reconfigure != nil {
 }
 ```
 
-这段代码的第一行调用了 `GetInheritListeners()` 来获取要继承过来的监听器。 `reconfigure` 这个返回值是新旧 MOSN 在 `listen.sock` 上的连接，是否为空代表了 MOSN 是否是升级或重启。下面开始分析 `GetInheritListeners()`。在 `GetInheritListeners()` 中调用了 `isReconfigure()` 方法。
+这段代码的第一行调用了 `GetInheritListeners()` 来获取要继承过来的监听器。 `reconfigure` 这个返回值是新旧 MOSN 在 `listen.sock` 上的连接，如果为空代表了 MOSN 为`普通启动`，反之为`热升级/重启`。下面开始分析 `GetInheritListeners()`。在 `GetInheritListeners()` 中调用了 `isReconfigure()` 方法。
 
 ```go
 func isReconfigure() bool {
@@ -112,7 +139,7 @@ func isReconfigure() bool {
 }
 ```
 
-这里通过连接 unix socket `reconfig.sock`，判断能否读取到数据。旧 MOSN 进程会监听 `reconfig.sock`，在有连接进来时发送数据。
+这里通过连接 unix socket `reconfig.sock`，判断能否读取到数据。旧 MOSN 会监听 `reconfig.sock`，在有连接进来时发送数据。
 
 ```go
 l, err := net.Listen("unix", types.ReconfigureDomainSocket)
@@ -126,7 +153,7 @@ for {
 }
 ```
 
-如果能读到，说明已经有一个旧的 MOSN 启动并监听了 `reconfig.sock`，那么本次启动就是升级或重启了。同时向 `reconfig.sock` 发起连接，会使得旧的 MOSN 尝试向 `listen.sock` 发送要转移的 listener 数组。这个逻辑在上面的 `reconfigure(false)` 方法中调用 `sendInheritListeners()` 实现。为了保证旧的 MOSN 可以连上新的 MOSN，这里还重试了10次，并且每次等待1s。也就是说，新 MOSN 在接下来 10s 内可以监听 `listen.sock` 即可。
+如果能读到，说明已经有一个旧的 MOSN 启动并监听了 `reconfig.sock`，那么本次启动就是`热升级/重启`了。同时向 `reconfig.sock` 发起连接，会使得旧的 MOSN 尝试向 `listen.sock` 发送要转移的 listener 数组。这个逻辑在上面的 `reconfigure(false)` 方法中调用 `sendInheritListeners()` 实现。为了保证旧的 MOSN 可以连上新的 MOSN，这里还重试了10次，并且每次等待1s。也就是说，新 MOSN 在接下来 10s 内可以监听 `listen.sock` 即可。
 
 ```go
 // retry 10 time
@@ -164,7 +191,7 @@ if len(scms) != 1 {
 	return nil, nil, err
 }
 
-// 解析从另一个另一个进程传来的socket控制消息：打开的文件描述符的整型数组
+// 解析从另一个进程传来的socket控制消息：打开的文件描述符的整型数组
 gotFds, err := unix.ParseUnixRights(&scms[0])
 
 listeners := make([]net.Listener, len(gotFds))
@@ -188,11 +215,16 @@ for i := 0; i < len(gotFds); i++ {
 return listeners, uc, nil
 ```
 
-上面的代码中新的 MOSN 监听了 `listen.sock`，这样就能获取到旧进程的所有 listener。当然，如果本次启动是第一次，那么获取的 `inheritListeners` 就是 nil。然后根据本次启动是第一次还是升级/reload，如果是第一次，则直接调用 `StartService`; 否则设置当前状态为 `Active_Reconfiguring`，然后重新加载配置文件，注意在此时并没有调用 `StartService`。关于 `StartService` 的逻辑可以看后面的分析。
+上面的代码中新的 MOSN 监听了 `listen.sock`，这样就能获取到旧 MOSN 的所有 listener。当然，如果本次启动是`普通启动`，那么获取的 `inheritListeners` 就是 nil。然后根据本次启动是`普通启动`还是`热升级/重启`：
+
+- 如果是普通启动，则直接调用 `StartService`。需要注意在后面的执行流程中，还会再一次调用 `StartService`。
+- 如果是`热升级/重启`，设置当前状态为 `Active_Reconfiguring`，然后重新加载配置文件，注意在此时并没有调用 `StartService`。
+
+因为后面还会有`StartService`的调用，因此 `StartService` 的逻辑在后面分析，以便理解在不同地方调用的逻辑。
 
 88 行的 `initializeMetrics(c.Metrics)` 初始化了监控指标，使用了 `go-metrics`。这里不做分析。
 
-90 行开始是 Mosn 实例的初始化。
+90 行开始是 Mosn 实例的初始化。它传入了上面的 `inheritListeners` 和 `reconfigure` 变量。
 
 ```go
 m := &Mosn{
@@ -296,15 +328,20 @@ for _, serverConfig := range c.Servers {
 
 上面就是 MOSN 初始化的分析。主要做了下列的工作：
 
-- 如果是升级或重启，则通过 `listen.sock` 接收旧进程的 listener 的文件描述符，并且保存到新进程的 server 上。
-- 初始化指标服务
+- 初始化配置文件路径，日志，进程id路径，unix socket 路径，trace的开关（SOFATracer）以及日志插件。
+- 通过 `server.GetInheritListeners()` 来判断启动模式（`普通启动`或`热升级/重启`），并在`热升级/重启`的情况下继承旧 MOSN 的监听器文件描述符。
+- 如果是`热升级/重启`，则设置 Mosn 状态为 `Active_Reconfiguring`;如果是`普通启动`，则直接调用 `StartService()`，关于 `StartService` 会在之后分析。
+- 初始化指标服务。
 - 根据是否是 Xds 模式初始化配置。
-- 非 Xds 模式下(也就是File, Mix模式) ，从配置文件中初始化 clustermanager
-- 非 Xds 模式下，初始化 routerManager，并从配置文件中读取路由配置更新
+  - xds 模式下，使用 nil 来初始化 clustermanager, 非 Xds 模式下(也就是File, Mix模式) ，从配置文件中初始化 clustermanager
+  - xds 模式下，使用默认配置来实例化 routerManager, 非 Xds 模式下，初始化 routerManager，并从配置文件中读取路由配置更新
+  - xds 模式下，使用默认配置来实例化 server，非 Xds 模式下，还要从配置文件中读取 listener 并添加。
 
-这里也用时序图来展示 listener 的转移:
+这里也用时序图来展示`热升级/重启`的初始化流程:
 
-![listener transfer](transfer-listener.svg)
+![new mosn](newmosn.svg)
+
+如果是`普通启动`，则6,7,8,9，10,11,12是没有的，并且在第5步后会调用`StartService`。
 
 
 ### 2.2 MOSN 的启动
@@ -354,15 +391,41 @@ func (m *Mosn) Start() {
 
 beforeStart 中主要做了以下的几个工作：
 
-1. 构造 adminServer，将admin server 加入到全局的 services 中
-2. store.StartService 启动服务。这里会判断该服务有没有从旧 MOSN 继承 listener，有的话直接启动，反之则先监听再启动。
-3. 通知旧 MOSN 退出
-4. 从旧 MOSN 进程中转移长连接
-5. 关闭遗留的 listener，也就是在第2步中没有使用的 lisenter
-6. 开启 dump config 进程
-7. 监听 reconfig.sock，这样就可以接收下一次的平滑升级或重启
+1. 构造 adminServer，将 admin server 加入到全局的 services 中
+2. 根据 MOSN 的状态是否是 `Active_Reconfiguring`
+   - 如果是`热升级/重启`，调用 `store.`StartService(m.inheritListeners)，继承 listener 直接启动。通知旧 MOSN 退出，并从旧 MOSN 中转移长连接。
+   - 如果是`普通启动`，`store.StartService(nil)` 会先监听 listener在启动。
+3. 关闭遗留的 listener，也就是在第 2 步中没有使用的 lisenter
+4. 开启 dump config 
+5. 监听 reconfig.sock，这样就可以接收下一次的平滑升级或重启
 
-在初始化 MOSN 部分，新的 MOSN 实例已经继承过来 listener 了，为了实现平滑的升级或重启，还需要把旧 MOSN 上的连接也转移过来。我们这里也主要分析转移连接部分。在 2.1 小章节中说到，`GetInheritListeners()` 方法通过监听 `listen.sock`，继承了旧进程中的 listener。在这里我们通过继承过来的 listener 在新 MOSN 中启动服务（打开数据平面）。
+这里我们先思考一下 `store.StartService` 的调用逻辑，因为在前文提到，初始化 MOSN 的时候，如果是`普通启动`，则会调用一次 `store.StartService`。而`热升级/重启`则不会调用。而后面无论何种情况都会调用`store.StartService`，是否多此一举呢？通过注释可以发现，前面是 `start init services`，后面是 `start other services`，同时 `service` 的结构如下：
+
+```go
+type service struct {
+	start bool
+	*http.Server
+	name string
+	init func()
+	exit func()
+}
+```
+
+这里想表达的逻辑应该是，如果是普通启动，那么有一些具有 init 变量的服务需要提前启动。在 `StartService` 中也可以验证这个想法：
+
+```go
+if s.init != nil {
+	s.init()
+}
+```
+
+但是在整个项目中我只找到了三处 service，没有符合条件的。这里可能是为了之后的功能扩展使用的。三处 service 如下所示：
+
+- store.AddService(s, "pprof", nil, nil)
+- store.AddService(srv, "Mosn Admin Server", nil, nil)
+- store.AddService(srv, "prometheus", nil, nil)
+
+因为`普通启动`时只有`store.StartService(nil)`， 因此我们这里接着分析在`热升级/重启`时的长连接转移逻辑。在初始化 MOSN 部分，新的 MOSN 实例已经继承过来 listener 了，为了实现平滑的升级或重启，还需要把旧 MOSN 上的连接也转移过来。在 2.1 小章节中说到，`GetInheritListeners()` 方法通过监听 `listen.sock`，继承了旧 MOSN 中的 listener。在这里我们通过继承过来的 listener 在新 MOSN 中启动服务。
 
 ```
 // start other services
@@ -371,7 +434,7 @@ if err := store.StartService(m.inheritListeners); err != nil {
 }
 ```
 
-同时新 MOSN 实例拥有了一个叫做 reconfigure（不要被名字误导了，它是新旧进程在 listen.sock 上的连接） 的连接。该连接会在旧 MOSN 中保持10分钟或者读到了代表要退出的数据。在 beforeStart 中，就是使用了 reconfigure 来在新 MOSN 即将启动之际，通知旧的 MOSN 退出。可以看 `pkg/mosn/starter.go` 的 202 行左右。下面一小段代码中，向 reconfigure 连接写入了一个 0 来通知旧 Mosn 退出。
+同时新 MOSN 实例拥有了一个叫做 reconfigure（不要被名字误导了，它是新旧 MOSN 在 listen.sock 上的连接） 的连接。该连接会在旧 MOSN 中保持10分钟或者读到了代表要退出的数据。在 beforeStart 中，就是使用了 reconfigure 来在新 MOSN 即将启动之际，通知旧的 MOSN 退出。可以看 `pkg/mosn/starter.go` 的 202 行左右。下面一小段代码中，向 reconfigure 连接写入了一个 0 来通知旧 Mosn 退出。
 
 ```
 // notify old mosn to transfer connection
@@ -430,7 +493,7 @@ utils.GoWithRecover(func() {
 }, nil)
 ```
 
-旧 MOSN 会通过 `conn.sock` 来发送长连接的文件描述符给新 MOSN。具体调用的方法是`pkg/network/transfer.go`中的`transferRead` 和 `transferWrite` 方法。关于长连接转移的细节非常复杂，MOSN 官网上提供了很详细的文档，很值得学习：[MOSN 平滑升级原理解析](https://mosn.io/zh/docs/concept/smooth-upgrade/)
+旧 MOSN 会通过 `conn.sock` 来发送长连接的文件描述符给新 MOSN。具体调用的方法是`pkg/network/transfer.go`中的`transferRead` 和 `transferWrite` 方法。关于长连接转移的细节非常复杂，MOSN 官网上提供了详细的文档，很值得学习：[MOSN 平滑升级原理解析](https://mosn.io/zh/docs/concept/smooth-upgrade/)
 
 下面我们用时序图来展示一下长连接的转移过程：
 
