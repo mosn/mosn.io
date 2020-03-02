@@ -566,13 +566,9 @@ func (srv *server) Start() {
 
 ## 四、参考资料
 
-[Envoy 中的基本术语](https://jimmysong.io/istio-handbook/data-plane/envoy-terminology.html)
-[Service Mesh架构反思：数据平面和控制平面的界线该如何划定？](https://skyao.io/post/201804-servicemesh-architecture-introspection/)
-
-[深入解读Service Mesh背后的技术细节](https://www.cnblogs.com/163yun/p/8962278.html)
-
-[使用Istio打造微服务（第1部分）](https://www.servicemesher.com/blog/back-to-microservices-with-istio-p1/)
-
-[蚂蚁金服Service Mesh新型网络代理的思考与实践](https://www.servicemesher.com/blog/microservice-with-service-mesh-at-ant-financial/)
-
-[MOSN 平滑升级原理解析](https://mosn.io/zh/docs/concept/smooth-upgrade/)
+- [Envoy 中的基本术语](https://jimmysong.io/istio-handbook/data-plane/envoy-terminology.html)
+- [Service Mesh 架构反思：数据平面和控制平面的界线该如何划定？](https://skyao.io/post/201804-servicemesh-architecture-introspection/)
+- [深入解读 Service Mesh 背后的技术细节](https://www.cnblogs.com/163yun/p/8962278.html)
+- [使用 Istio 打造微服务（第1部分）](https://www.servicemesher.com/blog/back-to-microservices-with-istio-p1/)
+- [蚂蚁金服 Service Mesh 新型网络代理的思考与实践](https://www.servicemesher.com/blog/microservice-with-service-mesh-at-ant-financial/)
+- [MOSN 平滑升级原理解析](https://mosn.io/zh/docs/concept/smooth-upgrade/)
