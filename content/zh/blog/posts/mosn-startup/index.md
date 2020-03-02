@@ -7,7 +7,7 @@ author: "[joyme123](https://github.com/joyme123)"
 description: MOSN 启动流程分析。
 ---
 
-本文的目的是分析 MOSN 的启动流程。
+本文的目的是分析 MOSN 的启动流程。基于 mosn 版本 v0.4.0，commit 为: dc35c8fc95435a47e6393db1c79dd9f60f7eb898
 
 ## 一、MOSN 简介
  
