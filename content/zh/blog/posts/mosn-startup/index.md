@@ -339,9 +339,11 @@ for _, serverConfig := range c.Servers {
 
 这里也用时序图来展示`热升级/重启`的初始化流程:
 
-![new mosn](newmosn.svg)
+![hot-upgrade-reload newmosn](hot-upgrade-reload-newmosn.svg)
 
-如果是`普通启动`，则6,7,8,9，10,11,12是没有的，并且在第5步后会调用`StartService`。
+如果是`普通启动`，则6,7,8,9,10,11,12是没有的，并且在第5步后会调用`StartService`。为了便于对比，这里仍然用时序图来展示：
+
+![normal newmosn](normal-newmosn.svg)
 
 
 ### 2.2 MOSN 的启动
@@ -378,7 +380,7 @@ func (m *Mosn) Start() {
 
 - 启动 xdsClient, xdsClient 负责从 pilot 周期地拉取 listeners/clusters/clusterloadassignment 配置。这个特性使得用户可以通过 crd 来动态的改变 service mesh 中的策略。
 
-- 启动 featuregate，featuregate 的初始化是在 `pkg/featuregate/mosn_features.go` 文件中的 `init()` 方法中，
+- 开始执行所有注册在 featuregate中 feature 的初始化函数。在 `pkg/featuregate/mosn_features.go` 文件中的 `init()` 方法中，可以看到 `XdsMtlsEnable`、`PayLoadLimitEnabl	e` 和 `MultiTenantMode` 的注册。
 
 - 解析服务注册信息
 
