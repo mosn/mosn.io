@@ -19,7 +19,7 @@ MOSN日志系统分为`日志`和`Metric`两大部分，其中`日志`主要包�
 
 ### errorlog
 
-errorlog主要主要是用来记录mosn运行时候的日志信息，[配置对象](https://github.com/mosn/mosn/blob/07cd4afe4d76619fdfbdff858239885f9a358bb2/pkg/config/v2/server.go#L28):
+errorlog主要是用来记录`MOSN`运行时候的日志信息，[配置结构](https://github.com/mosn/mosn/blob/07cd4afe4d76619fdfbdff858239885f9a358bb2/pkg/config/v2/server.go#L28):
 
 ``` golang
 type ServerConfig struct {
@@ -34,7 +34,7 @@ type ServerConfig struct {
 初始化errorlog包括两个对象`StartLogger`和`DefaultLogger`
 
 - StartLogger主要用来记录mosn启动的日志信息，日志级别是INFO
-- DefaultLogger主要是用来记录启动之后的日志信息，默认和StartLogger一样，可以通过配置文件覆盖
+- DefaultLogger主要是用来记录`MOSN`启动之后的运行日志信息，默认和StartLogger一样，可以通过配置文件覆盖
 
 [代码如下：](https://github.com/mosn/mosn/blob/07cd4afe4d76619fdfbdff858239885f9a358bb2/pkg/log/logger_manager.go#L37)
 
@@ -60,7 +60,7 @@ func InitDefaultLogger(output string, level log.Level) (err error) {
 
 ### accesslog
 
-accesslog主要用来记录请求的数据信息，[配置文件](https://github.com/mosn/mosn/blob/07cd4afe4d76619fdfbdff858239885f9a358bb2/pkg/config/v2/server.go#L76):
+accesslog主要用来记录上下游请求的数据信息，[配置结构](https://github.com/mosn/mosn/blob/07cd4afe4d76619fdfbdff858239885f9a358bb2/pkg/config/v2/server.go#L76):
 
 ``` golang
 type AccessLog struct {
@@ -142,7 +142,7 @@ AccessLog interface {
 
 *其中 `type` 目前只支持 `prometheus`*
 
-通过 `prometheus` 库提供的 http 能力，使用配置信息启动一个http服务，把 `Metrics` 信息通过 `http://host:port/metrics` 的方式供`prometheus`收集或展示。
+通过 [prometheus库](https://github.com/prometheus/client_golang) 提供的 http 能力，使用配置信息启动一个http服务，把 `Metrics` 信息通过 `http://host:port/metrics` 的方式供`prometheus`收集或展示。
 
 ### console
 
@@ -178,4 +178,8 @@ AccessLog interface {
 
 ## 总结
 
-通过分析 `MOSN` 源码的 `log系统` 模块，不单单是了解了日志部分，从配置，到启动流程，到上下游请求都有所涉及。学习了很多，希望 `MOSN` 越来越完善
+通过分析 `MOSN` 源码的 `log系统` 模块，不单单是了解了日志部分，从配置、启动流程，到上下游请求都有所涉及。学习了很多，希望 `MOSN` 越来越强大。
+
+---
+
+[MOSN源码 v0.10.0](https://github.com/mosn/mosn/tree/v0.10.0)
