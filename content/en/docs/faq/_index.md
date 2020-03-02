@@ -44,17 +44,9 @@ The release cycle of MOSN open source is one month. We are about to announce Roa
 
 Currently, MOSN can be based on Istio 1.1.4 and run through the bookinfo example. Due to the latest version of Istio that has upgraded the XDS protocol and some enhancements, MOSN is currently adapting. It is expected that in October 2020, it will fully support HTTP of high-level Istio. Department ability.
 
-### Will MOSN contribute to an Open Source Foundation?
-
-Currently, MOSN has no clear plans to contribute to the foundation.
-
 ### What service registration and discovery mechanisms does MOSN support?
 
 MOSN mainly supports two service registration and discovery mechanisms: one is to directly adapt to Istio, and the other is to integrate the SDK and use it with different registration centers and configuration centers.
-
-### How does MOSN compare to Envoy?
-
-Because Envoy is based on HTTP testing, currently MOSN does not have a large optimization for HTTP, so we expect that a benchmark will be released after this year's optimization.
 
 ### How to participate in the MOSN open source community?
 
