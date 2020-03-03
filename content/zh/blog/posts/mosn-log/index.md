@@ -117,12 +117,12 @@ log 的具体实现已经分离到了 [mosn/pkg/log](https://github.com/mosn/pkg
 
 根据不同的输出方式，初始化不同的 `io.Writer` 对象， [详情](https://github.com/mosn/pkg/blob/1e4184714e744895968339725cc2dc34f5116dcb/log/logger.go#L146)
 
-|            type             |                     io.Writer                     |
-| :-------------------------: | :-----------------------------------------------: |
+| type                        |                     io.Writer                     |
+| :-------------------------- | :----------------------------------------------- |
 | "", "stderr", "/dev/stderr" |                     os.Stderr                     |
-|   "stdout", "/dev/stdout"   |                     os.Stdout                     |
-|          "syslog"           | [gsyslog](github.com/hashicorp/go-syslog)本地对象 |
-|            其他             | [gsyslog](github.com/hashicorp/go-syslog)远程对象 |
+| "stdout", "/dev/stdout"     |                     os.Stdout                     |
+| "syslog"                    | [gsyslog](github.com/hashicorp/go-syslog)本地对象 |
+| 其他                        | [gsyslog](github.com/hashicorp/go-syslog)远程对象 |
 
 创建好 log 对象之后，通过 `loggers` 保存起来，避免创建多个对象，`loggers` 是一个 [sync.Map](https://blog.csdn.net/ChamPly/article/details/77622328)对象，是 `golang1.9` 之后加入的一个新的线程安全的 `map`。
 
@@ -145,24 +145,24 @@ lg := &Logger{
 }
 
 for {
-		select {
-		case <-l.reopenChan:
-		......
-		case <-l.closeChan:
-		......
-		case buf = <-l.writeBufferChan:
-		......
-		runtime.Gosched()
-	}
+	select {
+	case <-l.reopenChan:
+	......
+	case <-l.closeChan:
+	......
+	case buf = <-l.writeBufferChan:
+	......
+	runtime.Gosched()
+}
 ```
 
 #### [reopenChan](https://github.com/mosn/pkg/blob/1e4184714e744895968339725cc2dc34f5116dcb/log/logger.go#L260)
 
-通过重命名文件之后，关闭当前的 `log` 对象，重新调用 `start` 方法创建新文件，主要使用在文件轮转的时候
+通过重命名文件之后，重新调用 `start` 方法创建新文件，主要使用在文件轮转的时候。`os.Stdout` `os.Stderr` 不支持操作，会报错。
 
 #### closeChan
 
-释放资源，等待关闭
+把当前 `writeBufferChan` 需要写入的数据写入到对象中，然后退出当前协程。
 
 #### writeBufferChan
 
@@ -259,5 +259,5 @@ _其中 `type` 目前只支持 `prometheus`_
 
 ---
 
-[MOSN 源码 v0.10.0](https://github.com/mosn/mosn/tree/v0.10.0)
-[pkg 源码](https://github.com/mosn/pkg/tree/1e4184714e744895968339725cc2dc34f5116dcb) commit 1e41847
+- [MOSN 源码 v0.10.0](https://github.com/mosn/mosn/tree/v0.10.0)
+- [pkg 源码](https://github.com/mosn/pkg/tree/1e4184714e744895968339725cc2dc34f5116dcb) commit 1e41847
