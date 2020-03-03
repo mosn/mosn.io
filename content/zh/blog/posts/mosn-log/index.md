@@ -1,7 +1,7 @@
 ---
 title: MOSN 源码解析 - log系统
 linkTitle: MOSN 源码解析 - log系统
-date: 2020-03-02
+date: 2020-03-03
 weight: 1
 author: "[@champly](https://github.com/champly)"
 description: "对 MOSN Log系统的源码解析。"
@@ -13,34 +13,34 @@ description: "对 MOSN Log系统的源码解析。"
 
 ## 概述
 
-MOSN日志系统分为`日志`和`Metric`两大部分，其中`日志`主要包括`errorlog`和`accesslog`，`Metrics`主要包括`console数据`和`prometheus数据`
+MOSN 日志系统分为`日志`和`Metric`两大部分，其中`日志`主要包括`errorlog`和`accesslog`，`Metrics`主要包括`console数据`和`prometheus数据`
 
 ## 日志
 
 ### errorlog
 
-errorlog主要是用来记录`MOSN`运行时候的日志信息，[配置结构](https://github.com/mosn/mosn/blob/07cd4afe4d76619fdfbdff858239885f9a358bb2/pkg/config/v2/server.go#L28):
+errorlog 主要是用来记录`MOSN`运行时候的日志信息，[配置结构](https://github.com/mosn/mosn/blob/07cd4afe4d76619fdfbdff858239885f9a358bb2/pkg/config/v2/server.go#L28):
 
-``` golang
+```golang
 type ServerConfig struct {
-……
+......
 	DefaultLogPath  string `json:"default_log_path,omitempty"`
 	DefaultLogLevel string `json:"default_log_level,omitempty"`
 	GlobalLogRoller string `json:"global_log_roller,omitempty"`
-……
+......
 }
 ```
 
-初始化errorlog包括两个对象`StartLogger`和`DefaultLogger`
+初始化 errorlog 包括两个对象`StartLogger`和`DefaultLogger`
 
-- StartLogger主要用来记录mosn启动的日志信息，日志级别是INFO
-- DefaultLogger主要是用来记录`MOSN`启动之后的运行日志信息，默认和StartLogger一样，可以通过配置文件覆盖
+- StartLogger 主要用来记录 mosn 启动的日志信息，日志级别是 INFO
+- DefaultLogger 主要是用来记录`MOSN`启动之后的运行日志信息，默认和 StartLogger 一样，可以通过配置文件覆盖
 
 [代码如下：](https://github.com/mosn/mosn/blob/07cd4afe4d76619fdfbdff858239885f9a358bb2/pkg/log/logger_manager.go#L37)
 
-``` golang
+```golang
 func init() {
-	……
+	......
 	// use console as start logger
 	StartLogger, _ = GetOrCreateDefaultErrorLogger("", log.INFO) // 默认INFO
 	// default as start before Init
@@ -48,39 +48,41 @@ func init() {
 	DefaultLogger = log.DefaultLogger
 	// default proxy logger for test, override after config parsed
 	log.DefaultContextLogger, _ = CreateDefaultContextLogger("", log.INFO)
-	……
+	......
 }
-……
+
+......
+
 func InitDefaultLogger(output string, level log.Level) (err error) {
 	// 使用配置文件来覆盖默认配置
 	DefaultLogger, err = GetOrCreateDefaultErrorLogger(output, level)
-	……
+	......
 }
 ```
 
 ### accesslog
 
-accesslog主要用来记录上下游请求的数据信息，[配置结构](https://github.com/mosn/mosn/blob/07cd4afe4d76619fdfbdff858239885f9a358bb2/pkg/config/v2/server.go#L76):
+`accesslog` 主要用来记录上下游请求的数据信息，[配置结构](https://github.com/mosn/mosn/blob/07cd4afe4d76619fdfbdff858239885f9a358bb2/pkg/config/v2/server.go#L76):
 
-``` golang
+```golang
 type AccessLog struct {
 	Path   string `json:"log_path,omitempty"`
 	Format string `json:"log_format,omitempty"`
 }
 ```
 
-每个配置文件下面servers->listener->access_logs，具体配置示例如下：
+每个配置文件下面 `servers`->`listener`->`access_logs`，具体配置示例如下：
 
-``` json
+```json
 {
 	"servers": [
 		{
 			"mosn_server_name": "mosn_server_1",
-			……
+			......
 			"listeners": [
 				{
 					"name": "ingress_sofa",
-					……
+					......
 					"log_path": "./logs/ingress.log",
 					"log_level": "DEBUG",
 					"access_logs": [
@@ -96,23 +98,98 @@ type AccessLog struct {
 }
 ```
 
-accesslog实现如下[接口](https://github.com/mosn/mosn/blob/07cd4afe4d76619fdfbdff858239885f9a358bb2/pkg/log/accesslog.go#L105):
+accesslog 实现如下[接口](https://github.com/mosn/mosn/blob/07cd4afe4d76619fdfbdff858239885f9a358bb2/pkg/log/accesslog.go#L105):
 
-``` golang
+```golang
 AccessLog interface {
     // Log write the access info.
     Log(ctx context.Context, reqHeaders HeaderMap, respHeaders HeaderMap, requestInfo RequestInfo)
 }
 ```
 
-调用Log记录日志的时候，通过使用 [变量机制](https://mosn.io/zh/blog/posts/mosn-variable) 来填充`log_format`里面的变量，相关信息保存在ctx里面。用于保存变量信息的 `entries` 通过 `NewAccessLog` 初始化的时候，调用 `parseFormat` 方法来初始化的，[参考相关代码](https://github.com/mosn/mosn/blob/07cd4afe4d76619fdfbdff858239885f9a358bb2/pkg/log/accesslog.go#L79)。
+调用 Log 记录日志的时候，通过使用 [变量机制](https://mosn.io/zh/blog/posts/mosn-variable) 来填充`log_format`里面的变量，相关信息保存在 ctx 里面。用于保存变量信息的 `entries` 通过 `NewAccessLog` 初始化的时候，调用 `parseFormat` 方法来初始化的，[参考相关代码](https://github.com/mosn/mosn/blob/07cd4afe4d76619fdfbdff858239885f9a358bb2/pkg/log/accesslog.go#L79)。
+
+### log 的具体实现
+
+log 的具体实现已经分离到了 [mosn/pkg/log](https://github.com/mosn/pkg/tree/1e4184714e744895968339725cc2dc34f5116dcb/log) 下面，`errorlog` 和 `accesslog` 的具体实现都是通过 [log.GetOrCreateLogger](https://github.com/mosn/pkg/blob/1e4184714e744895968339725cc2dc34f5116dcb/log/logger.go#L122) 来初始化的。
+
+#### start
+
+根据不同的输出方式，初始化不同的 `io.Writer` 对象， [详情](https://github.com/mosn/pkg/blob/1e4184714e744895968339725cc2dc34f5116dcb/log/logger.go#L146)
+
+|            type             |                     io.Writer                     |
+| :-------------------------: | :-----------------------------------------------: |
+| "", "stderr", "/dev/stderr" |                     os.Stderr                     |
+|   "stdout", "/dev/stdout"   |                     os.Stdout                     |
+|          "syslog"           | [gsyslog](github.com/hashicorp/go-syslog)本地对象 |
+|            其他             | [gsyslog](github.com/hashicorp/go-syslog)远程对象 |
+
+创建好 log 对象之后，通过 `loggers` 保存起来，避免创建多个对象，`loggers` 是一个 [sync.Map](https://blog.csdn.net/ChamPly/article/details/77622328)对象，是 `golang1.9` 之后加入的一个新的线程安全的 `map`。
+
+`start` 启动之后会 创建一个一直循环读取的协程 `handler`
+
+### handler
+
+[相关代码](https://github.com/mosn/pkg/blob/1e4184714e744895968339725cc2dc34f5116dcb/log/logger.go#L198)
+
+在初始化的时候，创建了一个 500 大小的 `chan` `writeBufferChan`，并且在 `handler` 里面处理需要记录的日志、重命名的事件、关闭的事件。
+
+```golang
+lg := &Logger{
+	output:          output,
+	roller:          roller,
+	writeBufferChan: make(chan buffer.IoBuffer, 500),
+	reopenChan:      make(chan struct{}),
+	closeChan:       make(chan struct{}),
+	// writer and create will be setted in start()
+}
+
+for {
+		select {
+		case <-l.reopenChan:
+		......
+		case <-l.closeChan:
+		......
+		case buf = <-l.writeBufferChan:
+		......
+		runtime.Gosched()
+	}
+```
+
+#### [reopenChan](https://github.com/mosn/pkg/blob/1e4184714e744895968339725cc2dc34f5116dcb/log/logger.go#L260)
+
+通过重命名文件之后，关闭当前的 `log` 对象，重新调用 `start` 方法创建新文件，主要使用在文件轮转的时候
+
+#### closeChan
+
+释放资源，等待关闭
+
+#### writeBufferChan
+
+```golang
+for i := 0; i < 20; i++ {
+	select {
+	case b := <-l.writeBufferChan:
+		buf.Write(b.Bytes())
+		buffer.PutIoBuffer(b)
+	default:
+		break
+	}
+}
+buf.WriteTo(l)
+buffer.PutIoBuffer(buf)
+```
+
+当收到第一次写数据的时候不是立刻写入数据到 `log` 对象，而是在等待 20 次读取信息，一起写入到对 `log` 象中，在大量写日志的时候不会导致调用太频繁。如频繁写入文件、频繁调用写日志接口。
+
+\*_当一次循环处理完之后，会调用 `runtime.Gosched()` 主动让出当前协程的 `cpu` 资源_
 
 ## Metrics
 
 `Metrics` 是一种规范的度量，分为如下类型，摘抄至 [METRIC TYPES](https://prometheus.io/docs/concepts/metric_types/)
 
 - Gauges: 代表可以任意上下波动的单个数值，通常用来表示测量值。比如内存，cpu，磁盘等信息。
-- Counters: 累计度量，代表单调递增的计数器，只有在重启或者重置的时候数量为0，其他时候一般不使用减少。可以用来表示请求的数量。
+- Counters: 累计度量，代表单调递增的计数器，只有在重启或者重置的时候数量为 0，其他时候一般不使用减少。可以用来表示请求的数量。
 - Histograms: 直方图，对观察值(通常是请求持续时间或返回大小之类的数据)进行采样，并将其计数放到对应的配置桶中，也提供所有观测值总和信息。
 - Summary: 类似于直方图，摘要采样的观测结果，可以计算滑动时间窗口内的可配置分位数。
 
@@ -124,10 +201,10 @@ AccessLog interface {
 
 主要是通过 `prometheus` 的 `metrics` 统计请求的信息，配置文件示例:
 
-``` json
+```json
 {
 	"metrics": {
-		……
+		......
 		"sinks": [
 			{
 				"type": "prometheus",
@@ -140,24 +217,24 @@ AccessLog interface {
 }
 ```
 
-*其中 `type` 目前只支持 `prometheus`*
+_其中 `type` 目前只支持 `prometheus`_
 
-通过 [prometheus库](https://github.com/prometheus/client_golang) 提供的 http 能力，使用配置信息启动一个http服务，把 `Metrics` 信息通过 `http://host:port/metrics` 的方式供`prometheus`收集或展示。
+通过 [prometheus 库](https://github.com/prometheus/client_golang) 提供的 http 能力，使用配置信息启动一个 http 服务，把 `Metrics` 信息通过 `http://host:port/metrics` 的方式供`prometheus`收集或展示。
 
 ### console
 
 主要用于 `admin api` 的 `/api/v1/stats` [展示](https://github.com/mosn/mosn/blob/07cd4afe4d76619fdfbdff858239885f9a358bb2/pkg/admin/server/server.go#L45)。所以必须配置 `admin` 相关信息，示例：
 
-``` json
+```json
 {
-	"admin": {
-		"address": {
-			"socket_address": {
-				"address": "0.0.0.0",
-				"port_value": 34901
-			}
-		}
-	}
+  "admin": {
+    "address": {
+      "socket_address": {
+        "address": "0.0.0.0",
+        "port_value": 34901
+      }
+    }
+  }
 }
 ```
 
@@ -182,4 +259,5 @@ AccessLog interface {
 
 ---
 
-[MOSN源码 v0.10.0](https://github.com/mosn/mosn/tree/v0.10.0)
+[MOSN 源码 v0.10.0](https://github.com/mosn/mosn/tree/v0.10.0)
+[pkg 源码](https://github.com/mosn/pkg/tree/1e4184714e744895968339725cc2dc34f5116dcb) commit 1e41847
