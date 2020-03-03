@@ -2,25 +2,21 @@
 title: MOSN 源码分析
 linkTitle: MOSN 源码分析 - XDS
 date: 2020-02-13
-weight: 1
-author: "[peacocktrain](https://github.com/peacocktrain)"
+aliases: "/zh/blog/posts/mosn-xds"
+author: "[孙福泽（Boss 直聘）](https://github.com/peacocktrain)"
 description: >
-  对MOSN XDS模块的源码解析。
-  
+  MOSN 源码解析之 XDS 模块。
 ---
 
-  _本文记录了对 MOSN 的源码研究 MOSN的XDS模块。_
-  
-  _本文的内容基于 MOSN v0.9.0。_
+本文的内容基于 MOSN v0.9.0。
 
-**XDS用来与pilot-discovery通讯做服务发现功能。**
+XDS用来与pilot-discovery通讯做服务发现功能。
 
-**XDS是一类发现服务的总称，包含LDS， RDS， CDS， EDS以及SDS。**
+XDS是一类发现服务的总称，包含LDS， RDS， CDS， EDS以及SDS。
 
-**MOSN通过XDS API可以动态获取Listener（监听器），Route（路由）， Cluster（集群）， Endpoint（集群成员）以及Secret（证书）配置。**
+MOSN通过XDS API可以动态获取Listener（监听器），Route（路由）， Cluster（集群）， Endpoint（集群成员）以及Secret（证书）配置。
 
-**XDS的基本流程:**
-**Pilot-Discovery的Model -> XDS.pb -> GRPC -> XDS.pb -> MOSN的Model （GRPC包括序列化和网络传输）。**
+XDS的基本流程：Pilot-Discovery的Model -> XDS.pb -> GRPC -> XDS.pb -> MOSN的Model （GRPC包括序列化和网络传输）。
 
 ## 配置文件&解析
 
@@ -177,7 +173,7 @@ switch(type):
     接受Routes
        
 ```
-   
+
 
 
 ## XDS类型转换

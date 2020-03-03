@@ -2,14 +2,11 @@
 title: MOSN 源码解析 - filter扩展机制
 linkTitle: MOSN 源码解析 - filter扩展机制
 date: 2020-02-09
-weight: 1
-author: "[@trainyao](https://trainyao.github.io)"
-authorlink: "https://trainyao.github.io"
-originallink: "https://trainyao.github.io/post/mosn/source_filter/"
-
+aliases: "/zh/blog/posts/mosn-filter"
+author: "[姚昌宇（有米科技）](https://trainyao.github.io)"
+description: >
+  MOSN 源码解析系列之 filter 扩展机制，如何创建自己的 filter 来扩展 MOSN。
 ---
-
-本文记录了对 MOSN 的源码研究 - MOSN 的filter扩展机制, 以及如何创建自己的filter来扩展 MOSN。
 
 本文的内容基于 MOSN v0.9.0。
 
@@ -31,7 +28,7 @@ drwxr-xr-x   6 mac  staff   192 Aug 28 22:37 network
 drwxr-xr-x   7 mac  staff   224 Aug 28 22:37 stream
 -rw-r--r--   1 mac  staff  1248 Feb  5 08:52 types.go
 ➜  mosn git:(2c6f58c5) ✗
-``` 
+```
 
 包括 `accept` 过程的 filter，`network` 处理过程的 filter，以及 `stream` 处理的 filter。其中 accept filters 目前暂不提供扩展（加载、运行写死在代码里面，如要扩展需要修改源码），
 steram、network filters 是可以通过定义新包在 `pkg/filter` 目录下实现扩展。
@@ -115,7 +112,7 @@ func NewMosn(c *config.MOSNConfig) *Mosn {
 
     ...
 ```
-      
+
 来源2：**XDS 信息解析**。
 
 MOSN 里的 XDS client 会将 XDS resources 解析成 MOSN 的 config，当 downstream client 连接进来的时候根据 config 进行组装需要用到的 filters。
@@ -153,7 +150,7 @@ func (al *activeListener) OnAccept(rawc net.Conn, useOriginalDst bool, oriRemote
 ...
 arc.ContinueFilterChain(ctx, true)
 ```
-   
+
 (2) 将连接上下文放入 context，并用以创建 filter chain，并初始化 filter manager，执行 filters 的 `OnNewConnection` 函数。
 filter manager 是 filters 的代理，外部会在不同阶段调用 filter manager 的不同函数，filter manager 管理 filters 的执行逻辑：
 
@@ -183,7 +180,7 @@ func (al *activeListener) OnAccept(rawc net.Conn, useOriginalDst bool, oriRemote
     
 ```
 ↓
-   
+
 [https://github.com/mosn/mosn/blob/0.9.0/pkg/server/handler.go#L454](https://github.com/mosn/mosn/blob/0.9.0/pkg/server/handler.go#L454)
 ```go
 func (al *activeListener) OnNewConnection(ctx context.Context, conn types.Connection) {
@@ -195,13 +192,13 @@ func (al *activeListener) OnNewConnection(ctx context.Context, conn types.Connec
     filterManager.InitializeReadFilters()
 ...
 ```
-   
+
 (3) 执行 filter 的 `OnData` 方法
     
 [https://github.com/mosn/mosn/blob/0.9.0/pkg/network/connection.go#L428](https://github.com/mosn/mosn/blob/0.9.0/pkg/network/connection.go#L428) ->
 
 [https://github.com/mosn/mosn/blob/0.9.0/pkg/network/connection.go#L484](https://github.com/mosn/mosn/blob/0.9.0/pkg/network/connection.go#L484)
-   
+
 ```go
 func (c *connection) doRead() (err error) {
     ...
