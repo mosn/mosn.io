@@ -2,13 +2,11 @@
 title: MOSN 源码分析 - 内存复用机制
 linkTitle: MOSN 源码分析 - 内存复用机制
 date: 2020-02-15
-weight: 1
-author: "[@trainyao](https://trainyao.github.io)"
-authorlink: "https://trainyao.github.io"
-originallink: "https://trainyao.github.io/post/mosn/source_buffer/"
+aliases: "/zh/blog/posts/mosn-buffer"
+author: "[姚昌宇（有米科技）](https://trainyao.github.io)"
+description: >
+  MOSN 源码解析系列之内存复用机制。
 ---
-
-本文记录了对 MOSN 的源码研究 - MOSN 的内存复用机制。
 
 本文的内容基于 MOSN v0.9.0，commit id 1609ae14。
 

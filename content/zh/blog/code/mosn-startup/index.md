@@ -2,20 +2,21 @@
 title: MOSN 源码解析 - 启动流程
 linkTitle: MOSN 源码解析 - 启动流程
 date: 2020-02-26
-weight: 1
+aliases: "/zh/blog/posts/mosn-startup"
 author: "[joyme123](https://github.com/joyme123)"
-description: MOSN 启动流程分析。
+description: >
+  MOSN 源码解析之启动流程分析。
 ---
 
 本文的目的是分析 MOSN 的启动流程。基于 mosn 版本 v0.4.0，commit 为: dc35c8fc95435a47e6393db1c79dd9f60f7eb898
 
-## 一、MOSN 简介
- 
+## MOSN 简介
+
 MOSN 是一款使用 Go 语言开发的网络代理软件，作为云原生的网络数据平面，旨在为服务提供多协议，模块化，智能化，安全的代理能力。
 
 MOSN 在基于 Kubernetes 的 service mesh 中通常扮演数据平面的角色，它作为 sidecar 注入到集群的 Pod 中，接管在 Pod 之间的网络连接。
 
-## 二、MOSN 启动流程
+## MOSN 启动流程
 
 我们先找到程序的入口，很多 go 的项目都将 程序入口写在 `cmd` 文件夹中，然后具体的实现写在 `pkg` 中。MOSN 项目也正好如此。在 `cmd/mosn/main/mosn.go` 
 中有我们要的 `main` 函数，提供了 `start`, `stop` 和 `reload` 命令。其中 `stop` 和 `reload` 还未做实现。
@@ -53,7 +54,7 @@ func Start(c *v2.MOSNConfig) {
 
 启动方法很简单，`Mosn := NewMosn(c)` 实例化了一个 `Mosn` 实例。`Mosn.Start()` 开始运行。 下面主要就 `NewMosn(c)` 和 `Start()` 方法做分析。
 
-### 2.1 MOSN 的初始化
+### MOSN 的初始化
 
 在进入到具体初始化之前，我们先看 MOSN 的结构：
 
@@ -346,7 +347,7 @@ for _, serverConfig := range c.Servers {
 ![normal newmosn](normal-newmosn.svg)
 
 
-### 2.2 MOSN 的启动
+### MOSN 的启动
 
 MOSN 启动逻辑实现在 Mosn 的 `Start()` 方法中，代码如下
 
@@ -389,7 +390,7 @@ func (m *Mosn) Start() {
 - 正式启动 MOSN 的服务。详细解析见下面的小章节 2.2.2 
 
 
-#### 2.2.1 beforeStart(): MOSN 启动前的最后一步
+#### beforeStart(): MOSN 启动前的最后一步
 
 beforeStart 中主要做了以下的几个工作：
 
@@ -501,7 +502,7 @@ utils.GoWithRecover(func() {
 
 ![conn transfer](transfer-conn.svg)
 
-#### 2.2.2 Start(): MOSN 正式启动
+#### Start(): MOSN 正式启动
 
 经过上面复杂的启动过程，MOSN 正式启动就很简单了。
 
@@ -540,7 +541,7 @@ func (srv *server) Start() {
 }
 ```
 
-## 三、基本术语参考
+## 基本术语参考
 
 下面基本术语的解释来自于这篇文章：[Envoy 中的基本术语](https://jimmysong.io/istio-handbook/data-plane/envoy-terminology.html)
 
@@ -564,7 +565,7 @@ func (srv *server) Start() {
 
 - Health checking：健康检查会与SDS服务发现配合使用。但是，即使使用其他服务发现方式，也有相应需要进行主动健康检查的情况。详见 health checking。
 
-## 四、参考资料
+## 参考资料
 
 - [Envoy 中的基本术语](https://jimmysong.io/istio-handbook/data-plane/envoy-terminology.html)
 - [Service Mesh 架构反思：数据平面和控制平面的界线该如何划定？](https://skyao.io/post/201804-servicemesh-architecture-introspection/)

@@ -70,4 +70,4 @@ MOSN 使用的 `GOMAXPROCS` 数量
 
 ## Listeners
 
-一组 [Listener](../listener) 的配置。
+一组 [Listener](./listener) 的配置。

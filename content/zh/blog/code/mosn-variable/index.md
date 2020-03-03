@@ -2,9 +2,10 @@
 title: MOSN 源码解析 - 变量机制
 linkTitle: MOSN 源码解析 - 变量机制
 date: 2020-02-16
-weight: 1
-author: "[黄润豪](https://github.com/glyasai)"
-description: 对 MOSN 变量机制的源码解析。
+aliases: "/zh/blog/posts/mosn-variable"
+author: "[黄润豪（好雨云）](https://github.com/glyasai)"
+description: >
+  MOSN 源码解析系列之变量机制的源码解析。
 ---
 
 本文的目的是分析 MOSN 源码中的`变量机制`。
