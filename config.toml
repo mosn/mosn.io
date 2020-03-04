@@ -54,7 +54,7 @@ id = "UA-93485976-3"
 [languages]
 [languages.en]
 title = "MOSN"
-description = "An Open Source Cloud Native Proxy for Edge and Service Mesh"
+description = "The Cloud Native Proxy for Edge and Service Mesh"
 languageName ="English"
 time_format_blog = "Jan 2, 2006"
 
@@ -62,7 +62,7 @@ time_format_blog = "Jan 2, 2006"
 weight = 1
 [languages.zh]
 title = "MOSN"
-description = "云原生开源网络代理，可用于边缘代理和服务网格"
+description = "云原生网络代理，可用于边缘代理和服务网格"
 languageName ="中文"
 contentDir = "content/zh"
 time_format_default = "2006年1月2日"
@@ -77,6 +77,7 @@ time_format_blog = "2006年1月2日"
 
 [params]
 copyright = "The MOSN Authors"
+qrcode = "https://gw.alipayobjects.com/mdn/rms_91f3e6/afts/img/A*NyEzRp3Xq28AAAAAAAAAAABkARQnAQ"
 #privacy_policy = "https://policies.google.com/privacy"
 
 # First one is picked as the Twitter card image if not set on page.
@@ -123,8 +124,13 @@ footer_about_disable = true
 [params.ui.feedback]
 enable = true
 # The responses that the user sees after clicking "yes" (the page was helpful) or "no" (the page was not helpful).
-yes = 'Glad to hear it! Please <a href="https://github.com/mosn/mosn/issues/new/choose">tell us how we can improve</a>.'
-no = 'Sorry to hear that. Please <a href="https://github.com/mosn/mosn/issues/new/choose">tell us how we can improve</a>.'
+yes = 'Glad to hear it! Please <a href="https://github.com/mosn/mosn.io/issues/new">tell us how we can improve</a>.'
+no = 'Sorry to hear that. Please <a href="https://github.com/mosn/mosn.io/issues/new/">tell us how we can improve</a>.'
+
+[[menu.main]]
+    name = "GitHub"
+    weight = -99
+    url = "https://github.com/mosn/mosn/"
 
 [params.links]
 # End user relevant links. These will show up on left side of footer and in the community page if you have one.
@@ -139,7 +145,7 @@ no = 'Sorry to hear that. Please <a href="https://github.com/mosn/mosn/issues/ne
 	icon = "fab fa-slack"
         desc = "Join us!"
 # Developer relevant links. These will show up on right side of footer and in the community page if you have one.
-[[params.links.developer]]
+[[params.links.user]]
 	name = "GitHub"
 	url = "https://github.com/mosn/mosn"
 	icon = "fab fa-github"

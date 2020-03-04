@@ -52,5 +52,5 @@ MOSN 主要支持两种服务注册与发现机制：一种是直接和 Istio �
 
 ### 如何参与 MOSN 开源社区？
 
-您可以扫描[社区](/zh/community/)页面上的钉钉群二维码，加入MOSN 用户群来参与开源社区，参与社区讨论和获取社区最新活动通知。还可以访问 [Community 仓库](https://github.com/mosn/community)了解 MOSN 开源社区的组织架构和获取社区资料。
+您可以扫描[社区](/zh/docs/community/)页面上的钉钉群二维码，加入MOSN 用户群来参与开源社区，参与社区讨论和获取社区最新活动通知。还可以访问 [Community 仓库](https://github.com/mosn/community)了解 MOSN 开源社区的组织架构和获取社区资料。
 

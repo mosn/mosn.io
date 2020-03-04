@@ -13,15 +13,15 @@
     display: block;
   }
 </style>
-<h2 class="feedback--title">Feedback</h2>
-<p class="feedback--question">Was this page helpful?</p>
-<button class="feedback--answer feedback--answer-yes">Yes</button>
-<button class="feedback--answer feedback--answer-no">No</button>
+<h2 class="feedback--title">{{ i18n "feedback" }}</h2>
+<p class="feedback--question">{{ i18n "helpful" }}</p>
+<button class="feedback--answer feedback--answer-yes">{{ i18n "yes" }}</button>
+<button class="feedback--answer feedback--answer-no">{{ i18n "no" }}</button>
 <p class="feedback--response feedback--response-yes">
-  {{ .yes | safeHTML }}
+ {{ i18n "yes_response" | safeHTML }}
 </p>
 <p class="feedback--response feedback--response-no">
-  {{ .no | safeHTML }}
+  {{ i18n "no_response" | safeHTML }}
 </p>
 <script>
   const yesButton = document.querySelector('.feedback--answer-yes');
