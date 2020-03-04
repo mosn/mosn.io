@@ -44,3 +44,17 @@ other = "Posts in"
 
 [year]
 other = "2006"
+
+# Feedback
+[feedback]
+other = "Feedback"
+[helpful]
+other = "Was this page helpful?"
+[yes]
+other = "Yes"
+[no]
+other = "No"
+[yes_response]
+other = "Glad to hear it! Please <a href='https://github.com/mosn/mosn.io/issues/new'>tell us how we can improve</a>."
+[no_response]
+other = "Sorry to hear that. Please <a href='https://github.com/mosn/mosn.io/issues/new/'>tell us how we can improve</a>."
