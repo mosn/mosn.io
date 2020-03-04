@@ -111,7 +111,13 @@ AccessLog interface {
 
 ### log 的具体实现
 
-log 的具体实现已经分离到了 [mosn/pkg/log](https://github.com/mosn/pkg/tree/1e4184714e744895968339725cc2dc34f5116dcb/log) 下面，`errorlog` 和 `accesslog` 的具体实现都是通过 [log.GetOrCreateLogger](https://github.com/mosn/pkg/blob/1e4184714e744895968339725cc2dc34f5116dcb/log/logger.go#L122) 来初始化的。
+log 的具体实现已经分离到了 [mosn/pkg/log](https://github.com/mosn/pkg/tree/1e4184714e744895968339725cc2dc34f5116dcb/log) 下面，`errorlog` 和 `accesslog` 的具体实现都是通过 [log.GetOrCreateLogger](https://github.com/mosn/pkg/blob/1e4184714e744895968339725cc2dc34f5116dcb/log/logger.go#L122) 来初始化的。当 `roller` 为空的时候使用默认的 `defaultRoller`，默认每天轮转。
+
+```golang
+defaultRoller = Roller{MaxTime: defaultRotateTime}
+......
+defaultRotateTime = 24 * 60 * 60
+```
 
 #### start
 
