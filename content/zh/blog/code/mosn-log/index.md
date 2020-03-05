@@ -3,7 +3,7 @@ title: MOSN 源码解析 - log系统
 linkTitle: MOSN 源码解析 - log系统
 date: 2020-03-03
 weight: 1
-author: "[@champly](https://github.com/champly)"
+author: "[陈鹏（多点生活）](https://github.com/champly)"
 description: "对 MOSN Log系统的源码解析。"
 ---
 
@@ -21,7 +21,7 @@ MOSN 日志系统分为`日志`和`Metric`两大部分，其中`日志`主要包
 
 errorlog 主要是用来记录`MOSN`运行时候的日志信息，[配置结构](https://github.com/mosn/mosn/blob/07cd4afe4d76619fdfbdff858239885f9a358bb2/pkg/config/v2/server.go#L28):
 
-```golang
+```go
 type ServerConfig struct {
 ......
 	DefaultLogPath  string `json:"default_log_path,omitempty"`
@@ -38,7 +38,7 @@ type ServerConfig struct {
 
 [代码如下：](https://github.com/mosn/mosn/blob/07cd4afe4d76619fdfbdff858239885f9a358bb2/pkg/log/logger_manager.go#L37)
 
-```golang
+```go
 func init() {
 	......
 	// use console as start logger
@@ -64,7 +64,7 @@ func InitDefaultLogger(output string, level log.Level) (err error) {
 
 `accesslog` 主要用来记录上下游请求的数据信息，[配置结构](https://github.com/mosn/mosn/blob/07cd4afe4d76619fdfbdff858239885f9a358bb2/pkg/config/v2/server.go#L76):
 
-```golang
+```go
 type AccessLog struct {
 	Path   string `json:"log_path,omitempty"`
 	Format string `json:"log_format,omitempty"`
@@ -100,20 +100,20 @@ type AccessLog struct {
 
 accesslog 实现如下[接口](https://github.com/mosn/mosn/blob/07cd4afe4d76619fdfbdff858239885f9a358bb2/pkg/log/accesslog.go#L105):
 
-```golang
+```go
 AccessLog interface {
     // Log write the access info.
     Log(ctx context.Context, reqHeaders HeaderMap, respHeaders HeaderMap, requestInfo RequestInfo)
 }
 ```
 
-调用 Log 记录日志的时候，通过使用 [变量机制](https://mosn.io/zh/blog/posts/mosn-variable) 来填充`log_format`里面的变量，相关信息保存在 ctx 里面。用于保存变量信息的 `entries` 通过 `NewAccessLog` 初始化的时候，调用 `parseFormat` 方法来初始化的，[参考相关代码](https://github.com/mosn/mosn/blob/07cd4afe4d76619fdfbdff858239885f9a358bb2/pkg/log/accesslog.go#L79)。
+调用 Log 记录日志的时候，通过使用 [变量机制](https://mosn.io/zh/blog/code/mosn-variable) 来填充`log_format`里面的变量，相关信息保存在 ctx 里面。用于保存变量信息的 `entries` 通过 `NewAccessLog` 初始化的时候，调用 `parseFormat` 方法来初始化的，[参考相关代码](https://github.com/mosn/mosn/blob/07cd4afe4d76619fdfbdff858239885f9a358bb2/pkg/log/accesslog.go#L79)。
 
 ### log 的具体实现
 
 log 的具体实现已经分离到了 [mosn/pkg/log](https://github.com/mosn/pkg/tree/1e4184714e744895968339725cc2dc34f5116dcb/log) 下面，`errorlog` 和 `accesslog` 的具体实现都是通过 [log.GetOrCreateLogger](https://github.com/mosn/pkg/blob/1e4184714e744895968339725cc2dc34f5116dcb/log/logger.go#L122) 来初始化的。当 `roller` 为空的时候使用默认的 `defaultRoller`，默认每天轮转。
 
-```golang
+```go
 defaultRoller = Roller{MaxTime: defaultRotateTime}
 ......
 defaultRotateTime = 24 * 60 * 60
@@ -140,7 +140,7 @@ defaultRotateTime = 24 * 60 * 60
 
 在初始化的时候，创建了一个 500 大小的 `chan` `writeBufferChan`，并且在 `handler` 里面处理需要记录的日志、重命名的事件、关闭的事件。
 
-```golang
+```go
 lg := &Logger{
 	output:          output,
 	roller:          roller,
@@ -172,7 +172,7 @@ for {
 
 #### writeBufferChan
 
-```golang
+```go
 for i := 0; i < 20; i++ {
 	select {
 	case b := <-l.writeBufferChan:
