@@ -14,7 +14,9 @@ description: >
 
 Before the Service Mesh transformation, we have expected that as the next generation of Ant Financial's infrastructure, Meshization will inevitably bring revolutionary changes and evolution costs. We have a very ambitious blueprint: ready to integrate the original network and middleware various capabilities have been re-precipitated and polished to create a low-level platform for the next-generation architecture of the future, which will carry the responsibility of various service communications.
 
-This is a long-term planning project that takes many years to build and meets the needs of the next five or even ten years. The team will cooperate to build a cross-business, SRE, middleware, infrastructure and other departments. We must have a network proxy forwarding plane with flexible expansion, high performance, and long-term evolution. Nginx and Envoy are unsatisfactory in terms of R & D efficiency and flexible expansion. At the same time, the entire Mesh transformation involves a large number of departments and R & D personnel. The landing costs of cross-team cooperation must be considered. Therefore, we based our own research on Golang. New network proxy MOSN in cloud native scenario. For the performance of Golang, we also did a full investigation and test in the early stage to meet the performance requirements of Ant Financial Services.
+This is a long-term planning project that takes many years to build and meets the needs of the next five or even ten years, and cooperates to build a team that spans business, SRE, middleware, and infrastructure departments. We must have a network proxy forwarding plane with flexible expansion, high performance, and long-term evolution. Nginx and Envoy have a very long-term capacity accumulation and active community in the field of network agents. We have also borrowed from other excellent open source network agents such as Nginx and Envoy. At the same time, we have enhanced research and development efficiency and flexible expansion. Mesh transformation involves a large number of departments and R & D personnel. We must consider the landing cost of cross-team cooperation. Therefore, we have developed a new network proxy MOSN based on Go in the cloud-native scenario. For Go's performance, we also did a full investigation and test in the early stage to meet the performance requirements of Ant Financial's services.
+
+At the same time, we received a lot of feedback and needs from the end user community. Everyone has the same needs and thoughts. So we combined the actual situation of the community and ourselves to conduct the research and development of MOSN from the perspective of satisfying the community and users. We believe that the open source competition is mainly competition between standards and specifications. We need to make the most suitable implementation choice based on open source standards.
 
 ### What is the difference between MOSN and Envoy? What are the advantages of MOSN?
 
@@ -42,7 +44,7 @@ The release cycle of MOSN open source is one month. We are about to announce Roa
 
 ### What version of Istio does MOSN support? When will it be available in Istio?
 
-Currently, MOSN can be based on Istio 1.1.4 and run through the bookinfo example. Due to the latest version of Istio that has upgraded the XDS protocol and some enhancements, MOSN is currently adapting. It is expected that in October 2020, it will fully support HTTP of high-level Istio. Department ability.
+Currently, MOSN can be based on Istio 1.1.4 and run through the bookinfo example. Due to the latest version of Istio that has upgraded the XDS protocol and some enhancements, MOSN is currently adapting. It is expected that in October 2020, it will fully support HTTP of high-level Istio ability. To achieve this, the MOSN community has specifically established the [MOSN Istio Working Group](https://github.com/mosn/community/blob/master/wg-istio.md) to work with MOSN to adapt Istio.
 
 ### What service registration and discovery mechanisms does MOSN support?
 
@@ -50,4 +52,4 @@ MOSN mainly supports two service registration and discovery mechanisms: one is t
 
 ### How to participate in the MOSN open source community?
 
-Join the MOSN slack worksapce: <https://mosnproxy.slack.com> to participate in the open source community. You can also visit the [Community repository](https://github.com/mosn/community) to learn about the organizational structure of the MOSN open source community and to obtain community materials.
+Join the MOSN slack worksapce <https://mosnproxy.slack.com> to participate in the open source community. You can also visit the [Community repository](https://github.com/mosn/community) to learn about the organizational structure of the MOSN open source community and to obtain community materials.

@@ -4,7 +4,7 @@ linkTitle: "Announcing MOSN v0.10.0"
 date: 2020-02-28
 author: MOSN Team
 description: >
-  MOSN v0.10.0 changelog。
+  MOSN v0.10.0 changelog.
 ---
 
 We are happy to announce the release of [MOSN v0.10.0](https://github.com/mosn/mosn/releases/tag/v0.10.0). You can see the changelog below.
