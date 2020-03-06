@@ -146,6 +146,12 @@ no = 'Sorry to hear that. Please <a href="https://github.com/mosn/mosn.io/issues
         desc = "Join us!"
 # Developer relevant links. These will show up on right side of footer and in the community page if you have one.
 [[params.links.user]]
+	name ="Mailing list"
+	url = "https://groups.google.com/d/forum/mosn-dev"
+	icon = "fa fa-envelope"
+        desc = "Discussion and help from your fellow users"
+# Developer relevant links. These will show up on right side of footer and in the community page if you have one.
+[[params.links.user]]
 	name = "GitHub"
 	url = "https://github.com/mosn/mosn"
 	icon = "fab fa-github"
