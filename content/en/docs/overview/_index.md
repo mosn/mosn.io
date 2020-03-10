@@ -7,7 +7,7 @@ description: >
   The basic description of MOSN.
 ---
 
-MOSN is a powerful cloud native proxy written in Golang. As a cloud-native network data plane, MOSN is designed to provide services with multi-protocol, modular, intelligent, and secure proxy capabilities. MOSN is the short name of Modular Open Smart Network-proxy. MOSN can be integrated with any Service Mesh that supports the xDS API. It can also be used for other purposes, such as independent Layer 4 or 7 load balancer, API gateway, and cloud-native ingress.
+MOSN is a powerful cloud native proxy written in Golang. As a cloud-native network data plane, MOSN is designed to provide services with multi-protocol, modular, intelligent, and secure proxy capabilities. MOSN is the short name of Modular Open Smart Network. MOSN can be integrated with any Service Mesh that supports the xDS API. It can also be used for other purposes, such as independent Layer 4 or 7 load balancer, API gateway, and cloud-native ingress.
 
 ## Quick start
 

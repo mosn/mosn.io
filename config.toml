@@ -54,7 +54,7 @@ id = "UA-93485976-3"
 [languages]
 [languages.en]
 title = "MOSN"
-description = "The Cloud Native Proxy for Edge and Service Mesh"
+description = "The Cloud Native Proxy for Edge or Service Mesh"
 languageName ="English"
 time_format_blog = "Jan 2, 2006"
 
@@ -62,7 +62,7 @@ time_format_blog = "Jan 2, 2006"
 weight = 1
 [languages.zh]
 title = "MOSN"
-description = "云原生网络代理，可用于边缘代理和服务网格"
+description = "用于边缘或服务网格的云原生网络代理"
 languageName ="中文"
 contentDir = "content/zh"
 time_format_default = "2006年1月2日"
