@@ -1,5 +1,5 @@
 ---
-title: "MOSN blog"
+title: "Blog"
 linkTitle: "Blog"
 menu:
   main:

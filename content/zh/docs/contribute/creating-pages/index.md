@@ -54,7 +54,7 @@ description: >
 - title：即本文章的标题。
 - linkTitle：显示在侧边栏的文档标题，一般写成跟 `title` 的内容一致即可。
 - date：该文档的创作日期，格式为 `YYYY-MM-dd`。
-- weight：在同一文档层级，weight 数字越小的文档在侧边栏中显示约靠前。
+- weight：在同一文档层级，weight 数字越小的文档在侧边栏中显示约靠前，对于非 `docs` 目录下的文章不需要设置。
 - description：对本文档的简介。
 
 对于博客、发布、新闻文档，还需要填写作者信息：

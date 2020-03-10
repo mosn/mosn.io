@@ -1,7 +1,5 @@
 +++
 title = "MOSN"
-linkTitle = "MOSN"
-
 +++
 
 {{< blocks/cover title="Modular Open Smart Network proxy" image_anchor="top" height="full" >}}
@@ -12,20 +10,27 @@ linkTitle = "MOSN"
 	<a class="btn btn-lg btn-secondary mr-3 mb-4" href="https://github.com/mosn/mosn">
 		下载<i class="fab fa-github ml-2 "></i>
 	</a>
-	<p class="lead mt-5"><a href="#">云原生开源网络代理，可用于边缘代理和服务网格</a></p>
+	<p class="lead mt-5">开源的云原生网络代理，可用于边缘代理和服务网格</p>
 	<div class="mx-auto mt-5">
-		{{< blocks/link-down color="info" >}}
+		{{< blocks/link-down color="light" >}}
 	</div>
 </div>
 {{< /blocks/cover >}}
 
-{{% blocks/lead color="primary" %}}
-MOSN 可以与任何支持 xDS API 的 Service Mesh 集成，亦可以作为独立的四、七层负载均衡，API Gateway，云原生 Ingress 等使用。
-{{% /blocks/lead %}}
+<div id="overview">
+  <div class="contain">
+    <h4 class="section-head">关于 MOSN</h4>
+    MOSN 是一款使用 Go 语言开发的网络代理软件，由蚂蚁金服开源并经过几十万容器的生产级验证。
+    MOSN 作为云原生的网络数据平面，旨在为服务提供多协议、模块化、智能化、安全的代理能力。
+    MOSN 是 Modular Open Smart Network-proxy 的简称。
+    MOSN 可以与任何支持 xDS API 的 Service Mesh 集成，亦可以作为独立的四、七层负载均衡，API Gateway、云原生 Ingress 等使用。
+    </p>
+  </div>
+</div>
 
 {{< blocks/section >}}
 {{% blocks/feature icon="fa-question" title="反馈问题" %}}
-功能请求、提问和 Bug，请使用 <a href="https://github.com/mosn/mosn/issues/new/choose">Github Issue</a> 报告给我们。
+功能请求、提问和 Bug，请使用 <a href="https://github.com/mosn/mosn/issues/new/choose">Github Issue</a> 报告给我们或加入<a href="/zh/community">钉钉群</a>与我们交流。
 {{% /blocks/feature %}}
 
 
@@ -37,6 +42,4 @@ MOSN 可以与任何支持 xDS API 的 Service Mesh 集成，亦可以作为独�
 {{% blocks/feature icon="fab fa-twitter" title="在 Twitter 上关注我们" %}}
 在 Twitter 上关注 <a href="https://twitter.com/MosnProxy">@MosnProxy</a> 获取 MOSN 的最新消息。
 {{% /blocks/feature %}}
-
-
 {{< /blocks/section >}}
