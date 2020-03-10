@@ -876,6 +876,7 @@ func (p *workerPool) spawnWorker(task func()) {
 			log.DefaultLogger.Errorf("[syncpool] panic %v\n%s", p, string(debug.Stack()))
 		}
 		//整个函数退出时，协程数量减1，后面可以再创建出来
+		//这里正常情况下下面的死循环是不会退出的，也就是说基础协程一旦创建就不会被回收
 		<-p.sem
 	}()
 	for {
