@@ -864,6 +864,7 @@ func (p *workerPool) ScheduleAuto(task func()) {
 		}, nil)
 	}
 }
+//额外创建出来的协程在执行完任务以后会自动退出
 func GoWithRecover(handler func(), recoverHandler func(r interface{})) {
 	go func() {
 		//省略defer方法...
