@@ -20,7 +20,8 @@ description:
   "global_log_roller":"",
   "graceful_timeout":"",
   "processor":"",
-  "listeners":[]
+  "listeners":[],
+  "routers":[]
 }
 ```
 
@@ -68,6 +69,10 @@ MOSN 使用的 `GOMAXPROCS` 数量
 - 如果没有配置，默认为 CPU 数量。
 - 如果配置为 0，等价于没有配置。
 
-## Listeners
+## listeners
 
 一组 [Listener](./listener) 的配置。
+
+## routers
+
+一组[Router](./router)的配置。
