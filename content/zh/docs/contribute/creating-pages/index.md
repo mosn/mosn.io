@@ -4,7 +4,7 @@ linkTitle: "创建页面"
 date: 2020-02-11
 weight: 2
 description: >
-  本页介绍了如何创建 MOSn 文档页面。
+  本页介绍了如何创建 MOSN 文档页面。
 ---
 
 ## 开始之前
