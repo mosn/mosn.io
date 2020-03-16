@@ -9,9 +9,9 @@ description: >
 
 ## Featuregate 介绍
 
-在MOSN中，存在一些功能是需要在启动时决定是否开启的，为了满足这种需求，MOSN推出了featuregate（功能开关）的能力。
+在MOSN中，存在一些功能需要在启动时决定是否开启的，为了满足这种需求，MOSN推出了featuregate（功能开关）的能力。
 
-Featuregate描述了一组MOSN中需要开启/关闭的feature状态，每个feature都有自己默认的状态，每个MOSN版本支持的feature、feature默认的版本都有所不同；featuregate的描述用一个字符串表示，按照${feature}=${bool}的方式，用逗号进行分割：
+Featuregate描述了一组MOSN中需要开启/关闭的feature状态，每个feature都有自己默认的状态，每个MOSN版本支持的feature、feature默认的版本都有所不同；featuregate的描述用一个字符串表示，按照`${feature}=${bool}`的方式，用逗号进行分割：
 
 ```
 // 通用模版
@@ -26,7 +26,7 @@ Featuregate 不仅仅是提供了一种功能切换的能力，同时也提供�
 - feature之间的依赖关系管理，包括feature之间的启动顺序依赖、开启/关闭状态的依赖等
   - 举例说明，基于MOSN实现两个feature，分别为A和B，需要在A初始化完成以后，B会使用A初始化的结果进行初始化，这就是B依赖A，当feature A处于Disable状态时，B显然也会处于Disable或者需要作出对应的“降级”； feature gate框架提供了一种简单的方式，可以更加专注于feature的开发，而不用去管理对应的启动与依赖
 
-基于featuregate的框架，在MOSN进行不同feature的二次开发，是featuregate框架最主要的目的。
+基于featuregate的框架，在MOSN中进行不同feature的二次开发，是featuregate框架最主要的目的。
 
 ## 基于featuregate进行开发
 
@@ -253,7 +253,7 @@ func (f *FD) Start() {
 
 ### FAQ
 
-#### 为什么不使用配置的方式，而要使用feature gate?
+#### 为什么不使用配置的方式，而要使用featuregate?
 
-- 配置文件需要进行解析，feature gate更有利于扩展能力的实现
-- 有的feature 需要判断的时机，比配置文件解析要早，甚至可能影响配置解析的逻辑
+- 配置文件需要进行解析，featuregate更有利于扩展能力的实现
+- 有的feature需要判断的时机，比配置文件解析要早，甚至可能影响配置解析的逻辑
