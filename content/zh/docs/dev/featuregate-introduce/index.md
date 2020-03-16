@@ -1,17 +1,17 @@
 ---
-title: "FeatureGate介绍"
-linkTitle: "FeatureGate介绍"
+title: "Featuregate介绍"
+linkTitle: "Featuregate介绍"
 date: 2020-03-13
 weight: 2
 description: >
-  本页介绍了MOSN的FeatureGate。
+  本页介绍了MOSN的featuregate。
 ---
 
 ## Featuregate 介绍
 
-在MOSN中，存在一些功能是需要在启动时决定是否开启的，为了满足这种需求，MOSN推出了feature gate（功能开关）的能力。
+在MOSN中，存在一些功能是需要在启动时决定是否开启的，为了满足这种需求，MOSN推出了featuregate（功能开关）的能力。
 
-feature gate描述了一组MOSN中需要开启/关闭的feature状态，每个feature都有自己默认的状态，每个mosn版本支持的feature、feature默认的版本都有所不同；feature gate的描述用一个字符串表示，按照${feature}=${bool}的方式，用逗号进行分割：
+Featuregate描述了一组MOSN中需要开启/关闭的feature状态，每个feature都有自己默认的状态，每个MOSN版本支持的feature、feature默认的版本都有所不同；featuregate的描述用一个字符串表示，按照${feature}=${bool}的方式，用逗号进行分割：
 
 ```
 // 通用模版
@@ -20,18 +20,20 @@ feature gate描述了一组MOSN中需要开启/关闭的feature状态，每个fe
 ./mosn start -c mosn_config.json -f "auto_config=true,XdsMtlsEnable=true"
 ```
 
-feature gate 不仅仅是提供了一种功能切换的能力，同时也提供了一种可扩展的开发机制，基于MOSN进行二次开发时，可以使用feature gate做到如下的功能：
+Featuregate 不仅仅是提供了一种功能切换的能力，同时也提供了一种可扩展的开发机制，基于MOSN进行二次开发时，可以使用featuregate做到如下的功能：
+
 - 功能切换的能力，可以控制某个feature的开启/关闭
 - feature之间的依赖关系管理，包括feature之间的启动顺序依赖、开启/关闭状态的依赖等
-  - 举例说明，基于mosn实现两个feature，分别为A和B，需要在A初始化完成以后，B会使用A初始化的结果进行初始化，这就是B依赖A，当feature A处于Disable状态时，B显然也会处于Disable或者需要作出对应的“降级”； feature gate框架提供了一种简单的方式，可以更加专注于feature的开发，而不用去管理对应的启动与依赖
+  - 举例说明，基于MOSN实现两个feature，分别为A和B，需要在A初始化完成以后，B会使用A初始化的结果进行初始化，这就是B依赖A，当feature A处于Disable状态时，B显然也会处于Disable或者需要作出对应的“降级”； feature gate框架提供了一种简单的方式，可以更加专注于feature的开发，而不用去管理对应的启动与依赖
 
-基于featuregate的框架，在mosn进行不同feature的二次开发，是featuregate框架最主要的目的。
+基于featuregate的框架，在MOSN进行不同feature的二次开发，是featuregate框架最主要的目的。
 
-## 基于Featuregate进行开发
+## 基于featuregate进行开发
 
-### featuregate 实现
+### Featuregate 实现
 
-首先，我们来看一下，featuregate框架提供了哪些接口
+首先，我们来看一下，featuregate框架提供了哪些接口:
+
 ```Go
 // 返回一个Feature当前的状态，true表示enable，false表示disable
 func Enabled(key Feature) bool
@@ -54,9 +56,10 @@ func StartInit()
 func WaitInitFinsh() error
 ```
 
-这其中，StartInit 和 WaitInitFinsh 是由MOSN框架进行调用，基于MOSN进行二次开发时无须关注和调用；通常情况下，Set和SetFromMap也无须关注。所有的上述接口，都是由框架下默认的一个不可导出的全局FeatureGate对象暴露，在没有极为特殊需求的场景下（如编写单元测试），不需要额外生成FeatureGate对象，使用默认的即可。
+这其中，StartInit 和 WaitInitFinsh 是由MOSN框架进行调用，基于MOSN进行二次开发时无须关注和调用；通常情况下，Set和SetFromMap也无须关注。所有的上述接口，都是由框架下默认的一个不可导出的全局featuregate对象暴露，在没有极为特殊需求的场景下（如编写单元测试），不需要额外生成FeatureGate对象，使用默认的即可。
 
-接下来，我们看一下FeatureGate的实现
+接下来，我们看一下featuregate的实现:
+
 ```Go
 type knownFeatureSpec struct {
         FeatureSpec
@@ -75,10 +78,11 @@ type FeatureGate struct {
 }
 ```
 
-FeatureGate包含了一个map，用于记录所有被支持的Feature；一个inited状态标，表示FeatureGate是否已经完成了初始化; Once用于确保FeatureGate的初始化只执行一次，WaitGroup则用于同步Feature初始化的结果；一个Mutex用于并发保护。
-按照FeatureGate的设计，不同的Feature是可以通过Add的方式新增，以及不同的Set方法改变状态的，而不同Feature的初始化Init函数都会统一执行，因此一旦执行完Init，则不再允许新增Feature、修改Feature状态；因此我们需要一个inited的标记来记录这个行为。
-knownFeatureSpec是一个不可导出的结构体，用于对表示不同Feature的FeatureSpec封装，其中的Once和channel均是用于FeatureGate中订阅和初始化使用，在此不做详细说明。
-下面，我们来看一下FeatureSpec的定义，这也是我们基于FeatureGate框架进行开发的核心数据结构。
+Featuregate包含了一个map，用于记录所有被支持的feature；一个`inited`状态标，表示featuregate是否已经完成了初始化; `once`用于确保featuregate的初始化只执行一次，`WaitGroup`则用于同步feature初始化的结果；一个`Mutex`用于并发保护。
+按照featuregate的设计，不同的feature是可以通过`Add`的方式新增，以及不同的`Set`方法改变状态的，而不同feature的初始化`Init`函数都会统一执行，因此一旦执行完`Init`，则不再允许新增feature、修改feature状态；因此我们需要一个`inited`的标记来记录这个行为。
+`knownFeatureSpec`是一个不可导出的结构体，用于对表示不同feature的`FeatureSpec`封装，其中的`once`和`channel`均是用于featuregate中订阅和初始化使用，在此不做详细说明。
+下面，我们来看一下`FeatureSpec`的定义，这也是我们基于featuregate框架进行开发的核心数据结构。
+
 ```Go
 type prerelease string
 const (
@@ -102,8 +106,10 @@ type FeatureSpec interface {
         PreRelease() prerelease
 }
 ```
-- prerelease 是不可导出的定义，有三个约定的导出变量可以使用，相当于传统语言的Enum类型，用于描述Feature的信息，没有明确的作用
-- FeatureSpec可以自行实现，同时多数情况下可以用框架实现的BaseFeatureSpec，或者基于BaseFeatureSpec进行封装；如注释描述，通常情况下只需要额外封装实现一个InitFunc函数即可
+
+- `prerelease` 是不可导出的定义，有三个约定的导出变量可以使用，相当于传统语言的Enum类型，用于描述feature的信息，没有明确的作用
+- `FeatureSpec`可以自行实现，同时多数情况下可以用框架实现的`BaseFeatureSpec`，或者基于`BaseFeatureSpec`进行封装；如注释描述，通常情况下只需要额外封装实现一个`InitFunc`函数即可
+
 ```Go
 // BaseFeatureSpec is a basic implementation of FeatureSpec.
 // Usually, a feature spec just need an init func.
@@ -120,12 +126,14 @@ type BaseFeatureSpec struct {
 }
 ```
 
-### feature gate的使用
+### Featuregate的使用
 
-了解了feature gate的基本实现，就可以考虑使用feature gate进行基本的编程扩展了。下面会介绍几种feature gate的使用场景，以及如何编写feature
+了解了featuregate的基本实现，就可以考虑使用featuregate进行基本的编程扩展了。下面会介绍几种featuregate的使用场景，以及如何编写feature。
 
 #### 1. 基本的“全局”开关
-对于Feature切换最基本的使用场景，就是使用一个类似“全局变量”进行控制，通过IF条件判断执行不同的逻辑。使用FeatureGate框架实现这种能力，可以把控制Feature切换的参数全部统一到启动参数中
+
+对于Feature切换最基本的使用场景，就是使用一个类似“全局变量”进行控制，通过IF条件判断执行不同的逻辑。使用FeatureGate框架实现这种能力，可以把控制Feature切换的参数全部统一到启动参数中。
+
 ```Go
 var featureName featuregate.Feature = "simple_feature"
 func init() {
@@ -145,7 +153,9 @@ func myfunc() {
 ```
 
 #### 2. 需要进行“初始化”操作
-通过封装扩展InitFunc函数，让相关的初始化工作在mosn启动时统一完成，如果Feature处于Disable状态，那么InitFunc不会执行
+
+通过封装扩展InitFunc函数，让相关的初始化工作在MOSN启动时统一完成，如果Feature处于Disable状态，那么InitFunc不会执行。
+
 ```Go
 var featureName featuregate.Feature = "init_feature"
 
@@ -160,11 +170,14 @@ func (f *MyFeature) InitFunc() {
 ```
 
 #### 3. Feature之间存在依赖关系
+
 这个功能是FeatureGate框架提供的最重要的能力，可以方便的解决下面的场景：
+
 - 假设我们存在四个独立的组件（Feature），分别是A、B、C，D
 - B和C的启动都依赖于A，即首先要A启动完成，然后B和C才能启动完成；D依赖于B，必须B启动完成，D才可以启动
 - 如果A没有启动，B就不能启动，而C存在一种降级方案，依然可以继续工作
 - 四个Feature在FeatureGate框架下可各自实现，如下
+
 ```Go
 var FeatureA featuregate.Feature = "A"
 

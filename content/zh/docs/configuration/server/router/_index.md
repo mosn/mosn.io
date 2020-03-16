@@ -1,6 +1,6 @@
 ---
-title: "router"
-linkTitle: "router"
+title: "Router 配置"
+linkTitle: "Router 配置"
 date: 2020-03-13
 weight: 2
 description: >
