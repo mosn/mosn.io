@@ -7,9 +7,9 @@ description: >
   本文将介绍如何使用 MOSN 在 Istio 框架下搭建 Service Mesh 的开发环境，并验证 MOSN 的一些基础路由能力、负载均衡能力等。
 ---
 
-{{% pageinfo color="primary" %}}
-MOSN 已通过 Istio 1.1.4 的 bookinfo 测试，关于最新版 Istio 的支持请参考 [Issue #933](https://github.com/mosn/mosn/issues/933)。
-{{% /pageinfo %}}
+{{% pageinfo color="primary" %}}    
+MOSN 已通过 Istio 1.4.6 的 `BookInfo` 测试，关于最新版 Istio 的支持情况可关注 [MOSN Istio WG](https://github.com/mosn/community/blob/master/wg-istio.md)。
+{{% /pageinfo %}}  
 
 本文介绍的内容将包括 : 
 
@@ -25,11 +25,12 @@ MOSN 已通过 Istio 1.1.4 的 bookinfo 测试，关于最新版 Istio 的支持
 下图是 Istio 整体框架下，MOSN 的工作示意图。
 
 <div align=center><img src="mosn-with-service-mesh.png" width = "450" height = "400" alt="MOSN 介绍" /></div>
+
 ## 准备工作
 
-本文以 macOS 为例 ，其他环境可以安装对应版本的软件。
+本文以 macOS 为例，其他环境可以安装对应版本的软件。
 
-### 安装 hyperkit
+#### 安装 hyperkit
 
 先安装 [docker-for-mac](https://store.docker.com/editions/community/docker-ce-desktop-mac)，之后[安装驱动](https://github.com/kubernetes/minikube/blob/master/docs/drivers.md)
 
@@ -51,39 +52,39 @@ $ curl -LO https://storage.googleapis.com/minikube/releases/latest/docker-machin
 && sudo chmod u+s /usr/local/bin/docker-machine-driver-hyperkit
 ```
 
-### 安装 Minikube（也可以购买商业 k8s 集群）
+#### 安装 Minikube（也可以购买商业 Kubernetes 集群）
 
-推荐使用 Minikube v0.28 以上来体验，请参考 [https://github.com/kubernetes/minikube](https://github.com/kubernetes/minikube)
+推荐使用 Minikube v0.28 以上来体验，请参考 [minikube doc](https://github.com/kubernetes/minikube)。
 
 ```bash
 $ brew cask install minikube
 ```
 
-### 启动 Minikube
+#### 启动 Minikube
 
-注意，pilot 至少需要 2G 内存，所以在启动的时候，可以通过加参数的方法给 minikube 添加分配的资源，如果你机器的资源不够，推荐使用商业版本的 k8s 集群。
+注意，pilot 至少需要 2G 内存，所以在启动的时候，可以通过加参数的方法给 minikube 添加分配的资源，如果你机器的资源不够，推荐使用商业版本的 Kubernetes 集群。
 
 ```bash
 $ minikube start --memory=8192 --cpus=4 --kubernetes-version=v1.15.0 --vm-driver=hyperkit
 ```
 
-创建istio 命名空间
+创建 istio 命名空间
 
 ```
 $ kubectl create namespace istio-system
 ```
 
-### 安装 kubectl 命令行工具
+#### 安装 kubectl 命令行工具
 
-kubectl 是用于针对 k8s 集群运行命令的命令行接口，安装参考 [https://kubernetes.io/docs/tasks/tools/install-kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl)。
+kubectl 是用于针对 Kubernetes 集群运行命令的命令行接口，安装参考 [kubectl doc](https://kubernetes.io/docs/tasks/tools/install-kubectl)。
 
 ```bash
 $ brew install kubernetes-cli
 ```
 
-### 安装 Helm
+#### 安装 Helm
 
-Helm 是一个 k8s 的包管理工具，安装参考 [https://docs.helm.sh/using\_helm/#installing-helm](https://docs.helm.sh/using_helm/#installing-helm)
+Helm 是一个 Kubernetes 的包管理工具，安装参考 [helm doc](https://docs.helm.sh/using_helm/#installing-helm)：
 
 ```bash
 $ brew install kubernetes-helm
@@ -91,22 +92,20 @@ $ brew install kubernetes-helm
 
 ## 源码方式部署 Istio
 
-{{% pageinfo color="primary" %}}
-当前 SOFAMesh 已停止 fork 的方式开发，而是转为直接基于 Istio 开发，向 Istio 社区贡献，未来将可以通过 Istio 直接支持。MOSN 已通过 Istio 1.4.6 的 BookInfo 测试，关于最新版 Istio 的支持请参考 [Issue #933](https://github.com/mosn/mosn/issues/933)。
-{{% /pageinfo %}}
+MOSN 已通过 Istio 1.4.6 的 `BookInfo` 测试，相关支持动态请关注 [MOSN Istio WG](https://github.com/mosn/community/blob/master/wg-istio.md)。
 
-### 下载适配过 MOSN 的 Istio 源码
+#### 下载适配过 MOSN 的 Istio 源码
 
 ```bash
 $ git clone -b feature-mosn_adapter https://github.com/mosn/istio.git
 ```
 
-### 通过 Helm 安装 Istio
+#### 通过 Helm 安装 Istio
 
 
 **使用 `helm template` 安装**
 
-首先需要切换到Istio源码所在目录，然后使用Helm安装istio CRD以及各个组件 
+首先需要切换到 Istio 源码所在目录，然后使用 helm 安装 Istio CRD 以及各个组件： 
 
 ```bash
 $ cd istio
@@ -119,10 +118,10 @@ $ kubectl apply -f istio.yaml
 
 ```
 
-### 验证安装
+#### 验证安装
 
 `istio-system` 命名空间下的 pod 状态都是 Running 时，说明已经部署成功。
-如果仅仅是为了运行bookinfo，只需要pilot、injector、citadel这三个pod运行成功就可以满足最低要求
+如果仅仅是为了运行 `BookInfo`，只需要 pilot、injector、citadel 这三个 pod 运行成功就可以满足最低要求。
 
 ```bash
 $ kubectl get pods -n istio-system
@@ -141,7 +140,7 @@ istio-telemetry-5f5d94c78-zw847             2/2     Running     0          9d
 prometheus-6c9c8f9c97-mkcnp                 1/1     Running     0          9d
 ```
 
-我们可以登录到`istio-ingressgateway-79b75c4db-8w646` pod 上查看该网关已经成功使用MOSN作为`ingress-gateway`。
+我们可以登录到 `istio-ingressgateway-79b75c4db-8w646` pod 上查看该网关已经成功使用MOSN作为 `ingress-gateway`：
 
 ```bash
 #kubectl -n istio-system exec -it  istio-ingressgateway-79b75c4db-8w646  bash 
@@ -153,21 +152,9 @@ root        175  0.0  0.1  11468  1056 pts/1    S+   13:06   0:00 grep --color=a
 
 ``` 
 
-### 卸载安装
-
-如果需要运行 BookInfo 应用，则先不要卸载MOSN Istio。
-
-卸载 MOSN Istio。
-
-```bash
-$ kubectl delete -f istio_init.yaml
-$ kubectl delete -f istio.yaml
-$ kubectl delete namespace istio-system
-```
-
 ## BookInfo 实验
 
-BookInfo 是一个类似豆瓣的图书应用，它包含四个基础服务：
+`BookInfo` 是一个类似豆瓣的图书应用，它包含四个基础服务：
 
 -  Product Page：主页，由 python 开发，展示所有图书信息，它会调用 Reviews 和 Details 服务
 -  Reviews：评论，由 java 开发，展示图书评论，会调用 Ratings 服务
@@ -175,9 +162,10 @@ BookInfo 是一个类似豆瓣的图书应用，它包含四个基础服务：
 -  Details：图书详情，由 ruby 开发
 
 <div align=center><img src="bookinfo.png" width = "550" height = "400" alt="bookinfo" /></div>
-### 部署 BookInfo 应用并注入 MOSN
 
-> 详细过程可以参考 [https://istio.io/docs/examples/bookinfo/](https://istio.io/docs/examples/bookinfo/)
+#### 部署 `BookInfo` 应用并注入 MOSN
+
+> 详细过程可以参考 [BookInfo doc](https://istio.io/docs/examples/bookinfo/)
 
 
 注入 MOSN。
@@ -186,7 +174,7 @@ BookInfo 是一个类似豆瓣的图书应用，它包含四个基础服务：
 $ kubectl label namespace default istio-injection=enabled
 ```
 
-部署 Bookinfo。
+部署 `Bookinfo`。
 
 ```bash
 $ kubectl apply -f samples/bookinfo/platform/kube/bookinfo.yaml
@@ -219,7 +207,7 @@ reviews-v3-86876fd564-z4kdb      2/2     Running   0          9d
 
 ```
 
-同样我们可以查看此时 BookInfo 应用的每一个 pod 都运行了2个容器，一个容器是 BookInfo 自身业务容器，另一个容器是Istio注入的 sidecar MOSN 容器。
+同样我们可以查看此时 `BookInfo` 应用的每一个 pod 都运行了 2 个容器，一个容器是 `BookInfo` 自身业务容器，另一个容器是Istio注入的 sidecar MOSN 容器。
 
 ```bash
 #kubectl exec -it productpage-v1-7b8fdcd7f-vcbwg  -c istio-proxy  bash 
@@ -230,7 +218,7 @@ istio-p+     13  0.0  2.0 128060 21344 ?        Sl   Mar10   5:12 /usr/local/bin
 istio-p+     95  0.0  0.0  11460  1036 pts/0    S+   13:15   0:00 grep --color=auto mosn
 ```
 
-### 访问 BookInfo 服务
+#### 访问 BookInfo 服务
 
 开启 gateway 模式。
 
@@ -241,7 +229,7 @@ NAME               AGE
 bookinfo-gateway   24m
 ```
 
-设置GATEWAY_URL,参考文档 https://istio.io/docs/tasks/traffic-management/ingress/ingress-control/#determining-the-ingress-ip-and-ports
+设置 `GATEWAY_URL` 参考[文档](https://istio.io/docs/tasks/traffic-management/ingress/ingress-control/#determining-the-ingress-ip-and-ports)
 
 ```bash
 $ export INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].nodePort}')
@@ -259,10 +247,7 @@ $ curl -o /dev/null -s -w "%{http_code}\n"  http://$GATEWAY_URL/productpage   //
 
 **观察页面情况**
 
-访问 `http://$GATEWAY_URL/productpage` (注意： $GATEWAY_URL 需要替换成你设置的地址)，正常的话通过刷新会看到如下所示 BookInfo 的界面，其中 Book Reviews 有三个版本，
-刷新后依次会看到(可以查看 samples/bookinfo/platform/kube/bookinfo.yaml 中的配置发现为什么是这三个版本)
-
-版本一的界面。
+访问 `http://$GATEWAY_URL/productpage` (注意： `$GATEWAY_URL` 需要替换成你设置的地址)，正常的话通过刷新会看到如下所示 `BookInfo` 的界面，其中 Book Reviews 有三个版本，刷新后依次会看到(可以查看 samples/bookinfo/platform/kube/bookinfo.yaml 中的配置发现为什么是这三个版本)版本一的界面。
 
 ![版本一](v1.png)
 
@@ -274,9 +259,9 @@ $ curl -o /dev/null -s -w "%{http_code}\n"  http://$GATEWAY_URL/productpage   //
 
 ![版本三](v3.png)
 
-### 验证 MOSN 按 version 路由能力
+#### 验证 MOSN 按 version 路由能力
 
-首先为 BookInfo 的 service 创建一系列的 destination rules。
+首先为 `BookInfo` 的 service 创建一系列的 destination rules。
 
 ```bash
 $ kubectl apply -f samples/bookinfo/networking/destination-rule-all.yaml
@@ -288,11 +273,11 @@ $ kubectl apply -f samples/bookinfo/networking/destination-rule-all.yaml
 $ kubectl apply -f samples/bookinfo/networking/virtual-service-all-v1.yaml
 ```
 
-访问 `http://$GATEWAY_URL/productpage` 发现 reviews 固定在如下版本一的页面不再变化
+访问 `http://$GATEWAY_URL/productpage` 发现 reviews 固定在如下版本一的页面不再变化。
 
 ![版本一](v1.png)
 
-### 验证 MOSN 按 weight 路由能力
+#### 验证 MOSN 按 weight 路由能力
 
 我们通过下面操作将 v1 和 v3 版本各分配 50% 的流量。
 
@@ -300,11 +285,11 @@ $ kubectl apply -f samples/bookinfo/networking/virtual-service-all-v1.yaml
 $ kubectl apply -f samples/bookinfo/networking/virtual-service-reviews-50-v3.yaml
 ```
 
-访问 `http://$GATEWAY_URL/productpage` 这次 v1 和 v3 各有 1/2 几率出现
+访问 `http://$GATEWAY_URL/productpage` 这次 v1 和 v3 各有 1/2 几率出现。
 
-### 验证 MOSN 按照特定 header 路由能力
+#### 验证 MOSN 按照特定 header 路由能力
 
-BookInfo 系统右上角有一个登陆的入口，登陆以后请求会带上 end-user 这个自定义，值是 user name，Mosn 支持根据这个 header 的值来做路由。比如，我们尝试将 jason 这个用户路由到 v2 版本，其他的路由到 v1 版本（用户名和密码均是：jason，为什么是这个用户可以查看对应的 yaml 文件）。
+`BookInfo` 系统右上角有一个登陆的入口，登陆以后请求会带上 end-user 这个自定义，值是 user name，Mosn 支持根据这个 header 的值来做路由。比如，我们尝试将 jason 这个用户路由到 v2 版本，其他的路由到 v1 版本（用户名和密码均是：jason，为什么是这个用户可以查看对应的 yaml 文件）。
 
 ```bash
 $ kubectl apply -f samples/bookinfo/networking/virtual-service-reviews-test-v2.yaml
@@ -321,21 +306,37 @@ $ kubectl apply -f samples/bookinfo/networking/virtual-service-reviews-test-v2.y
 ![版本一](v1.png)
 
 
-### 卸载 BookInfo
+#### 卸载 BookInfo
 
 可以使用下面的命令来完成应用的删除和清理工作：
 
-删除路由规则，并销毁应用的 Pod
+删除路由规则，并销毁应用的 Pod。
 
 ```bash
 $ sh samples/bookinfo/platform/kube/cleanup.sh
 ```
 
-确认BookInfo应用已经关停
+确认 `BookInfo` 应用已经关停：
 
 ```bash
 $ kubectl get virtualservices   #-- there should be no virtual services
 $ kubectl get destinationrules  #-- there should be no destination rules
 $ kubectl get gateway           #-- there should be no gateway
 $ kubectl get pods              #-- the Bookinfo pods should be deleted
+```
+
+#### 卸载 Istio
+
+执行如下命令，删除 Istio 相关 CRD 以及 pod 等资源：
+
+```bash
+$ kubectl delete -f istio_init.yaml
+$ kubectl delete -f istio.yaml
+$ kubectl delete namespace istio-system
+```
+
+确认 Istio 是否成功卸载：
+
+```bash
+$ kubectl get namespace istio-system
 ```
