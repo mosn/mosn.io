@@ -92,7 +92,7 @@ $ brew install kubernetes-helm
 ## 源码方式部署 Istio
 
 {{% pageinfo color="primary" %}}
-当前 SOFAMesh 已停止 fork 的方式开发，而是转为直接基于 Istio 开发，向 Istio 社区贡献，未来将可以通过 Istio 直接支持。MOSN 已通过 Istio 1.1.4 的 bookinfo 测试，关于最新版 Istio 的支持请参考 [Issue #933](https://github.com/mosn/mosn/issues/933)。
+当前 SOFAMesh 已停止 fork 的方式开发，而是转为直接基于 Istio 开发，向 Istio 社区贡献，未来将可以通过 Istio 直接支持。MOSN 已通过 Istio 1.4.6 的 BookInfo 测试，关于最新版 Istio 的支持请参考 [Issue #933](https://github.com/mosn/mosn/issues/933)。
 {{% /pageinfo %}}
 
 ### 下载适配过 MOSN 的 Istio 源码
