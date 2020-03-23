@@ -2,17 +2,16 @@
 title: "MOSN源码浅析-协程模型"
 linkTitle: "MOSN源码浅析-协程模型"
 date: 2020-02-25
-weight: 2
-author: "[凌风郎少](https://github.com/zhenjunMa)"
+author: "[马振军（陌陌）](https://github.com/zhenjunMa)"
 description: >
-  本文主要以safarpc-sample为例来分析MOSN处理请求跟响应的整个流程。
+  本文主要以 sofarpc-sample 为例来分析 MOSN 处理请求跟响应的整个流程。
 ---
 
-# 一、基本概念
+## 基本概念
 
 ![](concept.jpg)
 
- MOSN 中的概念比较多，以`sofarpc-sample`下面的`config.json`为例，结合上图依次看下：
+MOSN 中的概念比较多，以`sofarpc-sample`下面的`config.json`为例，结合上图依次看下：
 
 1. Downstream：调用端的数据流向统称。
 2. Upstream：服务端的数据流向统称。
@@ -21,7 +20,7 @@ description: >
 5. clientCluster：服务提供者的地址列表，实际应用中这块数据应该来自于注册中心。
 6. serverCluster：真正提供服务的业务进程，也就是说一个MOSN可以代理多个服务端进程。
 
-# 二、流程概述
+## 流程概述
 
 ![](eventloop.png)
 
@@ -31,13 +30,17 @@ description: >
 2. 由于 MOSN 夹在调用端跟服务端中间，分别跟调用端、服务端都会建立连接，因此在stream层采用的是`同步阻塞`的方式，也就是说调用端的请求转发出去以后对应的协程就会挂起，在收到服务端发来的响应以后再唤醒该等待协程，而关联请求跟响应的关键就是 requestID。
 
 明白了大致流程以后，下面就通过源码来分析一下整个过程。
-# 三、源码分析
+
+## 源码分析
+
 为了便于理解，这里从下往上看，也就是先从网络层接收数据的逻辑开始，一步一步来分析 MOSN 是怎么做编解码，怎么转发请求。
 
-##### A、发起请求
+### 发起请求
+
 MOSN 对于网络层的操作，无论是调用端还是服务端，都封装在`eventloop.go`文件中，每当连接建立以后，MOSN 都会开启两个协程分别处理该连接上的读写操作，分别对应`startReadLoop`跟`startWriteLoop`两个方法。
 
 当调用端（业务进程）发起请求时，根据`clientListener`指定的地址跟 MOSN 建立连接，然后发起调用。MOSN 在建立连接以后，会等待请求数据的到达，这部分逻辑就在`startReadLoop `中：
+
 ```go
 func (c *connection) startReadLoop() {
 	var transferTime time.Time
@@ -64,8 +67,10 @@ func (c *connection) startReadLoop() {
 	}
 }
 ```
+
 逻辑比较直观，就是一个死循环不断的读取该连接上面的数据。
 下面看一下关键的`doRead()`方法：
+
 ```go
 func (c *connection) doRead() (err error) {
     //为该连接创建一个buffer来保存读入的数据
@@ -96,9 +101,11 @@ func (c *connection) doRead() (err error) {
 	return
 }
 ```
+
 上面的`ReadOnce `方法比较简单，就不单独列出来了，其实就是在该连接上设置一个超时时间进行读取，并把读取到的数据放入buffer中，结合最外层的死循环，不难理解这个不断尝试读取数据的模型。
 
 下面重点看一下回调方法`onRead() `
+
 ```go
 func (c *connection) onRead() {
 	//不再可读，这里可能跟热升级有关？
@@ -152,7 +159,9 @@ func (fm *filterManager) onContinueReading(filter *activeReadFilter) {
 	}
 }
 ```
+
 在`sofarpc-sample`中，这个过滤器对应的实现就在`proxy.go`文件中，一起来看下具体实现：
+
 ```go
 func (p *proxy) OnData(buf buffer.IoBuffer) api.FilterStatus {
     //针对使用的协议类型初始化serverStreamConn
@@ -184,7 +193,9 @@ func (p *proxy) OnData(buf buffer.IoBuffer) api.FilterStatus {
 	return api.Stop
 }
 ```
+
 由于我们是以`sofarcp-sample`为例进行分析，所以上述的`Dispatch()`方法自然落在了`pkg/stream/sofarpc/stream.go`文件中，一起来看一下：
+
 ```go
 func (conn *streamConnection) Dispatch(buf types.IoBuffer) {
 	for {
@@ -214,9 +225,11 @@ func (conn *streamConnection) Dispatch(buf types.IoBuffer) {
 	}
 }
 ```
+
 上述解码过程的具体实现就不单独列出来了，根据协议规范处理字节即可。
 
 下面重点看一下解码成功后的后续处理，继续`handleCommand`方法：
+
 ```go
 func (conn *streamConnection) handleCommand(ctx context.Context, model interface{}, err error) {
 	if err != nil {
@@ -264,7 +277,9 @@ func (conn *streamConnection) processStream(ctx context.Context, cmd sofarpc.Sof
 	return nil
 }
 ```
+
 上述stream的处理逻辑，是我认为整个数据流处理中最复杂的部分，首先这里出现了分歧，根据当前的数据是request还是response进行不同的处理，顺着我们的思路，现在还在请求转发阶段，因此我们先来看下请求处理：
+
 ```go
 func (conn *streamConnection) onNewStreamDetect(ctx context.Context, cmd sofarpc.SofaRpcCmd, span types.Span) *stream {
 	//每个请求新建一个stream
@@ -341,11 +356,12 @@ func newActiveStream(ctx context.Context, proxy *proxy, responseSender types.Str
 	return stream
 }
 ```
+
 整个stream的构建过程代码多且复杂，但其实总的来说就是针对每个请求创建了两个stream对象，一个用于封装请求逻辑，一个用于封装收到响应以后的处理逻辑。
 
 接下来需要回到`handleCommand`方法，当stream创建好之后，会直接调用其receiver的`OnReceive`方法，由于现在还是处理请求，所以对应的是`downstream.go`中的实现：
 
-`注意：每个请求数据都分为了header，body，trailers三部分`
+注意：每个请求数据都分为了header，body，trailers三部分。
 
 ```go
 func (s *downStream) OnReceive(ctx context.Context, headers types.HeaderMap, data types.IoBuffer, trailers types.HeaderMap) {
@@ -385,9 +401,11 @@ func (s *downStream) OnReceive(ctx context.Context, headers types.HeaderMap, dat
 	})
 }
 ```
+
 `receive`方法的逻辑我觉得很有意思，总体来说在请求转发阶段，依次需要经过`DownFilter` -> `MatchRoute` -> `DownFilterAfterRoute` -> `DownRecvHeader ` -> `DownRecvData` -> `DownRecvTrailer`  -> `WaitNofity`这么几个阶段，从字面意思可以知道`MatchRoute`就是构建路由信息，也就是转发给哪个服务，而`WaitNofity`则是转发成功以后，等待被响应数据唤醒。
 
 下面就依次来看一下：
+
 ```go
 func (s *downStream) receive(ctx context.Context, id uint32, phase types.Phase) types.Phase {
 	for i := 0; i <= int(types.End-types.InitPhase); i++ {
@@ -466,6 +484,7 @@ func (s *downStream) receive(ctx context.Context, id uint32, phase types.Phase) 
 	return types.End
 }
 ```
+
 真正的发送数据逻辑是在`receiveHeaders`、`receiveData `、`receiveTrailers `这三个方法里，当然每次请求不一定都需要有这三部分的数据，这里我们以`receiveHeaders`方法为例来进行说明：
 
 ```go
@@ -679,6 +698,7 @@ func (c *connection) Write(buffers ...buffer.IoBuffer) (err error) {
 	return
 }
 ```
+
 在对应的`eventloop.go`中的`startWriteLoop`方法：
 
 ```go
@@ -722,9 +742,11 @@ func (s *downStream) waitNotify(id uint32) (phase types.Phase, err error) {
 	return s.processError(id)
 }
 ```
+
 经过上面的几个步骤，请求被成功转发出去，并且对应的stream在阻塞等待响应。
 
-##### B、结果响应
+### 结果响应
+
 接下来我们再回头看看收到响应时候的处理过程，由于网络层的处理逻辑都是一样的，所以我们从前面出现分歧的地方开始看，也就是`processStream`方法，当收到的数据类型是`RESPONSE`时，它会调用`onStreamRecv`，一起来看下：
 
 ```go
@@ -742,6 +764,7 @@ func (conn *streamConnection) onStreamRecv(ctx context.Context, cmd sofarpc.Sofa
 	return nil
 }
 ```
+
 该stream同样会走到`handleCommand`方法中的`OnReceive`，如下：
 
 ```go
@@ -769,8 +792,10 @@ func (r *upstreamRequest) OnReceive(ctx context.Context, headers types.HeaderMap
 	r.downStream.sendNotify()
 }
 ```
+
 逻辑很简单，就是把根据requestID匹配到的stream唤醒，下面来看一下唤醒以后的处理逻辑，
 这里需要回到前面阻塞的`receive`方法中，唤醒以后会从之前阻塞的地方开始继续执行，如下：
+
 ```go
 func (s *downStream) receive(ctx context.Context, id uint32, phase types.Phase) types.Phase {
 	for i := 0; i <= int(types.End-types.InitPhase); i++ {
@@ -829,9 +854,11 @@ func (s *downStream) receive(ctx context.Context, id uint32, phase types.Phase) 
 	return types.End
 }
 ```
+
 上面的receiveXXX方法会把响应数据转发给业务进程，之前分析过了，这里就不再赘述。
 
-# 四、协程池
+## 协程池
+
 前面在请求处理过程中提到了会把请求任务交给一个协程池去处理，这里就简单看一下 MOSN 中协程池的实现原理：
 ```go
 type workerPool struct {
@@ -889,6 +916,6 @@ func (p *workerPool) spawnWorker(task func()) {
 }
 ```
 
-# 五、总结
+## 总结
 
 MOSN 对于数据的处理及转发这块非常复杂，主要是概念很多，尤其是stream部分，对象之间互相引用，错综复杂，考虑到篇幅原因，本文只说明了流程，其他比如路由策略的细节等需要通过其他文章进行分析。
