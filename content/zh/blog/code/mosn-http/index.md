@@ -7,13 +7,12 @@ description: "对 MOSN  HTTP系能力。"
 ---
 
 本文的目的是分析 MOSN 源码中的`http 系能力`。
-
 本文的内容基于 MOSN 0.9.0
 
 ## 概述
-http 是互联网界最常用的一种协议之一，mosn 也提供了对其强大的支持。
+HTTP 是互联网界最常用的一种协议之一，MOSN 也提供了对其强大的支持。
 
-## mosn http报文处理
+## MOSN http 报文组成
 
 ![](message.jpg)
 
@@ -35,7 +34,7 @@ type stream struct {
 }
 ```
 
-## mosn http 处理流程
+## MOSN HTTP 处理流程
 
 ![流程图](flow.png)
 
