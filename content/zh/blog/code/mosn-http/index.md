@@ -6,13 +6,13 @@ author: "陈爱祥（嘀嘀打车）"
 description: "对 MOSN  HTTP系能力。"
 ---
 
-本文的目的是分析 MOSN 源码中的`http 系能力`。
+本文的目的是分析 MOSN 源码中的`HTTP 系能力`。
 本文的内容基于 MOSN 0.9.0
 
 ## 概述
 HTTP 是互联网界最常用的一种协议之一，MOSN 也提供了对其强大的支持。
 
-## MOSN http 报文组成
+## MOSN HTTP 报文组成
 
 ![](message.jpg)
 
