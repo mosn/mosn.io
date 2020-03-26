@@ -2,25 +2,24 @@
 title: MOSN 源码解析 - HTTP系能力
 linkTitle: MOSN 源码解析 - HTTP系能力
 date: 2020-03-07
-weight: 1
 author: "陈爱祥（嘀嘀打车）"
-description: "对 MOSN Log系统的源码解析。"
+description: "对 MOSN  HTTP系能力。"
 ---
 
 本文的目的是分析 MOSN 源码中的`http 系能力`。
 
 本文的内容基于 MOSN 0.9.0
 
-# 概述
-  http 是互联网界最常用的一种协议之一，mosn 也提供了对其强大的支持。
+## 概述
+http 是互联网界最常用的一种协议之一，mosn 也提供了对其强大的支持。
 
-# mosn http报文处理
+## mosn http报文处理
 
 ![](message.jpg)
 
-上图是[图解Http](https://book.douban.com/subject/25863515/) 中关于http报文报文的介绍。mosn 对于Http报文的处理并没有使用go 官网 `net/http`中的结构也没有独立设计一套相关结构 而是复用了业界开源的[fasthttp](https://github.com/valyala/fasthttp) 的结构。
+上图是[图解HTTP](https://book.douban.com/subject/25863515/) 中关于HTTP报文报文的介绍。MOSN 对于Http报文的处理并没有使用go 官网 `net/http`中的结构也没有独立设计一套相关结构 而是复用了业界开源的[fasthttp](https://github.com/valyala/fasthttp) 的结构。
 
-```
+```go
 type stream struct {
 	str.BaseStream
 
@@ -36,20 +35,28 @@ type stream struct {
 }
 ```
 
-# mosn http 处理流程
+## mosn http 处理流程
 
-## 流程注册
+![流程图](flow.png)
 
-```
+上图是HTTP请求在MOSN中的流动过程，下面将具体讲解。
+
+### 流程注册
+
+```go
 func init() {
 	str.Register(protocol.HTTP1, &streamConnFactory{})
 }
 ```
-在pkg/stream/http 包加载过程中将包含http对于mosn上下游连接的处理逻辑的结构体值注册到统一的stream处理工厂。
+在pkg/stream/http 包加载过程中将包含HTTP对于MOSN上下游连接的处理逻辑的结构体值注册到统一的stream处理工厂。
 
-## 捕获请求
-    mosn 作为一个sidecar的落地方式，其重要作用就是处理上游到mson的请求。其主要处理逻辑在serverStreamConnection 的server成员函数中。
-```
+### 捕获请求
+
+![捕获请求](flow1.png)
+
+由上图可知，MOSN捕捉到一个请求之后会开启一个goroutine读取连接中的数据，也就是
+serverStreamConnection.serve函数
+```go
 func (conn *serverStreamConnection) serve() {
 	for {
 		// 1. pre alloc stream-level ctx with bufferCtx
@@ -138,12 +145,237 @@ func (conn *serverStreamConnection) serve() {
 	}
 }
 ```
-由以上代码可以得知，因为不能判断连接是长连接还是短连接，所以mosn 上游不主动关闭连接，mosn也不会主动关闭，除非出现错误。
 
-## 转发请求
-    mosn 捕获请求之后并不是重点还需要继续转发给目标服务。其中最重要的逻辑就是维护一个高效的对于目标服务的连接处理逻辑。其重要逻辑在connPool的getAvailableClient成员函数。
+由以上代码可以得知，因为不能判断连接是长连接还是短连接，所以MOSN调用方不主动关闭连接，MOSN也不会主动关闭，除非出现错误。
+
+### 转发请求
+
+![转发请求](flow2.png)
+
+由上图可知，MOSN在捕获请求之后，开启一个goroutine 创建对upstream的连接，并且通过这个连接和upstream进行数据交互，与此同时开启另外一个goroutine对这个连接进行监控用来处理连接返回数据。其主要处理逻辑在downStream.receive中。
+
+```go
+for i := 0; i <= int(types.End-types.InitPhase); i++ {
+		fmt.Println("yu",i,s.downstreamReqTrailers == nil,phase,int(types.End-types.InitPhase),types.WaitNofity)
+		switch phase {
+		// init phase
+		case types.InitPhase:
+			phase++
+
+			// downstream filter before route
+		case types.DownFilter:
+			if log.Proxy.GetLogLevel() >= log.DEBUG {
+				log.Proxy.Debugf(s.context, "[proxy] [downstream] enter phase %d, proxyId = %d  ", phase, id)
+			}
+			s.runReceiveFilters(phase, s.downstreamReqHeaders, s.downstreamReqDataBuf, s.downstreamReqTrailers)
+
+			if p, err := s.processError(id); err != nil {
+				return p
+			}
+			phase++
+
+			// match route
+		case types.MatchRoute:
+			if log.Proxy.GetLogLevel() >= log.DEBUG {
+				log.Proxy.Debugf(s.context, "[proxy] [downstream] enter phase %d, proxyId = %d  ", phase, id)
+			}
+			s.matchRoute()
+			if p, err := s.processError(id); err != nil {
+				return p
+			}
+			phase++
+
+			// downstream filter after route
+		case types.DownFilterAfterRoute:
+			if log.Proxy.GetLogLevel() >= log.DEBUG {
+				log.Proxy.Debugf(s.context, "[proxy] [downstream] enter phase %d, proxyId = %d  ", phase, id)
+			}
+			s.runReceiveFilters(phase, s.downstreamReqHeaders, s.downstreamReqDataBuf, s.downstreamReqTrailers)
+
+			if p, err := s.processError(id); err != nil {
+				return p
+			}
+			phase++
+
+			// downstream receive header
+		case types.DownRecvHeader:
+			if s.downstreamReqHeaders != nil {
+				if log.Proxy.GetLogLevel() >= log.DEBUG {
+					log.Proxy.Debugf(s.context, "[proxy] [downstream] enter phase %d, proxyId = %d  ", phase, id)
+				}
+				s.receiveHeaders(s.downstreamReqDataBuf == nil && s.downstreamReqTrailers == nil)
+
+				if p, err := s.processError(id); err != nil {
+					return p
+				}
+			}
+			phase++
+
+			// downstream receive data
+		case types.DownRecvData:
+			if s.downstreamReqDataBuf != nil {
+				if log.Proxy.GetLogLevel() >= log.DEBUG {
+					log.Proxy.Debugf(s.context, "[proxy] [downstream] enter phase %d, proxyId = %d  ", phase, id)
+				}
+				s.downstreamReqDataBuf.Count(1)
+
+				s.receiveData(s.downstreamReqTrailers == nil)
+
+				if p, err := s.processError(id); err != nil {
+					return p
+				}
+			}
+			phase++
+
+			// downstream receive trailer
+		case types.DownRecvTrailer:
+			if s.downstreamReqTrailers != nil {
+				if log.Proxy.GetLogLevel() >= log.DEBUG {
+					log.Proxy.Debugf(s.context, "[proxy] [downstream] enter phase %d, proxyId = %d  ", phase, id)
+				}
+				s.receiveTrailers()
+
+				if p, err := s.processError(id); err != nil {
+					return p
+				}
+			}
+			phase++
+
+			// downstream oneway
+		case types.Oneway:
+			if s.oneway {
+				if log.Proxy.GetLogLevel() >= log.DEBUG {
+					log.Proxy.Debugf(s.context, "[proxy] [downstream] enter phase %d, proxyId = %d  ", phase, id)
+				}
+				s.cleanStream()
+
+				// downstreamCleaned has set, return types.End
+				if p, err := s.processError(id); err != nil {
+					return p
+				}
+			}
+
+			// no oneway, skip types.Retry
+			phase = types.WaitNofity
+
+			// retry request
+		case types.Retry:
+			if log.Proxy.GetLogLevel() >= log.DEBUG {
+				log.Proxy.Debugf(s.context, "[proxy] [downstream] enter phase %d, proxyId = %d  ", phase, id)
+			}
+
+			if s.downstreamReqDataBuf != nil {
+				s.downstreamReqDataBuf.Count(1)
+			}
+			s.doRetry()
+			if p, err := s.processError(id); err != nil {
+				return p
+			}
+			phase++
+
+			// wait for upstreamRequest or reset
+		case types.WaitNofity:
+			if log.Proxy.GetLogLevel() >= log.DEBUG {
+				log.Proxy.Debugf(s.context, "[proxy] [downstream] enter phase %d, proxyId = %d  ", phase, id)
+			}
+			if p, err := s.waitNotify(id); err != nil {
+				return p
+			}
+
+			if log.Proxy.GetLogLevel() >= log.DEBUG {
+				log.Proxy.Debugf(s.context, "[proxy] [downstream] OnReceive send downstream response %+v", s.downstreamRespHeaders)
+			}
+
+			phase++
+
+			// upstream filter
+		case types.UpFilter:
+			if log.Proxy.GetLogLevel() >= log.DEBUG {
+				log.Proxy.Debugf(s.context, "[proxy] [downstream] enter phase %d, proxyId = %d  ", phase, id)
+			}
+			s.runAppendFilters(phase, s.downstreamRespHeaders, s.downstreamRespDataBuf, s.downstreamRespTrailers)
+
+			if p, err := s.processError(id); err != nil {
+				return p
+			}
+
+			// maybe direct response
+			if s.upstreamRequest == nil {
+				fakeUpstreamRequest := &upstreamRequest{
+					downStream: s,
+				}
+
+				s.upstreamRequest = fakeUpstreamRequest
+			}
+
+			phase++
+
+			// upstream receive header
+		case types.UpRecvHeader:
+			// send downstream response
+			if s.downstreamRespHeaders != nil {
+				if log.Proxy.GetLogLevel() >= log.DEBUG {
+					log.Proxy.Debugf(s.context, "[proxy] [downstream] enter phase %d, proxyId = %d  ", phase, id)
+				}
+				s.upstreamRequest.receiveHeaders(s.downstreamRespDataBuf == nil && s.downstreamRespTrailers == nil)
+
+				if p, err := s.processError(id); err != nil {
+					return p
+				}
+			}
+			phase++
+
+			// upstream receive data
+		case types.UpRecvData:
+			if s.downstreamRespDataBuf != nil {
+				if log.Proxy.GetLogLevel() >= log.DEBUG {
+					log.Proxy.Debugf(s.context, "[proxy] [downstream] enter phase %d, proxyId = %d  ", phase, id)
+				}
+				s.upstreamRequest.receiveData(s.downstreamRespTrailers == nil)
+
+				if p, err := s.processError(id); err != nil {
+					return p
+				}
+			}
+			phase++
+
+			// upstream receive triler
+		case types.UpRecvTrailer:
+			if s.downstreamRespTrailers != nil {
+				if log.Proxy.GetLogLevel() >= log.DEBUG {
+					log.Proxy.Debugf(s.context, "[proxy] [downstream] enter phase %d, proxyId = %d  ", phase, id)
+				}
+				s.upstreamRequest.receiveTrailers()
+
+				if p, err := s.processError(id); err != nil {
+					return p
+				}
+			}
+			phase++
+
+			// process end
+		case types.End:
+			return types.End
+
+		default:
+			log.Proxy.Errorf(s.context, "[proxy] [downstream] unexpected phase: %d", phase)
+			return types.End
+		}
+	}
+
+	log.Proxy.Errorf(s.context, "[proxy] [downstream] unexpected phase cycle time")
+	return types.End
+}
 
 ```
+这个函数是处理转发逻辑的核心函数规定在处理的各个阶段需要做的事情。比如在`case types.UpRecvHeader`的时候进行连接创建以及对下游数据的初步读取。
+
+## 其他
+
+### 连接复用
+在MOSN处理http请求的过程中我们可以很明显的看到，针对可能频繁使用的连接，MOSN实现了一套复用机制。
+
+```go
 
 type connPool struct {
 	MaxConn int
@@ -185,20 +417,21 @@ func (p *connPool) getAvailableClient(ctx context.Context) (*activeClient, types
 	}
 }
 ```
-由上述代码可知，mosn 维护了连接池来实现高效的连接复用
-# 内存复用
-    http的处理会频繁的申请空间来解析http报文，为了减少频繁的内存申请，实现内存复用，mosn 基于sync.pool 设计了内存复用模块。
 
-```
+由上述代码可知，MOSN 维护了一个有效长连接的栈，当栈中还有有效连接则从栈顶取出有效的长连接，如果不存在则新建一个tcp长连接。MOSN通过这种方式维护了连接池来实现高效的连接复用。
+### 内存复用
+HTTP的处理过程中会频繁的申请空间来解析http报文，为了减少频繁的内存申请，常规的做法是内存复用，MOSN也不例外，其基于sync.pool 设计了内存复用模块。
+
+```go
 func httpBuffersByContext(context context.Context) *httpBuffers {
 	ctx := buffer.PoolContext(context)
 	return ctx.Find(&ins, nil).(*httpBuffers)
 }
 ```
 
-# 总结
-    本文简单的分析了mosn 中对于http 请求的处理，其核心点在于解决：
+## 总结
+本文简单的分析了MOSN中对于HTTP请求的处理过程，其中优化方式主要如下：
 
-1. tcp 黏包：直接使用fasthttp 的request和response
-2. 实现连接复用：连接池
-3. 实现内存复用：sync.pool
+1. tcp 黏包：使用fasthttp 的request和response来解析报文。
+2. 实现连接复用：连接池。
+3. 实现内存复用：sync.pool。
