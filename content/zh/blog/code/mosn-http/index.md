@@ -3,20 +3,20 @@ title: MOSN 源码解析 - HTTP系能力
 linkTitle: MOSN 源码解析 - HTTP系能力
 date: 2020-03-07
 author: "陈爱祥（嘀嘀打车）"
-description: "对 MOSN  HTTP系能力。"
+description: "本文分析的是 MOSN 的 HTTP 系能力。"
 ---
 
-本文的目的是分析 MOSN 源码中的`HTTP 系能力`。
-本文的内容基于 MOSN 0.9.0
+本文的目的是分析 MOSN 源码中的 HTTP 系能力，内容基于 MOSN 0.9.0
 
 ## 概述
+
 HTTP 是互联网界最常用的一种协议之一，MOSN 也提供了对其强大的支持。
 
 ## MOSN HTTP 报文组成
 
 ![](message.jpg)
 
-上图是[图解HTTP](https://book.douban.com/subject/25863515/) 中关于HTTP报文报文的介绍。MOSN 对于Http报文的处理并没有使用go 官网 `net/http`中的结构也没有独立设计一套相关结构 而是复用了业界开源的[fasthttp](https://github.com/valyala/fasthttp) 的结构。
+上图是[图解 HTTP](https://book.douban.com/subject/25863515/) 中关于 HTTP 报文报文的介绍。MOSN 对于 HTTP 报文的处理并没有使用go 官网 `net/http`中的结构也没有独立设计一套相关结构 而是复用了业界开源的[fasthttp](https://github.com/valyala/fasthttp) 的结构。
 
 ```go
 type stream struct {
@@ -47,14 +47,16 @@ func init() {
 	str.Register(protocol.HTTP1, &streamConnFactory{})
 }
 ```
-在pkg/stream/http 包加载过程中将包含HTTP对于MOSN上下游连接的处理逻辑的结构体值注册到统一的stream处理工厂。
+
+在 `pkg/stream/http` 包加载过程中将包含 HTTP 对于MOSN上下游连接的处理逻辑的结构体值注册到统一的stream处理工厂。
 
 ### 捕获请求
 
 ![捕获请求](flow1.png)
 
 由上图可知，MOSN捕捉到一个请求之后会开启一个goroutine读取连接中的数据，也就是
-serverStreamConnection.serve函数
+ `serverStreamConnection.serve` 函数。
+
 ```go
 func (conn *serverStreamConnection) serve() {
 	for {
@@ -372,10 +374,10 @@ for i := 0; i <= int(types.End-types.InitPhase); i++ {
 ## 其他
 
 ### 连接复用
-在MOSN处理http请求的过程中我们可以很明显的看到，针对可能频繁使用的连接，MOSN实现了一套复用机制。
+
+在MOSN处理 HTTP 请求的过程中我们可以很明显的看到，针对可能频繁使用的连接，MOSN实现了一套复用机制。
 
 ```go
-
 type connPool struct {
 	MaxConn int
 
@@ -419,7 +421,7 @@ func (p *connPool) getAvailableClient(ctx context.Context) (*activeClient, types
 
 由上述代码可知，MOSN 维护了一个有效长连接的栈，当栈中还有有效连接则从栈顶取出有效的长连接，如果不存在则新建一个tcp长连接。MOSN通过这种方式维护了连接池来实现高效的连接复用。
 ### 内存复用
-HTTP的处理过程中会频繁的申请空间来解析http报文，为了减少频繁的内存申请，常规的做法是内存复用，MOSN也不例外，其基于sync.pool 设计了内存复用模块。
+HTTP 的处理过程中会频繁的申请空间来解析 HTTP 报文，为了减少频繁的内存申请，常规的做法是内存复用，MOSN也不例外，其基于sync.pool 设计了内存复用模块。
 
 ```go
 func httpBuffersByContext(context context.Context) *httpBuffers {
@@ -429,6 +431,7 @@ func httpBuffersByContext(context context.Context) *httpBuffers {
 ```
 
 ## 总结
+
 本文简单的分析了MOSN中对于HTTP请求的处理过程，其中优化方式主要如下：
 
 1. tcp 黏包：使用fasthttp 的request和response来解析报文。
