@@ -1,6 +1,6 @@
 ---
-title: MOSN 源码分析 - 共享内存模型
-linkTitle: MOSN 源码分析 - 共享内存模型
+title: MOSN 源码解析 - 共享内存模型
+linkTitle: MOSN 源码解析 - 共享内存模型
 date: 2020-02-23
 aliases: "/zh/blog/posts/mosn-shm"
 author: "[姚昌宇（有米科技）](https://trainyao.github.io)"

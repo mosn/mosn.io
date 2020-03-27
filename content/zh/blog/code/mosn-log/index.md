@@ -1,6 +1,6 @@
 ---
-title: MOSN 源码解析 - log系统
-linkTitle: MOSN 源码解析 - log系统
+title: MOSN 源码解析 - log 系统
+linkTitle: MOSN 源码解析 - log 系统
 date: 2020-03-03
 weight: 1
 author: "[陈鹏（多点生活）](https://github.com/champly)"
