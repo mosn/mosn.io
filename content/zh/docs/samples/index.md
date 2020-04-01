@@ -15,7 +15,7 @@ description: >
 
 ## 使用 MOSN 作为 SOFARPC 代理
 
-请参考 MOSN 转发 SOFARPC 的示例工程 [sofarpc-sample](https://github.com/mosn/mosn/blob/master/examples/cn_readme/sofarpc-sample/README.md)。
+请参考 MOSN 转发 SOFARPC 的示例工程 [sofarpc-with-xprotocol-sample](https://github.com/mosn/mosn/blob/master/examples/cn_readme/sofarpc-with-xprotocol-sample/README.md)。
 
 ## 使用 MOSN 作为TCP 代理
 
