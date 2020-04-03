@@ -12,9 +12,10 @@ We are happy to announce the release of [MOSN v0.11.0](https://github.com/mosn/m
 ### New features
 
 - Support the extension of Listener Filter, the transparent hijacking capability is implemented based on Listener Filter [@wangfakang](https://github.com/wangfakang)
-- New Set method for variable mechanism [@pxzero](https://github.com/pxzero)
-- Added automatic retry and exception handling when SDS Client fails [@taoyuanyuan](https://github.com/taoyuanyuan)
-- Improve TraceLog and support injecting context [@nejisama](https://github.com/nejisama)
+- New Set method for variable mechanism [@neverhook](https://github.com/neverhook)
+- Added automatic retry and exception handling when SDS Client fails [@pxzero](https://github.com/pxzero)
+- Improve TraceLog and support injecting context [@taoyuanyuan](https://github.com/taoyuanyuan)
+- Added FeatureGate `auto_config`, when the feature is enabled, the dynamically updated configuration will be saved to the startup configuration [@nejisama](https://github.com/nejisama)
 
 ### Refactoring
 
