@@ -16,9 +16,18 @@ description: >
 
 MOSN 当前只支持主动健康检查，支持的协议包括 SOFARPC 以及 HTTP2，它是 Cluster 的一个模块，可通过配置决定是否开启对 Cluster 中的 Host 进行健康检查，以及配置健康检查时使用的参数。
 
-通过主动健康检查，MOSN 可以及时摘除不健康的机器，从而为连接管理提供有效的 `Upstream`，提高建联的成功率。同时基于健康检查模块还可以做连接的保活，从而维持长连接。
+通过主动健康检查，MOSN 可以及时摘除不健康的机器，从而为连接管理提供有效的 `Upstream`，提高建连的成功率。同时基于健康检查模块还可以做连接的保活，从而维持长连接。
 
 ## MOSN 连接管理
+
+HTTP/1.0 默认使用短连接，即客户端和服务器每进行一次 HTTP 操作建立一次连接，任务结束中断连接。HTTP/1.1 起默认使用长连接用以保持连接特性。使用长连接的 HTTP 协议需在响应头添加 `Connection:keep-alive`。HTTP/1 虽然能够维持长连接，但是单条连接同一时间只能处理一个请求/相应，意味着如果同时收到4个请求需要建立4条 TCP 连接，连接的成本相对来说比较高昂；HTTP/2 引入 Stream/Frame 的概念，支持分帧多路复用能力，在逻辑上区分出成对的请求 Stream 和响应 Stream，从而单条连接并发处理多个请求/响应，解决 HTTP/1 连接数与并发数成正比的问题。
+
+HTTP/1.1不支持多路复用，使用经典的Ping-Pong模式：在请求发送之后必须独占当前连接等待服务器端给出这个请求的应答然后才能释放连接。因此HTTP/1.1下并发多个请求就必须采用多连接，为了提升性能通常使用长连接+连接池的设计。MOSN 长连接多路复用处理流程：
+
+* MOSN 从 downstream 接收一个请求 request，依据报文扩展多路复用接口 `GetRequestId` 获取到请求在这条连接上的身份标识并且记录到关联映射中待用；
+* 请求经过 MOSN 的路由、负载均衡处理，选择一个 upstream，同时在这条连接上新建一个请求流，并调用文扩展多路复用接口 `SetRequestId` 封装新的身份标识，并记录到关联映射中与 downstream 信息组合；
+* MOSN 从 upstream 接收一个响应 response，依据报文扩展多路复用接口 `GetRequestId` 获取到请求在这条连接上的身份标识。此时可以从上下游关联映射表中，根据 upstream 信息找到对应的 downstream 信息；
+* 依据 downstream request 的信息，调用文扩展多路复用接口 `SetRequestId` 设置响应的 requestId，并回复给 downstream。
 
 MOSN 在 `Proxy` 下游 Request 时，会根据 `Upstream` Host 地址以及与 `Upstream` Host 的应用层协议获取对应的长连接，之后在长连接上封装对应协议的 Stream, 并转发数据，从而避免每次与 `Upstream` 新建连接带来的握手开销以提高转发性能、降低时延。在创建 Stream 的时候，连接池还提供熔断保护功能，将 Stream 创建的数量约束在一个阈值以下。当前 MOSN 支持的连接池包括：SOFARPC、HTTP1、HTTP2、XProocol 等应用层协议的连接池.
 
@@ -27,6 +36,8 @@ MOSN 在 `Proxy` 下游 Request 时，会根据 `Upstream` Host 地址以及与 
 如下图所示为连接池工作的示意图：
 
 ![](./proxy.png)
+
+
 
 ### 1. 接口描述
 
