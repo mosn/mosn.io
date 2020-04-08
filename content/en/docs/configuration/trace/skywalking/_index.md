@@ -31,20 +31,24 @@ The SkyWalking configuration structure is shown as follows.
 
 ## reporter
 
-Reporter mode, support `log` (only test) and `gRPC`. <br>
+Reporter mode, support `log` (only test) and `gRPC`.
+
 - If this field is left empty, `log` by default.
 
 ## backend_service
 
-SkyWalking backend service address, used only if the reporter is `gRCP`. <br>
+SkyWalking backend service address, used only if the reporter is `gRCP`.
+
 - eg: `127.0.0.1:11800`.
 
 ## service_name
 
-To register the service name to SkyWalking. <br>
+To register the service name to SkyWalking.
+
 - If this field is left empty, `mosn` by default.
 
 ## with_register
 
-Boolean. When true, the coroutine is blocked until the registration is successful. <br>
+Boolean. When true, the coroutine is blocked until the registration is successful.
+
 - If this field is left empty, `true` by default.
