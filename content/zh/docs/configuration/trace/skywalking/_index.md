@@ -49,6 +49,6 @@ SkyWalking 后端服务地址，仅在上报模式为 `gRPC` 模式时使用 。
 
 ## with_register
 
-bool类型，当此值为true时，会阻塞协程等待当前实例注册到 SkyWalking 。
+bool 类型，当此值为 true 时，会阻塞协程等待当前实例注册到 SkyWalking 。
 
 - 如果配置为空，则默认为 `true`。
