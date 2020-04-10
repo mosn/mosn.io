@@ -75,8 +75,8 @@ MOSN 作为一款网络代理，在转发链路上的网络层、协议层、转
 
 完成实现以后，我们就可以通过具体的配置来实现对应的功能了。在示例的配置中，配置 StreamFilter 为我们刚才实现的 Filter，只转发 Header 中包含 user:admin 的请求。示例配置中监听的端口是 2046，转发的后端 server 端口是 8080。在演示之前，我已经完成了 8080 server 的启动，这个 server 会对收到的任意请求返回 200 。我们来看一下 MOSN 转发情况。Demo 操作可以在文末直播的视频回顾中查看。
 
-Stream Filter Demo: [https://github.com/mosn/mosn/tree/master/examples/codes/mosn-extensions/simple_streamfilter](https://github.com/mosn/mosn/tree/master/examples/codes/mosn-extensions/simple_streamfilter)
-Demo Readme：[https://github.com/mosn/mosn/tree/master/examples/cn_readme/mosn-extensions](https://github.com/mosn/mosn/tree/master/examples/cn_readme/mosn-extensions)
+- Stream Filter Demo: [https://github.com/mosn/mosn/tree/master/examples/codes/mosn-extensions/simple_streamfilter](https://github.com/mosn/mosn/tree/master/examples/codes/mosn-extensions/simple_streamfilter)
+- Demo Readme：[https://github.com/mosn/mosn/tree/master/examples/cn_readme/mosn-extensions](https://github.com/mosn/mosn/tree/master/examples/cn_readme/mosn-extensions)
 
 ### MOSN Plugin 机制
 
@@ -122,8 +122,8 @@ MOSN 提供了 go 语言的子进程 server 封装，在 go 语言场景下，�
 
 ![image.png](1586436269094-79115a60-66ca-4318-9049-82079bae5979.png)
 
-load cert demo: [https://github.com/mosn/mosn/tree/master/examples/codes/mosn-extensions/plugin/cert_loader](https://github.com/mosn/mosn/tree/master/examples/codes/mosn-extensions/plugin/cert_loader)
-Demo Readme：[https://github.com/mosn/mosn/tree/master/examples/cn_readme/mosn-extensions](https://github.com/mosn/mosn/tree/master/examples/cn_readme/mosn-extensions)
+- load cert demo: [https://github.com/mosn/mosn/tree/master/examples/codes/mosn-extensions/plugin/cert_loader](https://github.com/mosn/mosn/tree/master/examples/codes/mosn-extensions/plugin/cert_loader)
+- Demo Readme：[https://github.com/mosn/mosn/tree/master/examples/cn_readme/mosn-extensions](https://github.com/mosn/mosn/tree/master/examples/cn_readme/mosn-extensions)
 
 下面我们来看一下效果，首先配置依然是监听 2046 的端口，配置了扩展的 TLS 配置，就需要 HTTPS 才可以访问 MOSN。
 
@@ -137,8 +137,8 @@ Demo Readme：[https://github.com/mosn/mosn/tree/master/examples/cn_readme/mosn-
 
 这个示例运行以后和之前 Stream Filter 的效果是一样的。
 
-Stream Filter Plugin demo: [https://github.com/mosn/mosn/tree/master/examples/codes/mosn-extensions/plugin/filter](https://github.com/mosn/mosn/tree/master/examples/codes/mosn-extensions/plugin/filter)
-Demo Readme：[https://github.com/mosn/mosn/tree/master/examples/cn_readme/mosn-extensions](https://github.com/mosn/mosn/tree/master/examples/cn_readme/mosn-extensions)
+- Stream Filter Plugin demo: [https://github.com/mosn/mosn/tree/master/examples/codes/mosn-extensions/plugin/filter](https://github.com/mosn/mosn/tree/master/examples/codes/mosn-extensions/plugin/filter)
+- Demo Readme：[https://github.com/mosn/mosn/tree/master/examples/cn_readme/mosn-extensions](https://github.com/mosn/mosn/tree/master/examples/cn_readme/mosn-extensions)
 
 #### 动态库(SO)扩展机制
 
@@ -184,8 +184,8 @@ Demo Readme：[https://github.com/mosn/mosn/tree/master/examples/cn_readme/mosn-
 - 生成 StreamFilterChainFactory 的函数必须是固定的名字；
 - 不再需要 init “注册”该函数；
 
-Stream Filter SO Demo: [https://github.com/mosn/mosn/tree/master/examples/codes/mosn-extensions/plugin/so](https://github.com/mosn/mosn/tree/master/examples/codes/mosn-extensions/plugin/so)
-Demo Readme：[https://github.com/mosn/mosn/tree/master/examples/cn_readme/mosn-extensions](https://github.com/mosn/mosn/tree/master/examples/cn_readme/mosn-extensions)
+- Stream Filter SO Demo: [https://github.com/mosn/mosn/tree/master/examples/codes/mosn-extensions/plugin/so](https://github.com/mosn/mosn/tree/master/examples/codes/mosn-extensions/plugin/so)
+- Demo Readme：[https://github.com/mosn/mosn/tree/master/examples/cn_readme/mosn-extensions](https://github.com/mosn/mosn/tree/master/examples/cn_readme/mosn-extensions)
 
 下面我们来看一下这个 Demo 的效果。本次 Demo 中的 Filter 实现依然是之前的“鉴权”示例。经过验证，我们发现这个思路是可行的，但是离生产实践还需要完善更多的细节。
 
