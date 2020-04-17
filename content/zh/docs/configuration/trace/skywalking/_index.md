@@ -18,7 +18,6 @@ SkyWalking 描述的 MOSN 的基本全局参数如下所示。
   "tracing": {
     "enable": true,
     "driver": "SkyWalking",
-    "tracer": "SkyWalking",
     "config": {
       "reporter": "gRPC",
       "backend_service": "127.0.0.1:11800",
