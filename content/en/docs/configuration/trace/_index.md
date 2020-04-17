@@ -16,7 +16,6 @@ This topic describes trace configurations of MOSN.
   "tracing": {
     "enable": true,
     "driver": "",
-    "tracer": "",
     "config": {
       
     }
@@ -29,10 +28,6 @@ This topic describes trace configurations of MOSN.
 Boolean. Enable or disable trace.
 
 ## driver
-
-Currently, supports `SOFATracer` and `SkyWalking`.
-
-## tracer
 
 Currently, supports `SOFATracer` and `SkyWalking`.
 
