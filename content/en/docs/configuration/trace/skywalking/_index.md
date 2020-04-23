@@ -18,7 +18,6 @@ The SkyWalking configuration structure is shown as follows.
   "tracing": {
     "enable": true,
     "driver": "SkyWalking",
-    "tracer": "SkyWalking",
     "config": {
       "reporter": "gRPC",
       "backend_service": "127.0.0.1:11800",

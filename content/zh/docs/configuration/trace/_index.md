@@ -16,7 +16,6 @@ description:
   "tracing": {
     "enable": true,
     "driver": "",
-    "tracer": "",
     "config": {
       
     }
@@ -29,9 +28,5 @@ description:
 bool类型，表示启用或禁用trace。
 
 ## driver
-
-目前支持 `SOFATracer` 和 `SkyWalking`。
-
-## tracer
 
 目前支持 `SOFATracer` 和 `SkyWalking`。
