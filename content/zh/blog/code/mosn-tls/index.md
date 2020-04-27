@@ -1,11 +1,9 @@
 ---
 title: MOSN 源码解析 - TLS
 linkTitle: MOSN 源码解析 - TLS
-date: 2020-04-27
-weight: 1
+date: 2020-04-26
 author: "[永鹏](https://github.com/nejisama)"
-description: >
-  MOSN TLS 能力解析。
+description: "MOSN TLS 能力解析。"
 ---
 
 本文基于的内容是 MOSN v0.12.0。
@@ -49,8 +47,10 @@ func (al *activeListener) OnAccept(rawc net.Conn, ch chan api.Connection, ...) {
 ```
 
 判断是否需要建立 TLS 连接会基于 TLSManager 的状态。
-+ 如果 TLSManager 是关闭 TLS 状态，则一定不支持 TLS 连接。
-+ 如果 TLSManager 是开启 TLS 状态，还需要额外判断是否支持 Inspector 模式，如果支持 Inspector，则说明 MOSN 的 Listener 可以同时处理 TLS 加密连接和明文的非加密连接；此时 MOSN 会等待连接上收到的第一个数据，判断请求是明文还是 TLS，从而决定使用连接状态。如果不支持 Inspector 模式，那么就只支持 TLS 连接。
+
+- 如果 TLSManager 是关闭 TLS 状态，则一定不支持 TLS 连接。
+- 如果 TLSManager 是开启 TLS 状态，还需要额外判断是否支持 Inspector 模式，如果支持 Inspector，则说明 MOSN 的 Listener 可以同时处理 TLS 加密连接和明文的非加密连接；此时 MOSN 会等待连接上收到的第一个数据，判断请求是明文还是 TLS，从而决定使用连接状态。如果不支持 Inspector 模式，那么就只支持 TLS 连接。
+
 判断是否兼容 Inspector 的逻辑如下。MOSN 会在建立上执行`Peek`，尝试获取连接上第一个数据字节，如果是 0x16（来自 TLS 握手的 Client Hello 的第一个字节），则判断为 TLS 连接，否则判断为明文连接。
 
 ```Go
@@ -88,9 +88,9 @@ func (mng *serverContextManager) Conn(c net.Conn) (net.Conn, error) {
 ```
 
 除了普通的 TLS 以外，MOSN 还支持双向 TLS，即 Server 端要求 Client 端也提供证书，也是可以配置不同的兼容场景，包括：
-+ Client 必须提供 TLS 证书，完成双向 TLS 加密。
-+ 要求 Client 提供 TLS 证书，但是如果 Client 没有提供证书，也可以兼容执行普通的 TLS 加密
-逻辑实现如下。
+
+- Client 必须提供 TLS 证书，完成双向 TLS 加密。
+- 要求 Client 提供 TLS 证书，但是如果 Client 没有提供证书，也可以兼容执行普通的 TLS 加密逻辑实现如下。
 
 ```Go
 func (ctx *tlsContext) setServerConfig(tmpl tls.Config, cfg *v2.TLSConfig, hooks ConfigHooks) {
@@ -118,8 +118,9 @@ func (ctx *tlsContext) setServerConfig(tmpl tls.Config, cfg *v2.TLSConfig, hooks
 ### 客户端 (Cluster)
 
 MOSN 作为客户端的时候，就是 MOSN 在把请求向后端（Upstream）转发的时候，基于 MOSN 的 Cluster 配置转发请求。在 Cluster 配置解析的时候，如果存在 TLS 相关的配置，会尝试生成一个 TLSManager。在转发请求向后端建立连接的时候，会基于两个维度判断是否要建立 TLS 连接。
-+ 首先判断建立连接的 Host 配置是否允许建立 TLS 连接，这个是考虑到有的场景特定的 Host 不希望建立 TLS 连接或者不支持 TLS 连接进行的设计。默认配置情况下，Host 配置都是允许建立 TLS 连接的。
-+ 在 Host 允许建立 TLS 的情况下，会根据 TLSManager 的状态，判断是否要建立 TLS 连接。
+
+- 首先判断建立连接的 Host 配置是否允许建立 TLS 连接，这个是考虑到有的场景特定的 Host 不希望建立 TLS 连接或者不支持 TLS 连接进行的设计。默认配置情况下，Host 配置都是允许建立 TLS 连接的。
+- 在 Host 允许建立 TLS 的情况下，会根据 TLSManager 的状态，判断是否要建立 TLS 连接。
 
 ```Go
 func newSimpleCluster(clusterConfig v2.Cluster) *simpleCluster {
@@ -155,6 +156,7 @@ MOSN 的 TLS 能力，都通过 TLSManager 提供，TLSManager 分为 ServerMana
 #### provider
 
 provider 是 MOSN 的 TLS 模块中提供 TLS 运行时配置的模块，支持静态配置模式`staticProvider`和动态 SDS 模式`sdsProvider`。无论是哪种模式，provider 中最终存储的对象都是 MOSN 定义的`tlsContext`。
+
 MOSN 在进行配置解析时，会判断使用哪种模式，然后基于不同的情况解析出 `tlsContext`。同时需要说明的是，静态模式只是区别于动态 SDS 模式的一种模式，通过 TLS 的扩展，我们也可以做到静态模式下，让证书动态获取，这一点在后文中会进行介绍。
 
 ```Go
@@ -174,7 +176,7 @@ func NewProvider(cfg *v2.TLSConfig) (types.TLSProvider, error) {
 
 #### tlsContext
 
-`tlsContext`是 MOSN 中 TLS 运行时的基础单元，主要功能是负责提供 MOSN 运行时所需要的`tls.Config`。其定义与方法如下
+`tlsContext`是 MOSN 中 TLS 运行时的基础单元，主要功能是负责提供 MOSN 运行时所需要的`tls.Config`。其定义与方法如下。
 
 ```Go
 type tlsContext struct {
@@ -224,11 +226,12 @@ func newTLSContext(cfg *v2.TLSConfig, secret *secretInfo) (*tlsContext, error) {
 ```
 
 `secretInfo`包含了可以获取完整的 TLS 证书信息的内容，完整的证书信息包括证书、私钥、以及签发证书的 CA 信息。通常情况下，secretInfo 就是完整的 TLS 证书信息，在有 tls 扩展的场景，则是利用`secretInfo`通过扩展实现进行获取。代码中通过`getFactory`获取到的`hooks`就是扩展实现，在没有扩展的时候，返回的就是默认的`hooks`。
+
 动态 SDS 模式下，当 MOSN 收到来自 SDS 服务端的信息以后，也是通过调用`newTLSContext`生成`tlsContext`提供 TLS 能力。
 
 #### TLS 扩展
 
-考虑到一些 TLS 运行时的配置安全需求以及证书校验需求，MOSN 对 TLS 运行时配置提供了一个扩展点，可以按照需求扩展两种类型，四个功能
+考虑到一些 TLS 运行时的配置安全需求以及证书校验需求，MOSN 对 TLS 运行时配置提供了一个扩展点，可以按照需求扩展两种类型，四个功能：
 + 解析证书和私钥的方式可扩展，默认是读取证书 / 私钥的明文字符串或明文文件
 + 解析 CA 证书的方式可扩展，默认是读取 CA 证书的明文字符串或明文文件
 + Server 端握手校验的方式可扩展，默认是标准的 TLS 握手校验方式
