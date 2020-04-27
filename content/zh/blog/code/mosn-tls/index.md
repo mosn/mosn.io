@@ -5,7 +5,7 @@ date: 2020-04-27
 weight: 1
 author: "[永鹏](https://github.com/nejisama)"
 description: >
-  MOSN TLS 能力解析
+  MOSN TLS 能力解析。
 ---
 
 本文基于的内容是 MOSN v0.12.0。
@@ -48,8 +48,8 @@ func (al *activeListener) OnAccept(rawc net.Conn, ch chan api.Connection, ...) {
 }
 ```
 
-判断是否需要建立 TLS 连接会基于 TLSManager 的状态
-+ 如果 TLSManager 是关闭 TLS 状态，则一定不支持 TLS 连接
+判断是否需要建立 TLS 连接会基于 TLSManager 的状态。
++ 如果 TLSManager 是关闭 TLS 状态，则一定不支持 TLS 连接。
 + 如果 TLSManager 是开启 TLS 状态，还需要额外判断是否支持 Inspector 模式，如果支持 Inspector，则说明 MOSN 的 Listener 可以同时处理 TLS 加密连接和明文的非加密连接；此时 MOSN 会等待连接上收到的第一个数据，判断请求是明文还是 TLS，从而决定使用连接状态。如果不支持 Inspector 模式，那么就只支持 TLS 连接。
 判断是否兼容 Inspector 的逻辑如下。MOSN 会在建立上执行`Peek`，尝试获取连接上第一个数据字节，如果是 0x16（来自 TLS 握手的 Client Hello 的第一个字节），则判断为 TLS 连接，否则判断为明文连接。
 
@@ -88,9 +88,9 @@ func (mng *serverContextManager) Conn(c net.Conn) (net.Conn, error) {
 ```
 
 除了普通的 TLS 以外，MOSN 还支持双向 TLS，即 Server 端要求 Client 端也提供证书，也是可以配置不同的兼容场景，包括：
-+ Client 必须提供 TLS 证书，完成双向 TLS 加密
++ Client 必须提供 TLS 证书，完成双向 TLS 加密。
 + 要求 Client 提供 TLS 证书，但是如果 Client 没有提供证书，也可以兼容执行普通的 TLS 加密
-逻辑实现如下
+逻辑实现如下。
 
 ```Go
 func (ctx *tlsContext) setServerConfig(tmpl tls.Config, cfg *v2.TLSConfig, hooks ConfigHooks) {
@@ -117,9 +117,9 @@ func (ctx *tlsContext) setServerConfig(tmpl tls.Config, cfg *v2.TLSConfig, hooks
 
 ### 客户端 (Cluster)
 
-MOSN 作为客户端的时候，就是 MOSN 在把请求向后端（Upstream）转发的时候，基于 MOSN 的 Cluster 配置转发请求。在 Cluster 配置解析的时候，如果存在 TLS 相关的配置，会尝试生成一个 TLSManager。在转发请求向后端建立连接的时候，会基于两个维度判断是否要建立 TLS 连接
-+ 首先判断建立连接的 Host 配置是否允许建立 TLS 连接，这个是考虑到有的场景特定的 Host 不希望建立 TLS 连接或者不支持 TLS 连接进行的设计。默认配置情况下，Host 配置都是允许建立 TLS 连接的
-+ 在 Host 允许建立 TLS 的情况下，会根据 TLSManager 的状态，判断是否要建立 TLS 连接
+MOSN 作为客户端的时候，就是 MOSN 在把请求向后端（Upstream）转发的时候，基于 MOSN 的 Cluster 配置转发请求。在 Cluster 配置解析的时候，如果存在 TLS 相关的配置，会尝试生成一个 TLSManager。在转发请求向后端建立连接的时候，会基于两个维度判断是否要建立 TLS 连接。
++ 首先判断建立连接的 Host 配置是否允许建立 TLS 连接，这个是考虑到有的场景特定的 Host 不希望建立 TLS 连接或者不支持 TLS 连接进行的设计。默认配置情况下，Host 配置都是允许建立 TLS 连接的。
++ 在 Host 允许建立 TLS 的情况下，会根据 TLSManager 的状态，判断是否要建立 TLS 连接。
 
 ```Go
 func newSimpleCluster(clusterConfig v2.Cluster) *simpleCluster {
@@ -174,8 +174,7 @@ func NewProvider(cfg *v2.TLSConfig) (types.TLSProvider, error) {
 
 #### tlsContext
 
-`tlsContext`是 MOSN 中 TLS 运行时的基础单元，主要功能是负责提供 MOSN 运行时所需要的`tls.Config`。其
-定义与方法如下
+`tlsContext`是 MOSN 中 TLS 运行时的基础单元，主要功能是负责提供 MOSN 运行时所需要的`tls.Config`。其定义与方法如下
 
 ```Go
 type tlsContext struct {
