@@ -7,7 +7,7 @@ description: >
   The interpretation of the core concepts of MOSN.
 ---
 
-Modular Open Smart Network-proxy (MOSN) mainly comprises the following modules. It provides basic network proxy features, and cloud-native services such as [xDS](https://www.servicemesher.com/blog/envoy-xds-protocol/).
+Modular Open Smart Network (MOSN) mainly comprises the following modules. It provides basic network proxy features, and cloud-native services such as [xDS](https://www.servicemesher.com/blog/envoy-xds-protocol/).
 
 ![Modular diagram of MOSN](mosn-modules-arch.jpg)
 
