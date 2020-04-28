@@ -24,7 +24,7 @@ Driver 是 Tracer 的容器，管理注册的 Tracer 实例，Tracer 是 tracing
 
 ![MOSN 中的 tracing 架构](mosn-tracing.jpg)
 
-目前 MOSN tracing 有 [SOFATracer](http://github.com/sofastack/sofa-tracer) 和 SkyWalking 两种实现。SOFATracer 支持 http1 和 xprotocol 协议，将 trace 数据写入本地日志文件中。SkyWalking 支持 http1 协议，将 trace 数据通过 gRPC 上报到 SkyWalking 后端服务。
+目前 MOSN tracing 有 [SOFATracer](http://github.com/sofastack/sofa-tracer) 和 SkyWalking 两种实现。SOFATracer 支持 http1 和 xprotocol 协议的链路追踪，将 trace 数据写入本地日志文件中。SkyWalking 支持 http1 协议的链路追踪，使用原生的 Go 语言探针 [go2sky](https://github.com/SkyAPM/go2sky) 将 trace 数据通过 gRPC 上报到 SkyWalking 后端服务。
 
 ## 快速开始
 
@@ -38,7 +38,9 @@ Driver 是 Tracer 的容器，管理注册的 Tracer 实例，Tracer 是 tracing
 
 - [安装 docker-compose](https://docs.docker.com/compose/install/)
 
-需要一个编译好的 MOSN 程序。
+需要一个编译好的 MOSN 程序，您可以[下载 MOSN 源码](https://github.com/mosn/mosn)自行编译，或者直接下载 [MOSN v0.12.0 发行版](https://github.com/mosn/mosn/releases/tag/v0.12.0)以获取 MOSN 的运行时二进制文件。
+
+下面将以源码编译的方式演示 MOSN 如何与 SkyWalking 集成。
 
 ```bash
 cd ${projectpath}/cmd/mosn/main
@@ -62,7 +64,7 @@ cd ${targetpath}
 
 下面是 SkyWalking 的目录结构。
 
-```
+```bash
 * skywalking
 └─── http
 │           main                           # 编译完成的 MOSN 程序

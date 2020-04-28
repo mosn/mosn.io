@@ -3,7 +3,6 @@ title: "MOSN 社区成立"
 linkTitle: "MOSN 社区成立"
 date: 2019-12-28
 author: "MOSN 团队"
-weight: 1
 description: >
   项目从 SOFAStack 中迁出，由 SOFAMosn 改名为 MOSN，成为独立项目。
 ---
