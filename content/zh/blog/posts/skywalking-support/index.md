@@ -98,11 +98,26 @@ go run server.go
 go run client.go
 ```
 
-打开 [http://127.0.0.1:8080](http://127.0.0.1:8080/) 查看 SkyWalking-UI。
+打开 [http://127.0.0.1:8080](http://127.0.0.1:8080/) 查看 SkyWalking-UI，SkyWalking Dashboard 界面如下图所示。
 
-下面来看一段 Demo 视频。
+![SkyWalking Dashboard](skywalking-dashboard.png)
+
+在打开 Dashboard 后请点击右上角的 `Auto` 按钮以使页面自动刷新。
+
+### Demo 视频
+
+下面来看一下该 Demo 的操作视频。
 
 [![Demo](demo.jpg)](https://www.bilibili.com/video/BV17i4y1t7mZ/)
+
+### 清理
+
+要想销毁 SkyWalking 后台运行的 docker 容器只需要下面的命令。
+
+```bash
+cd ${projectpath}/examples/codes/trace/skywalking/http/
+docker-compose -f skywalking-docker-compose.yaml down
+```
 
 ## 未来计划
 
