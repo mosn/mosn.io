@@ -55,4 +55,4 @@ MOSN 是一款使用 Go 语言开发的网络代理软件，作为云原生的�
 
 MOSN 开源仍在高速发展中，有很多能力需要补全，欢迎所有人参与进来与我们一起共建。
 
-如有任何疑问欢迎[提交 Issue](https://github.com/mosn/mosn/issues)。
+关于 MOSN 社区的详细介绍请查看 [mosn/community](https://github.com/mosn/community) 仓库，如有任何疑问欢迎[提交 Issue](https://github.com/mosn/mosn/issues)。
