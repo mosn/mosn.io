@@ -11,7 +11,7 @@ Sidecar O&M is always challenging for a service mesh, while sidecar upgrades are
 
 ## Background
 
-This topic describes why and how MOSN supports hot upgrade. For details about the basic concepts of hot upgrade, see the [NGINX vs Envoy vs MOSN hot upgrade](/zh/blog/2019/nginx-envoy-mosn-hot-upgrade/).
+This topic describes why and how MOSN supports hot upgrade. For details about the basic concepts of hot upgrade, see the [NGINX vs Envoy vs MOSN hot upgrade](/zh/blog/posts/nginx-envoy-mosn-hot-upgrade/).
 
 First, why don't NGINX and Envoy require a connection-lossless migration solution like MOSN does? This depends on their business scenarios. NGINX and Envoy mainly support the HTTP1 and HTTP2 protocols. The `connection: Close` request/response header in HTTP1 and GOAWAY frame in HTTP2 allow a client to actively close a connection and establish a new one to a new process. However, common multiplexing protocols such as Dubbo and SOFARPC do not provide control frames, and a request will fail if the connection to the old process is closed.
 
