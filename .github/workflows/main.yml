@@ -13,6 +13,7 @@ jobs:
           hugo-version: '0.55.5'
           extended: true
       - run: npm install postcss-cli
+      - run: yarn add --dev postcss-loader postcss-import postcss-cssnext cssnano sugarss autoprefixer
       - name: Build
         # remove --minify tag if you do not need it
         # docs: https://gohugo.io/hugo-pipes/minification/
