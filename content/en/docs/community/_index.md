@@ -17,5 +17,4 @@ For more materials about MOSN community, please go to the [community repo](https
 
 ## Communication
 
-Communicate with MOSN developers on [Slack](https://mosnproxy.slack.com) workspace.
-
+Communicate with MOSN developers on [Slack](https://join.slack.com/t/istio/shared_invite/zt-dhww29on-SvP1~DBvtrk3UdjjbO0SGQ) workspace.
