@@ -7,7 +7,7 @@ description: >
   MOSN v0.12.0 changelog.
 ---
 
-We are happy to announce the release of [MOSN v0.12.0](https://github.com/mosn/mosn/releases/tag/v0.11.0). Thanks to [Sun Fuze (@peacocktrain)](https://github.com/peacocktrain) for his great contribution to this release, certified as [commiter](https://github.com/mosn/community/issues/6)🎉 by MOSN Community Leaders.
+We are happy to announce the release of [MOSN v0.12.0](https://github.com/mosn/mosn/releases/tag/v0.12.0). Thanks to [Sun Fuze (@peacocktrain)](https://github.com/peacocktrain) for his great contribution to this release, certified as [commiter](https://github.com/mosn/community/issues/6)🎉 by MOSN Community Leaders.
 
 You can see the changelog below.
 

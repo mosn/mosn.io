@@ -3,9 +3,8 @@ title: MOSN 源码解析 - 启动流程
 linkTitle: MOSN 源码解析 - 启动流程
 date: 2020-02-26
 aliases: "/zh/blog/posts/mosn-startup"
-author: "[joyme123](https://github.com/joyme123)"
-description: >
-  MOSN 源码解析之启动流程分析。
+author: "[江鹏飞（鑫火信息）](https://github.com/joyme123)"
+description: MOSN 源码解析之启动流程分析。
 ---
 
 本文的目的是分析 MOSN 的启动流程。基于 mosn 版本 v0.4.0，commit 为: dc35c8fc95435a47e6393db1c79dd9f60f7eb898
