@@ -121,6 +121,7 @@ The MOSN users.
   </tbody>
 </table>
 </div>
+Please [leave a comment here](https://github.com/mosn/community/issues/8) to tell us your scenario to make MOSN better!
 
 ## Communication
 
