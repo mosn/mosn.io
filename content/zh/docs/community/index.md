@@ -119,6 +119,7 @@ MOSN 是一个开源项目，于 2018 年 7 月由蚂蚁金服开源，使用 Ap
   </tbody>
 </table>
 </div>
+请在[此处](https://github.com/mosn/community/issues/8)登记并提供反馈来帮助 MOSN 做的更好。
 
 ## 加入社区
 
