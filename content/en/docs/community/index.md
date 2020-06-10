@@ -118,9 +118,17 @@ The MOSN users.
         </a>
       </td>
     </tr>
+    <tr>
+      <td align="center" valign="middle">
+        <a href="https://www.tuya.com" target="_blank">
+          <img width="222px"  src="/images/community/tuya.png">
+        </a>
+      </td>
+    </tr>
   </tbody>
 </table>
 </div>
+
 Please [leave a comment here](https://github.com/mosn/community/issues/8) to tell us your scenario to make MOSN better!
 
 ## Communication
