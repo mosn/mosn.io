@@ -21,6 +21,14 @@ MOSN 是一个开源项目，于 2018 年 7 月由蚂蚁金服开源，使用 Ap
 
 选择加入您感兴趣的工作组，开始您的 MOSN 之旅吧！
 
+## 社区会议
+
+MOSN 社区定期召开社区会议。
+
+- [每双周三晚 8 点（北京时间）](https://ebay.zoom.com.cn/j/96285622161)
+
+- [会议纪要](https://docs.google.com/document/d/12lgyCW-GmlErr_ihvAO7tMmRe87i70bv2xqe4h2LUz4/edit?usp=sharing)
+
 ## 合作伙伴
 
 合作伙伴参与 MOSN 合作开发，使 MOSN 变得更好。
@@ -126,8 +134,19 @@ MOSN 是一个开源项目，于 2018 年 7 月由蚂蚁金服开源，使用 Ap
   </tbody>
 </table>
 </div>
-
 请在[此处](https://github.com/mosn/community/issues/8)登记并提供反馈来帮助 MOSN 做的更好。
+
+## Roadmap
+
+MOSN with Istio 路线图如下。
+
+![MOSN with Istio 路线图](mosn-with-istio-roadmap.png)
+
+Roadmap 详情见 [Google Sheet](https://docs.google.com/spreadsheets/d/1fALompY9nKZNImOuxQw23xtMD-5rCBrXWziJZkj76bo/edit#gid=0)。
+
+## 教程
+
+MOSN 提供线上教程，见[教程页面](/zh/docs/tutorial/)。
 
 ## 加入社区
 

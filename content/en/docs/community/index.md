@@ -14,7 +14,7 @@ MOSN is an open source project that anyone in the community can use, improve, an
 
 For more materials about MOSN community, please go to the [community repo](https://github.com/mosn/community).
 
-## Working Groups
+## Working groups
 
 MOSN including the following working groups now.
 
@@ -22,6 +22,14 @@ MOSN including the following working groups now.
 - [Dubbo Working Group](https://github.com/mosn/community/blob/master/wg-dubbo.md)
 
 Choose to join a working group that interests you and start your MOSN journey!
+
+## Community meeting
+
+MOSN community holds regular meetings.
+
+- [Wednesday 8:00 PM CST(Beijing)](https://ebay.zoom.com.cn/j/96285622161)  every other week
+
+- [Meeting notes](https://docs.google.com/document/d/12lgyCW-GmlErr_ihvAO7tMmRe87i70bv2xqe4h2LUz4/edit?usp=sharing)
 
 ## Partners
 
@@ -130,6 +138,16 @@ The MOSN users.
 </div>
 
 Please [leave a comment here](https://github.com/mosn/community/issues/8) to tell us your scenario to make MOSN better!
+
+## Roadmap
+
+MOSN with Istio roadmap.
+
+![MOSN with Istio roadmap](mosn-with-istio-roadmap.png)
+
+## Tutorials
+
+See MOSN [tutorials](/docs/tutorial/).
 
 ## Communication
 
