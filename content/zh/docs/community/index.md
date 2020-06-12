@@ -134,7 +134,50 @@ MOSN 社区定期召开社区会议。
   </tbody>
 </table>
 </div>
+
 请在[此处](https://github.com/mosn/community/issues/8)登记并提供反馈来帮助 MOSN 做的更好。
+
+## 开源生态
+
+MOSN 社区积极拥抱开源生态，与以下开源社区建立了良好的合作关系。
+
+<div>
+<table>
+  <tbody>
+  <tr></tr>
+    <tr>
+      <td align="center" valign="middle">
+        <a href="https://istio.io/" target="_blank">
+          <img width="222px"  src="/images/community/istio.png">
+        </a>
+      </td>
+      <td align="center"  valign="middle">
+        <a href="https://skywalking.apache.org/" target="_blank">
+          <img width="222px"  src="/images/community/skywalking.png">
+        </a>
+      </td>
+      <td align="center" valign="middle">
+        <a href="https://dubbo.apache.org/" target="_blank">
+          <img width="222px"  src="/images/community/dubbo.png">
+        </a>
+      </td>
+      <td align="center" valign="middle">
+        <a href="https://sentinelguard.io/" target="_blank">
+          <img width="222px"  src="/images/community/sentinel.png">
+        </a>
+      </td>
+    </tr>
+    <tr></tr>
+    <tr>
+      <td align="center" valign="middle">
+        <a href="https://www.sofastack.tech/" target="_blank">
+          <img width="222px"  src="/images/community/sofastack.png">
+        </a>
+      </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
 ## Roadmap
 

@@ -139,6 +139,48 @@ The MOSN users.
 
 Please [leave a comment here](https://github.com/mosn/community/issues/8) to tell us your scenario to make MOSN better!
 
+## Ecosystem
+
+The MOSN community actively embraces the open source ecosystem and has established good relationships with the following open source communities.
+
+<div>
+<table>
+  <tbody>
+  <tr></tr>
+    <tr>
+      <td align="center" valign="middle">
+        <a href="https://istio.io/" target="_blank">
+          <img width="222px"  src="/images/community/istio.png">
+        </a>
+      </td>
+      <td align="center"  valign="middle">
+        <a href="https://skywalking.apache.org/" target="_blank">
+          <img width="222px"  src="/images/community/skywalking.png">
+        </a>
+      </td>
+      <td align="center" valign="middle">
+        <a href="https://dubbo.apache.org/" target="_blank">
+          <img width="222px"  src="/images/community/dubbo.png">
+        </a>
+      </td>
+      <td align="center" valign="middle">
+        <a href="https://sentinelguard.io/" target="_blank">
+          <img width="222px"  src="/images/community/sentinel.png">
+        </a>
+      </td>
+    </tr>
+    <tr></tr>
+    <tr>
+      <td align="center" valign="middle">
+        <a href="https://www.sofastack.tech/" target="_blank">
+          <img width="222px"  src="/images/community/sofastack.png">
+        </a>
+      </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
 ## Roadmap
 
 MOSN with Istio roadmap.
