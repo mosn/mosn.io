@@ -127,11 +127,11 @@ func main() {
 
 为了避免这些隐式的 init 行为，我们实际上是 fork 了 dubbo-go 并进行了少量修改的。当然，改动并不多，未来如果 dubbo-go 有更好的模块化方法的话，我们也可以很轻松地迁移回直接依赖 dubbo-go。
 
-在 MOSN 集成 dubbo-go 的过程中，dubbo-go 社区的老哥们给予了我们大量的支持，贤哥 (https://github.com/zouyx) 帮助我们在 dubbo-go 中实现了之前不支持的 unsub/unpub 功能，并帮助我们解决了很多技术方面的问题。dubbo-go 社区负责人于雨 (https://github.com/alexstocks) 也在开发过程中提供了大量的信息和技术支持。有这两位的支持，MOSN 和 dubbo 的集成才顺畅无比，否则的话要多走很多弯路。
+在 MOSN 集成 dubbo-go 的过程中，dubbo-go 社区的老哥们给予了我们大量的支持，[贤哥（@zouyx）](https://github.com/zouyx) 帮助我们在 dubbo-go 中实现了之前不支持的 unsub/unpub 功能，并帮助我们解决了很多技术方面的问题。dubbo-go 社区负责人[于雨（@alexstocks）](https://github.com/alexstocks)也在开发过程中提供了大量的信息和技术支持。有这两位的支持，MOSN 和 dubbo 的集成才顺畅无比，否则的话要多走很多弯路。
 
 ## 其它选择
 
-除了本文提到的 MOSN + dubbo-go 集成方式，多点的陈鹏同学为我们提供了另一种思路进行集成，本文就不展开了，感兴趣的同学可以参考文末的资料 [3]。
+除了本文提到的 MOSN + dubbo-go 集成方式，多点的陈鹏同学为我们提供了另一种思路进行集成，本文就不展开了，感兴趣的同学可以参考文末的资料。
 
 ## 作者简介
 
@@ -139,8 +139,6 @@ func main() {
 
 ## 参考资料
 
-[1]. [什么是Service Mesh（服务网格）](https://jimmysong.io/blog/what-is-a-service-mesh/)
-
-[2]. [MOSN 多协议机制解析](https://mosn.io/zh/docs/concept/multi-protocol)
-
-[3]. [多点生活在 Service Mesh 上的实践](https://mp.weixin.qq.com/s/mhHnH6ZDPPs6Gr0a20WGOw)
+1. [什么是Service Mesh（服务网格）](https://jimmysong.io/blog/what-is-a-service-mesh/)
+1. [MOSN 多协议机制解析](https://mosn.io/zh/docs/concept/multi-protocol)
+1. [多点生活在 Service Mesh 上的实践](https://mp.weixin.qq.com/s/mhHnH6ZDPPs6Gr0a20WGOw)
