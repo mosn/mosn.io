@@ -158,7 +158,7 @@ MOSN 社区积极拥抱开源生态，与以下开源社区建立了良好的合
       </td>
       <td align="center" valign="middle">
         <a href="https://dubbo.apache.org/" target="_blank">
-          <img width="222px"  src="/images/community/dubbo.png">
+          <img width="222px"  src="/images/community/dubbo-go.png">
         </a>
       </td>
       <td align="center" valign="middle">

@@ -160,7 +160,7 @@ The MOSN community actively embraces the open source ecosystem and has establish
       </td>
       <td align="center" valign="middle">
         <a href="https://dubbo.apache.org/" target="_blank">
-          <img width="222px"  src="/images/community/dubbo.png">
+          <img width="222px"  src="/images/community/dubbo-go.png">
         </a>
       </td>
       <td align="center" valign="middle">
