@@ -191,7 +191,7 @@ The MOSN Community Certified Committer is as follows.
 | Fakang Wang | [wangfakang](https://github.com/wangfakang)     | Ant Financial |
 | Peng Bai    | [nejisama](https://github.com/nejisama)         | Ant Financial |
 | Chunhui Cao | [cch123](https://github.com/cch123)             | Ant Financial |
-| Fuze Sun    | [peacocktrain](https://github.com/peacocktrain) | Boss 直聘     |
+| Fuze Sun    | [peacocktrain](https://github.com/peacocktrain) | zhipin.com    |
 | Peng Chen   | [champly](https://github.com/champly)           | dmall.com     |
 
 Committer is an individual with MOSN repository write access to the following criteria.
