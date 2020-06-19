@@ -178,6 +178,24 @@ MOSN 社区积极拥抱开源生态，与以下开源社区建立了良好的合
     </tbody>
   </table>
 </div>
+## Committer 列表
+
+MOSN 社区认证的 Committer 如下：
+
+| 姓名   | GitHub                                          | 公司      |
+| ------ | ----------------------------------------------- | --------- |
+| 田阳   | [taoyuanyuan](https://github.com/taoyuanyuan)   | 蚂蚁金服  |
+| 王发康 | [wangfakang](https://github.com/wangfakang)     | 蚂蚁金服  |
+| 白鹏   | [nejisama](https://github.com/nejisama)         | 蚂蚁金服  |
+| 曹春晖 | [cch123](https://github.com/cch123)             | 蚂蚁金服  |
+| 孙福泽 | [peacocktrain](https://github.com/peacocktrain) | Boss 直聘 |
+| 陈鹏 | [champly](https://github.com/champly) | 多点生活 |
+
+Committer 是具有 MOSN 仓库写权限的个人，标准如下：
+
+- 能够在长时间内做持续贡献 issue、PR 的个人；
+- 参与 issue 列表的维护及重要功能的讨论；
+- 积极参与 code review 和社区会议；
 
 ## Roadmap
 

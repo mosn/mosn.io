@@ -181,6 +181,25 @@ The MOSN community actively embraces the open source ecosystem and has establish
   </table>
 </div>
 
+## Committers
+
+The MOSN Community Certified Committer is as follows.
+
+| Name        | GitHub                                          | 公司          |
+| ----------- | ----------------------------------------------- | ------------- |
+| Yang Tian   | [taoyuanyuan](https://github.com/taoyuanyuan)   | Ant Financial |
+| Fakang Wang | [wangfakang](https://github.com/wangfakang)     | Ant Financial |
+| Peng Bai    | [nejisama](https://github.com/nejisama)         | Ant Financial |
+| Chunhui Cao | [cch123](https://github.com/cch123)             | Ant Financial |
+| Fuze Sun    | [peacocktrain](https://github.com/peacocktrain) | Boss 直聘     |
+| Peng Chen   | [champly](https://github.com/champly)           | dmall.com     |
+
+Committer is an individual with MOSN repository write access to the following criteria.
+
+- Individuals who can make sustained contributions to issues, PR over time.
+- Participate in the maintenance of issue lists and discussion of important features.
+- Active participation in code reviews and community meetings.
+
 ## Roadmap
 
 MOSN with Istio roadmap.
