@@ -190,6 +190,7 @@ MOSN 社区认证的 Committer 如下：
 | 曹春晖 | [cch123](https://github.com/cch123)             | 蚂蚁金服  |
 | 孙福泽 | [peacocktrain](https://github.com/peacocktrain) | Boss 直聘 |
 | 陈鹏 | [champly](https://github.com/champly) | 多点生活 |
+| 姚昌宇 | [trainyao](https://github.com/trainyao) | 有米科技 |
 
 Committer 是具有 MOSN 仓库写权限的个人，标准如下：
 
