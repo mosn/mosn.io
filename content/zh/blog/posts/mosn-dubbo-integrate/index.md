@@ -24,7 +24,7 @@ Service Mesh 设计一般划分为两个模块，控制面和数据面。可以�
 
 ## MOSN 简介
 
-MOSN 是蚂蚁金服出品的用 Go 语言实现的 Service Mesh 数据面，在蚂蚁内部已大规模落地，在开源过程中我们了解到外部用户有较多的 dubbo 用户，这些 dubbo 用户也希望能够享受 Service Mesh 社区的发展红利。同时可以针对自己公司的特殊业务场景，对 Service Mesh 的数据面进行一定的扩展。
+MOSN 是蚂蚁集团出品的用 Go 语言实现的 Service Mesh 数据面，在蚂蚁内部已大规模落地，在开源过程中我们了解到外部用户有较多的 dubbo 用户，这些 dubbo 用户也希望能够享受 Service Mesh 社区的发展红利。同时可以针对自己公司的特殊业务场景，对 Service Mesh 的数据面进行一定的扩展。
 
 谈到扩展，MOSN 使用 Go 编写的优势就体现出来了。相比 C++，Go 语言通过自带的内存分配器与 GC 实现了一定程度的内存安全，解放了程序员的心智。相比 C++ 编写的 envoy，无论是编程和问题定位都要轻松不少。
 
@@ -135,7 +135,7 @@ func main() {
 
 ## 作者简介
 
-曹春晖，开源 MOSN committer，@cch123，蚂蚁金服系统部技术专家，主攻 Service Mesh 方向。个人技术网站 xargin.com，和他人合著《Go 语言高级编程》。
+曹春晖，开源 MOSN committer，@cch123，蚂蚁集团系统部技术专家，主攻 Service Mesh 方向。个人技术网站 xargin.com，和他人合著《Go 语言高级编程》。
 
 ## 参考资料
 

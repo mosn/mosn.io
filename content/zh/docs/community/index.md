@@ -8,7 +8,7 @@ menu:
 description: 关于 MOSN 社区。
 ---
 
-MOSN 是一个开源项目，于 2018 年 7 月由蚂蚁金服开源，使用 Apache 2.0 协议，任何人都可以使用和参与改进。MOSN 社区期待您的加入！
+MOSN 是一个开源项目，于 2018 年 7 月由蚂蚁集团开源，使用 Apache 2.0 协议，任何人都可以使用和参与改进。MOSN 社区期待您的加入！
 
 关于 MOSN 社区的详细资料请访问 [Community 仓库](https://github.com/mosn/community)。
 
@@ -184,10 +184,10 @@ MOSN 社区认证的 Committer 如下：
 
 | 姓名   | GitHub                                          | 公司      |
 | ------ | ----------------------------------------------- | --------- |
-| 田阳   | [taoyuanyuan](https://github.com/taoyuanyuan)   | 蚂蚁金服  |
-| 王发康 | [wangfakang](https://github.com/wangfakang)     | 蚂蚁金服  |
-| 白鹏   | [nejisama](https://github.com/nejisama)         | 蚂蚁金服  |
-| 曹春晖 | [cch123](https://github.com/cch123)             | 蚂蚁金服  |
+| 田阳   | [taoyuanyuan](https://github.com/taoyuanyuan)   | 蚂蚁集团  |
+| 王发康 | [wangfakang](https://github.com/wangfakang)     | 蚂蚁集团  |
+| 白鹏   | [nejisama](https://github.com/nejisama)         | 蚂蚁集团  |
+| 曹春晖 | [cch123](https://github.com/cch123)             | 蚂蚁集团  |
 | 孙福泽 | [peacocktrain](https://github.com/peacocktrain) | Boss 直聘 |
 | 陈鹏 | [champly](https://github.com/champly) | 多点生活 |
 | 姚昌宇 | [trainyao](https://github.com/trainyao) | 有米科技 |

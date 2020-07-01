@@ -2,7 +2,7 @@
 title: "UDPA 最新进展深度介绍"
 linkTitle: "UDPA 最新进展深度介绍"
 date: 2020-02-24
-author: "[敖小剑（蚂蚁金服）](https://skyao.io)"
+author: "[敖小剑（蚂蚁集团）](https://skyao.io)"
 description: >
   在2019年5月，CNCF 筹建通用数据平面API工作组制定UDPA API。本文收集并整理了 UDPA 目前的情况，深入介绍 UDPA 的最新进展。另外 MOSN 已支持 xDS v2，正在向 UDPA 演进。
 ---
