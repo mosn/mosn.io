@@ -2,7 +2,7 @@
 title: MOSN 源码解析 -  reconfig 机制
 linkTitle: MOSN 源码解析 - reconfig 机制
 date: 2019-11-24
-aliases: "/zh/blog/posts/mosn-reconfig-mechanism"
+aliases: "blog/posts/mosn-reconfig-mechanism"
 author: "[姚昌宇（有米科技）](https://trainyao.github.io)"
 description: >
   MOSN 源码解析之 reconfig 机制。

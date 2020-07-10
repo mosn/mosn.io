@@ -139,4 +139,4 @@ SkyWalking 是观察性分析平台和应用性能管理系统。提供分布式
 - GitHub：<https://github.com/apache/skywalking>
 - 官网：<https://skywalking.apache.org>
 
-关于本文中的示例请参考 [MOSN GitHub](https://github.com/mosn/mosn/tree/master/examples/cn_readme/trace/skywalking/http) 和 [MOSN 官方文档](https://mosn.io/zh/docs/configuration/trace/)。
+关于本文中的示例请参考 [MOSN GitHub](https://github.com/mosn/mosn/tree/master/examples/cn_readme/trace/skywalking/http) 和 [MOSN 官方文档](https://mosn.iodocs/configuration/trace/)。

@@ -106,7 +106,7 @@ AccessLog interface {
 }
 ```
 
-调用 Log 记录日志的时候，通过使用 [变量机制](https://mosn.io/zh/blog/code/mosn-variable) 来填充`log_format`里面的变量，相关信息保存在 ctx 里面。用于保存变量信息的 `entries` 通过 `NewAccessLog` 初始化的时候，调用 `parseFormat` 方法来初始化的，[参考相关代码](https://github.com/mosn/mosn/blob/07cd4afe4d76619fdfbdff858239885f9a358bb2/pkg/log/accesslog.go#L79)。
+调用 Log 记录日志的时候，通过使用 [变量机制](https://mosn.ioblog/code/mosn-variable) 来填充`log_format`里面的变量，相关信息保存在 ctx 里面。用于保存变量信息的 `entries` 通过 `NewAccessLog` 初始化的时候，调用 `parseFormat` 方法来初始化的，[参考相关代码](https://github.com/mosn/mosn/blob/07cd4afe4d76619fdfbdff858239885f9a358bb2/pkg/log/accesslog.go#L79)。
 
 ### log 的具体实现
 
@@ -185,7 +185,7 @@ buf.WriteTo(l)
 buffer.PutIoBuffer(buf)
 ```
 
-当收到第一次写数据的时候不是立刻写入数据到 `log` 对象，而是在等待 20 次读取信息，一起写入到对 `log` 象中，在大量写日志的时候不会导致调用太频繁。如频繁写入文件、频繁调用写日志接口，相反，这会增加内存分配，最好的其实是使用 `writev`，但是 `go runtime` 的 `io` 库没有这个实现。可以采用 [plugin 机制](https://mosn.io/zh/blog/code/mosn-plugin/) 来接管日志的打印，减少 `io` 卡顿对 `go runtime` 的调度影响
+当收到第一次写数据的时候不是立刻写入数据到 `log` 对象，而是在等待 20 次读取信息，一起写入到对 `log` 象中，在大量写日志的时候不会导致调用太频繁。如频繁写入文件、频繁调用写日志接口，相反，这会增加内存分配，最好的其实是使用 `writev`，但是 `go runtime` 的 `io` 库没有这个实现。可以采用 [plugin 机制](https://mosn.ioblog/code/mosn-plugin/) 来接管日志的打印，减少 `io` 卡顿对 `go runtime` 的调度影响
 
 \*_当一次循环处理完之后，会调用 `runtime.Gosched()` 主动让出当前协程的 `cpu` 资源_
 
@@ -262,7 +262,7 @@ _其中 `type` 目前只支持 `prometheus`_
 
 ### shm
 
-`pkg/metrics/shm` 主要是通过 `mmap` 将一个文件或者其它对象映射进内存，让多个进程共用，可以让 `MOSN` 在热升级的过程中 `metrics` 数据不会出现 `"断崖"`，关于 `shm` 的分析内容可以参考 [共享内存模型](https://mosn.io/zh/blog/code/mosn-shm/)。
+`pkg/metrics/shm` 主要是通过 `mmap` 将一个文件或者其它对象映射进内存，让多个进程共用，可以让 `MOSN` 在热升级的过程中 `metrics` 数据不会出现 `"断崖"`，关于 `shm` 的分析内容可以参考 [共享内存模型](https://mosn.ioblog/code/mosn-shm/)。
 
 - **不鼓励在 Go 里面使用共享内存，除非你有明确的使用场景**
 

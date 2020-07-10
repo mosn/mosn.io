@@ -2,7 +2,7 @@
 title: MOSN 源码解析 - filter扩展机制
 linkTitle: MOSN 源码解析 - filter扩展机制
 date: 2020-02-09
-aliases: "/zh/blog/posts/mosn-filter"
+aliases: "blog/posts/mosn-filter"
 author: "[姚昌宇（有米科技）](https://trainyao.github.io)"
 description: >
   MOSN 源码解析系列之 filter 扩展机制，如何创建自己的 filter 来扩展 MOSN。

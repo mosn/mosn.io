@@ -28,7 +28,7 @@ MOSN 是蚂蚁集团出品的用 Go 语言实现的 Service Mesh 数据面，在
 
 谈到扩展，MOSN 使用 Go 编写的优势就体现出来了。相比 C++，Go 语言通过自带的内存分配器与 GC 实现了一定程度的内存安全，解放了程序员的心智。相比 C++ 编写的 envoy，无论是编程和问题定位都要轻松不少。
 
-MOSN 同时提供了强大的 XProtocol [协议扩展框架](https://mosn.io/zh/docs/concept/multi-protocol/)，用户可以根据自己的需求编写自定义协议解析。如果你使用的是 SOFA/Dubbo/HTTP/HTTP2，那么 MOSN 已经为你准备好了现成的实现。开箱即用。
+MOSN 同时提供了强大的 XProtocol [协议扩展框架](https://mosn.iodocs/concept/multi-protocol/)，用户可以根据自己的需求编写自定义协议解析。如果你使用的是 SOFA/Dubbo/HTTP/HTTP2，那么 MOSN 已经为你准备好了现成的实现。开箱即用。
 
 为了满足社区的需求，从今年 4 月开始，MOSN 社区与 dubbo-go 社区进行了深入的交流与合作。可能还有些同学对 dubbo-go 不太了解，简单介绍一下。
 
@@ -140,5 +140,5 @@ func main() {
 ## 参考资料
 
 1. [什么是Service Mesh（服务网格）](https://jimmysong.io/blog/what-is-a-service-mesh/)
-1. [MOSN 多协议机制解析](https://mosn.io/zh/docs/concept/multi-protocol)
+1. [MOSN 多协议机制解析](https://mosn.iodocs/concept/multi-protocol)
 1. [多点生活在 Service Mesh 上的实践](https://mp.weixin.qq.com/s/mhHnH6ZDPPs6Gr0a20WGOw)

@@ -211,7 +211,7 @@ More information about MOSN roadmap, see the [Google Sheet](https://docs.google.
 
 ## Tutorials
 
-See MOSN [tutorials](/docs/tutorial/).
+See MOSN [tutorials](/en/docs/tutorial/).
 
 ## Communication
 

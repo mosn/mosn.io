@@ -2,7 +2,7 @@
 title: MOSN 源码解析 - Plugin 机制
 linkTitle: MOSN 源码解析 - plugin 机制
 date: 2020-02-14
-aliases: "/zh/blog/posts/mosn-plugin"
+aliases: "blog/posts/mosn-plugin"
 author: "[烈元（蚂蚁集团）](https://github.com/taoyuanyuan)"
 description: >
   MOSN 源码解析系列之 Plugin 机制的源码解析。

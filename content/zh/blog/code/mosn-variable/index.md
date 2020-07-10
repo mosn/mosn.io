@@ -2,7 +2,7 @@
 title: MOSN 源码解析 - 变量机制
 linkTitle: MOSN 源码解析 - 变量机制
 date: 2020-02-16
-aliases: "/zh/blog/posts/mosn-variable"
+aliases: "blog/posts/mosn-variable"
 author: "[黄润豪（好雨云）](https://github.com/glyasai)"
 description: >
   MOSN 源码解析系列之变量机制的源码解析。

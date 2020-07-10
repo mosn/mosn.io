@@ -24,4 +24,4 @@ description: >
 
 直播报名：https://tech.antfin.com/community/live/1131
 
-扫描[社区](/zh/community/)页面的二维码加入钉钉群参与互动。
+扫描[社区](community/)页面的二维码加入钉钉群参与互动。

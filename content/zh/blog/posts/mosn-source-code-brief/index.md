@@ -125,7 +125,7 @@ support apis:
 5. protocol 和 stream 两个layer 因和协议有关，不同协议之间实现差异很大，层次不是很清晰。
 6. 跨层次调用/数据传输通过跨层次struct 的“组合”来实现。也有一些特别的，比如http net/io 和 stream 分别启动goroutine read/write loop，通过共享数据来变相的实现跨层调用。
 
-[MOSN的核心概念解析](https://mosn.io/zh/docs/concept/core-concept/)。
+[MOSN的核心概念解析](https://mosn.iodocs/concept/core-concept/)。
 
 ![](mosn_io_process.png)
 
