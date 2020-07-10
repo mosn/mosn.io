@@ -44,7 +44,7 @@ The release cycle of MOSN open source is one month. We are about to announce Roa
 
 ### What version of Istio does MOSN support? When will it be available in Istio?
 
-MOSN currently runs the [bookinfo example](/docs/quick-start/istio/) based on Istio 1.4.6. In September 2020, Istio is expected to fully support the capabilities of Istio and become an integral part of Istio Sidecar deployment options available. Please join the [MOSN community](/docs/community) to learn about working with Istio.
+MOSN currently runs the [bookinfo example](/docs/quick-start/istio/) based on Istio 1.5.2. In September 2020, Istio is expected to fully support the capabilities of Istio and become an integral part of Istio Sidecar deployment options available. Please join the [MOSN community](/docs/community) to learn about working with Istio.
 
 ### What service registration and discovery mechanisms does MOSN support?
 

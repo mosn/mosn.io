@@ -46,7 +46,7 @@ MOSN 开源的发布周期是一个月，我们即将公布 2020 年的 Roadmap�
 
 ### MOSN 支持 Istio 的什么版本？什么时候可以在 Istio 中可用？
 
-目前 MOSN 可基于 Istio 1.4.6  跑通 [bookinfo example](/zh/docs/quick-start/istio/)，预计 2020 年 9 月份将完整支持 Istio 的能力，并成为 Istio 中可用的 Sidecar 部署选项。请加入 [MOSN 社区](/zh/docs/community) 了解适配 Istio 的工作。
+目前 MOSN 可基于 Istio 1.5.2  跑通 [bookinfo example](/zh/docs/quick-start/istio/)，预计 2020 年 9 月份将完整支持 Istio 的能力，并成为 Istio 中可用的 Sidecar 部署选项。请加入 [MOSN 社区](/zh/docs/community) 了解适配 Istio 的工作。
 
 ### MOSN 支持哪些服务注册和发现机制？
 
