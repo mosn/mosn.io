@@ -2,6 +2,7 @@
 title: "Dubbo 集成"
 linkTitle: "Dubbo 集成"
 date: 2020-06-01
+aliases: "/zh/docs/dev/dubbo-integrate"
 weight: 2
 description: >
   本页介绍了如何在 MOSN 中集成 Dubbo 服务。

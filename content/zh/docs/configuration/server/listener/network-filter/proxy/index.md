@@ -3,6 +3,7 @@ title: "proxy"
 linkTitle: "proxy"
 weight: 1
 date: 2020-01-20
+aliases: "/zh/docs/configuration/server/listener/network-filter/proxy"
 description: >
   Network Filter 中的 proxy 配置说明。
 ---

@@ -3,6 +3,7 @@ title: "MOSN 0.2.1 性能报告"
 linkTitle: "MOSN 0.2.1 性能报告"
 date: 2019-12-04
 author: MOSN 团队
+aliases: "/zh/blog/releases/mosn-0.2.1-performance-report"
 description: >
   本性能报告的基准版本为 MOSN 0.2.1。
 ---

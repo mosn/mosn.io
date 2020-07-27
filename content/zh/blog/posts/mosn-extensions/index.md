@@ -4,6 +4,7 @@ linkTitle: "MOSN 的扩展机制解析"
 author: "[永鹏（蚂蚁集团）](https://github.com/nejisama)"
 description: "本文根据 SOFAChannel#14 直播分享整理，主题：云原生网络代理 MOSN 扩展机制解析。"
 date: 2020-04-09T21:00:00+08:00
+aliases: "/zh/blog/posts/mosn-extensions"
 ---
 
 本文根据 SOFAChannel#14 直播分享整理，主题：云原生网络代理 MOSN 扩展机制解析。

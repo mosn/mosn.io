@@ -3,6 +3,7 @@ title: "FAQ"
 linkTitle: "FAQ"
 date: 2020-03-02
 author: "MOSN 团队"
+aliases: "/zh/docs/faq/"
 menu:
   main:
     weight: 50

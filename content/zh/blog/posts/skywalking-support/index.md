@@ -4,6 +4,7 @@ linkTitle: "MOSN 支持使用 SkyWalking 进行分布式追踪"
 date: 2020-04-28
 author: "[Jimmy Song](https://jimmysong.io)、[张伟](https://github.com/arugal)"
 description: "日前，观察性分析平台和应用性能管理系统 SkyWalking 完成了与云原生网络代理 MOSN 的集成，作为 MOSN 中的支持的分布式追踪系统之一，旨在实现在微服务和 Service Mesh 中的更强大的可观察性。"
+aliases: "/zh/blog/posts/skywalking-support/"
 ---
 
 相比传统的巨石（Monolith）应用，微服务的一个主要变化是将应用中的不同模块拆分为了独立的进程。在微服务架构下，原来进程内的方法调用成为了跨进程的远程方法调用。相对于单一进程内的方法调用而言，跨进程调用的调试和故障分析是非常困难的，难以使用传统的代码调试程序或者日志打印来对分布式的调用过程进行查看和分析。

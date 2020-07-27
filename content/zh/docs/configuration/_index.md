@@ -3,6 +3,7 @@ title: "配置概览"
 linkTitle: "配置概览"
 date: 2020-01-20
 weight: 4
+aliases: "/zh/docs/configuration"
 description: >
   MOSN 配置文件概览。
 ---

@@ -2,6 +2,7 @@
 title: MOSN 源码解析 - HTTP 系能力
 linkTitle: MOSN 源码解析 - HTTP 系能力
 date: 2020-03-07
+aliases: "/zh/blog/code/mosn-http"
 author: "陈爱祥（嘀嘀打车）"
 description: "本文分析的是 MOSN 的 HTTP 系能力。"
 ---

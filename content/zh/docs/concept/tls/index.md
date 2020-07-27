@@ -3,6 +3,7 @@ title: "TLS 安全链路"
 linkTitle: "TLS 安全链路"
 date: 2020-01-20
 weight: 4
+aliases: "/zh/docs/concept/tls"
 description: >
   MOSN 的 TLS 安全能力。
 ---

@@ -3,6 +3,7 @@ title: "样式指南"
 linkTitle: "样式指南"
 date: 2020-02-11
 weight: 2
+aliases: "/zh/docs/contribute/style-guide"
 description: >
   本页提供 MOSN 文档的内容样式指南。
 ---

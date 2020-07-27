@@ -4,6 +4,7 @@ linkTitle: MOSN 源码解析 - TLS
 date: 2020-04-26
 author: "[永鹏](https://github.com/nejisama)"
 description: "MOSN TLS 能力解析。"
+aliases: "/zh/blog/code/mosn-tls"
 ---
 
 本文基于的内容是 MOSN v0.12.0。

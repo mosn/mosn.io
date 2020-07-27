@@ -3,6 +3,7 @@ title: "MOSN v0.14.0 发布"
 linkTitle: "MOSN v0.14.0 发布"
 date: 2020-07-01
 author: "MOSN 团队"
+aliases: "/zh/blog/releases/v0.14.0"
 description: "MOSN v0.14.0 变更日志。"
 ---
 

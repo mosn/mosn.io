@@ -4,7 +4,7 @@ linkTitle: "MOSN 多协议机制解析"
 date: 2020-03-26
 author: "[无钩（蚂蚁集团）](https://github.com/neverhook)"
 description: "本文根据 SOFAChannel#13 直播分享整理，主题：云原生网络代理 MOSN 多协议机制解析。"
-typora-root-url: ../multi-protocol-deep-dive
+aliases: "/zh/blog/posts/multi-protocol-deep-dive/"
 ---
 
 > 本文根据 SOFAChannel#13 直播分享整理，主题：云原生网络代理 MOSN 多协议机制解析，[查看视频回顾](https://tech.antfin.com/community/live/1131)。

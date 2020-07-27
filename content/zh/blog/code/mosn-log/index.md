@@ -2,6 +2,7 @@
 title: MOSN 源码解析 - log 系统
 linkTitle: MOSN 源码解析 - log 系统
 date: 2020-03-03
+aliases: "/zh/blog/code/mosn-log"
 author: "[陈鹏（多点生活）](https://github.com/champly)"
 description: "对 MOSN Log系统的源码解析。"
 ---

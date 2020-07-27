@@ -4,6 +4,7 @@ linkTitle: MOSN 源码解析 - 总览
 date: 2020-05-08
 author: "[烈元（蚂蚁集团）](https://github.com/taoyuanyuan)"
 description: MOSN 源码解析文章总览。
+aliases: "/zh/blog/posts/mosn-overview"
 ---
 
 ## 起因

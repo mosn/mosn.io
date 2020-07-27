@@ -3,6 +3,7 @@ title: "connection_manager"
 linkTitle: "connection_manager"
 date: 2020-01-20
 weight: 2
+aliases: "/zh/docs/configuration/server/listener/network-filter/connection-manager"
 description: >
   Network Filter 中的 connection_manager  配置说明。
 ---

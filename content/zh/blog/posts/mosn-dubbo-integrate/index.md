@@ -4,6 +4,7 @@ linkTitle: "在 MOSN 中玩转 dubbo-go"
 date: 2020-06-15
 author: "[曹春晖](https://github.com/cch123)"
 description: "本文主要介绍怎么样在 MOSN 中集成 dubbo-go，来实现 dubbo 的服务发现。"
+aliases: “/zh/blog/posts/mosn-dubbo-integrate"
 ---
 
 ## Service Mesh 简介

@@ -1,7 +1,9 @@
 ---
 title: 社区
 linkTitle: 社区
-aliases: "community/"
+aliases: 
+- "/community/"
+- "/zh/docs/community"
 menu:
   main:
     weight: 40

@@ -2,6 +2,7 @@
 title: MOSN 源码分析 - 连接池
 linkTitle: MOSN 源码分析 - 连接池
 date: 2020-04-07
+aliases: "/zh/blog/code/mosn-connection-pool"
 author: "[子懿（阿里云）](https://github.com/SteNIcholas)"
 description: >
   MOSN 源码解析系列之连接池。
