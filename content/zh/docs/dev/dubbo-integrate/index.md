@@ -2,6 +2,7 @@
 title: "Dubbo 集成"
 linkTitle: "Dubbo 集成"
 date: 2020-06-01
+aliases: "/zh/docs/dev/dubbo-integrate"
 weight: 2
 description: >
   本页介绍了如何在 MOSN 中集成 Dubbo 服务。
@@ -90,14 +91,14 @@ Dubbo 最初是 [Java 开发的一套 RPC 框架](https://dubbo.apache.org/zh-cn
 
 ```json
   "extend" :  [{
-		"type" : "dubbo_registry",
-		"config" : {
-			"enable" : true,
-			"server_port" : 20080,
-			"api_port" : 22222,
-			"log_path" : "/tmp"
-		}
-	}]
+    "type" : "dubbo_registry",
+    "config" : {
+      "enable" : true,
+      "server_port" : 20080,
+      "api_port" : 22222,
+      "log_path" : "/tmp"
+    }
+  }]
 ```
 
 该配置与 tracing、admin 等为平级配置。

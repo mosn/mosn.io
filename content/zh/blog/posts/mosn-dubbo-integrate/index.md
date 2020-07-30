@@ -4,6 +4,7 @@ linkTitle: "在 MOSN 中玩转 dubbo-go"
 date: 2020-06-15
 author: "[曹春晖](https://github.com/cch123)"
 description: "本文主要介绍怎么样在 MOSN 中集成 dubbo-go，来实现 dubbo 的服务发现。"
+aliases: “/zh/blog/posts/mosn-dubbo-integrate"
 ---
 
 ## Service Mesh 简介
@@ -24,11 +25,11 @@ Service Mesh 设计一般划分为两个模块，控制面和数据面。可以�
 
 ## MOSN 简介
 
-MOSN 是蚂蚁金服出品的用 Go 语言实现的 Service Mesh 数据面，在蚂蚁内部已大规模落地，在开源过程中我们了解到外部用户有较多的 dubbo 用户，这些 dubbo 用户也希望能够享受 Service Mesh 社区的发展红利。同时可以针对自己公司的特殊业务场景，对 Service Mesh 的数据面进行一定的扩展。
+MOSN 是蚂蚁集团出品的用 Go 语言实现的 Service Mesh 数据面，在蚂蚁内部已大规模落地，在开源过程中我们了解到外部用户有较多的 dubbo 用户，这些 dubbo 用户也希望能够享受 Service Mesh 社区的发展红利。同时可以针对自己公司的特殊业务场景，对 Service Mesh 的数据面进行一定的扩展。
 
 谈到扩展，MOSN 使用 Go 编写的优势就体现出来了。相比 C++，Go 语言通过自带的内存分配器与 GC 实现了一定程度的内存安全，解放了程序员的心智。相比 C++ 编写的 envoy，无论是编程和问题定位都要轻松不少。
 
-MOSN 同时提供了强大的 XProtocol [协议扩展框架](https://mosn.io/zh/docs/concept/multi-protocol/)，用户可以根据自己的需求编写自定义协议解析。如果你使用的是 SOFA/Dubbo/HTTP/HTTP2，那么 MOSN 已经为你准备好了现成的实现。开箱即用。
+MOSN 同时提供了强大的 XProtocol [协议扩展框架](https://mosn.iodocs/concept/multi-protocol/)，用户可以根据自己的需求编写自定义协议解析。如果你使用的是 SOFA/Dubbo/HTTP/HTTP2，那么 MOSN 已经为你准备好了现成的实现。开箱即用。
 
 为了满足社区的需求，从今年 4 月开始，MOSN 社区与 dubbo-go 社区进行了深入的交流与合作。可能还有些同学对 dubbo-go 不太了解，简单介绍一下。
 
@@ -135,10 +136,10 @@ func main() {
 
 ## 作者简介
 
-曹春晖，开源 MOSN committer，@cch123，蚂蚁金服系统部技术专家，主攻 Service Mesh 方向。个人技术网站 xargin.com，和他人合著《Go 语言高级编程》。
+曹春晖，开源 MOSN committer，@cch123，蚂蚁集团系统部技术专家，主攻 Service Mesh 方向。个人技术网站 xargin.com，和他人合著《Go 语言高级编程》。
 
 ## 参考资料
 
 1. [什么是Service Mesh（服务网格）](https://jimmysong.io/blog/what-is-a-service-mesh/)
-1. [MOSN 多协议机制解析](https://mosn.io/zh/docs/concept/multi-protocol)
+1. [MOSN 多协议机制解析](https://mosn.iodocs/concept/multi-protocol)
 1. [多点生活在 Service Mesh 上的实践](https://mp.weixin.qq.com/s/mhHnH6ZDPPs6Gr0a20WGOw)

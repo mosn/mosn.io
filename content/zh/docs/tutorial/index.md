@@ -1,6 +1,7 @@
 ---
 title: "教程"
 linkTitle: "教程"
+aliases: "/zh/docs/tutorial"
 menu:
   main:
     weight: 40

@@ -1,14 +1,16 @@
 ---
 title: 社区
 linkTitle: 社区
-aliases: "/zh/community/"
+aliases: 
+- "/community/"
+- "/zh/docs/community"
 menu:
   main:
     weight: 40
 description: 关于 MOSN 社区。
 ---
 
-MOSN 是一个开源项目，于 2018 年 7 月由蚂蚁金服开源，使用 Apache 2.0 协议，任何人都可以使用和参与改进。MOSN 社区期待您的加入！
+MOSN 是一个开源项目，于 2018 年 7 月由蚂蚁集团开源，使用 Apache 2.0 协议，任何人都可以使用和参与改进。MOSN 社区期待您的加入！
 
 关于 MOSN 社区的详细资料请访问 [Community 仓库](https://github.com/mosn/community)。
 
@@ -178,6 +180,25 @@ MOSN 社区积极拥抱开源生态，与以下开源社区建立了良好的合
     </tbody>
   </table>
 </div>
+## Committer 列表
+
+MOSN 社区认证的 Committer 如下：
+
+| 姓名   | GitHub                                          | 公司      |
+| ------ | ----------------------------------------------- | --------- |
+| 田阳   | [taoyuanyuan](https://github.com/taoyuanyuan)   | 蚂蚁集团  |
+| 王发康 | [wangfakang](https://github.com/wangfakang)     | 蚂蚁集团  |
+| 白鹏   | [nejisama](https://github.com/nejisama)         | 蚂蚁集团  |
+| 曹春晖 | [cch123](https://github.com/cch123)             | 蚂蚁集团  |
+| 孙福泽 | [peacocktrain](https://github.com/peacocktrain) | Boss 直聘 |
+| 陈鹏 | [champly](https://github.com/champly) | 多点生活 |
+| 姚昌宇 | [trainyao](https://github.com/trainyao) | 有米科技 |
+
+Committer 是具有 MOSN 仓库写权限的个人，标准如下：
+
+- 能够在长时间内做持续贡献 issue、PR 的个人；
+- 参与 issue 列表的维护及重要功能的讨论；
+- 积极参与 code review 和社区会议；
 
 ## Roadmap
 
@@ -189,7 +210,7 @@ Roadmap 详情见 [Google Sheet](https://docs.google.com/spreadsheets/d/1fALompY
 
 ## 教程
 
-MOSN 提供线上教程，见[教程页面](/zh/docs/tutorial/)。
+MOSN 提供线上教程，见[教程页面](docs/tutorial/)。
 
 ## 加入社区
 

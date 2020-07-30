@@ -3,6 +3,7 @@ title: "MOSN v0.12.0 发布"
 linkTitle: "MOSN v0.12.0 发布"
 date: 2020-04-28
 author: "MOSN 团队"
+aliases: "/zh/blog/releases/v0.12.0"
 description: >
   MOSN v0.12.0 变更日志。
 ---
@@ -13,7 +14,7 @@ description: >
 
 ### 新功能
 
-- [支持 Skywalking](/zh/blog/posts/skywalking-support) [@arugal](https://github.com/arugal)
+- [支持 Skywalking](blog/posts/skywalking-support) [@arugal](https://github.com/arugal)
 - Stream Filter 新增了一个 Receive Filter 执行的阶段，可在 MOSN 路由选择完 Host 以后，再次执行 Receive Filter [@wangfakang](https://github.com/wangfakang)
 - HTTP2 支持流式 [@peacocktrain](https://github.com/peacocktrain) [@taoyuanyuan](https://github.com/taoyuanyuan)
 - FeatureGate 新增接口 KnownFeatures，可输出当前 FeatureGate 状态 [@nejisama](https://github.com/nejisama)

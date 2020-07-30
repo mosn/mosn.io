@@ -3,6 +3,7 @@ title: "Trace 配置"
 linkTitle: "Trace 配置"
 date: 2020-04-08
 weight: 3
+aliases: "/zh/docs/configuration/trace"
 description: 
   MOSN trace 配置说明。
 ---

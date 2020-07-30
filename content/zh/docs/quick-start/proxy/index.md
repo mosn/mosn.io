@@ -3,6 +3,7 @@ title: "快速开始"
 linkTitle: "快速开始"
 weight: 1
 date: 2020-01-20
+aliases: "/zh/docs/quick-start/proxy"
 description: >
   快速搭建开发环境，完成构建，测试，打包和示例代码的运行。
 ---

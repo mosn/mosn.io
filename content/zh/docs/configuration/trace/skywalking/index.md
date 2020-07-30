@@ -3,6 +3,7 @@ title: "SkyWalking 配置"
 linkTitle: "SkyWalking 配置"
 date: 2020-04-08
 weight: 1
+aliases: "/zh/docs/configuration/trace/skywalking"
 description: 
   MOSN SkyWalking trace 配置说明。
 ---
@@ -22,7 +23,12 @@ SkyWalking 描述的 MOSN 的基本全局参数如下所示。
       "reporter": "gRPC",
       "backend_service": "127.0.0.1:11800",
       "service_name": "mosn",
-      "with_register": true
+      "max_send_queue_size": 30000,
+      "authentication": "mosn",
+      "tls": {
+        "cert_file": "cert.crt",
+        "server_name_override": "mosn.io"
+      }
     }
   }
 }
@@ -42,12 +48,32 @@ SkyWalking 后端服务地址，仅在上报模式为 `gRPC` 模式时使用 。
 
 ## service_name
 
-注册到 SkyWalking 的服务名称 。
+注册到 SkyWalking 的服务名称，仅在上报模式为 `gRPC` 模式时使用 。
 
 - 如果配置为空，则默认为 `mosn`。
 
-## with_register
+## max_send_queue_size
 
-bool 类型，当此值为 true 时，会阻塞协程等待当前实例注册到 SkyWalking 。
+trace 数据缓冲队列大小，仅在上报模式为 `gRPC` 模式时使用 。
 
-- 如果配置为空，则默认为 `true`。
+- 如果配置为空，则默认为 `30000`。
+
+## authentication
+
+`gRPC` 身份认证参数，仅在上报模式为 `gRPC` 模式时使用 。
+
+- 如果配置不为空，在与 SkyWalking 后端服务建立连接时会使用此参数进行身份认证。 
+
+## tls
+
+仅在上报模式为 `gRPC` 模式时使用 。
+
+- 如果配置不为空，将使用 TLS 连接 SkyWalking 后端服务。
+
+### cert_file
+
+TLS 客户端证书。
+
+### server_name_override
+
+服务名称。

@@ -5,6 +5,7 @@ date: 2019-12-28
 author: "[@ms2008](https://ms2008.github.io)"
 description: >
   本文是对 Nginx、Envoy 及 MOSN 的平滑升级原理区别的分析，适合对 Nginx 实现原理比较感兴趣的同学阅读，需要具备一定的网络编程知识。
+aliases: "/zh/blog/posts/nginx-envoy-mosn-hot-upgrade"
 ---
 
 ## 前言

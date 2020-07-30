@@ -12,9 +12,9 @@ description: >
 
 ### Why use MOSN instead of Istio's default data plane?
 
-Before the Service Mesh transformation, we have expected that as the next generation of Ant Financial's infrastructure, Meshization will inevitably bring revolutionary changes and evolution costs. We have a very ambitious blueprint: ready to integrate the original network and middleware various capabilities have been re-precipitated and polished to create a low-level platform for the next-generation architecture of the future, which will carry the responsibility of various service communications.
+Before the Service Mesh transformation, we have expected that as the next generation of Ant Group's infrastructure, Meshization will inevitably bring revolutionary changes and evolution costs. We have a very ambitious blueprint: ready to integrate the original network and middleware various capabilities have been re-precipitated and polished to create a low-level platform for the next-generation architecture of the future, which will carry the responsibility of various service communications.
 
-This is a long-term planning project that takes many years to build and meets the needs of the next five or even ten years, and cooperates to build a team that spans business, SRE, middleware, and infrastructure departments. We must have a network proxy forwarding plane with flexible expansion, high performance, and long-term evolution. Nginx and Envoy have a very long-term capacity accumulation and active community in the field of network agents. We have also borrowed from other excellent open source network agents such as Nginx and Envoy. At the same time, we have enhanced research and development efficiency and flexible expansion. Mesh transformation involves a large number of departments and R & D personnel. We must consider the landing cost of cross-team cooperation. Therefore, we have developed a new network proxy MOSN based on Go in the cloud-native scenario. For Go's performance, we also did a full investigation and test in the early stage to meet the performance requirements of Ant Financial's services.
+This is a long-term planning project that takes many years to build and meets the needs of the next five or even ten years, and cooperates to build a team that spans business, SRE, middleware, and infrastructure departments. We must have a network proxy forwarding plane with flexible expansion, high performance, and long-term evolution. Nginx and Envoy have a very long-term capacity accumulation and active community in the field of network agents. We have also borrowed from other excellent open source network agents such as Nginx and Envoy. At the same time, we have enhanced research and development efficiency and flexible expansion. Mesh transformation involves a large number of departments and R & D personnel. We must consider the landing cost of cross-team cooperation. Therefore, we have developed a new network proxy MOSN based on Go in the cloud-native scenario. For Go's performance, we also did a full investigation and test in the early stage to meet the performance requirements of Ant Group's services.
 
 At the same time, we received a lot of feedback and needs from the end user community. Everyone has the same needs and thoughts. So we combined the actual situation of the community and ourselves to conduct the research and development of MOSN from the perspective of satisfying the community and users. We believe that the open source competition is mainly competition between standards and specifications. We need to make the most suitable implementation choice based on open source standards.
 
@@ -30,13 +30,13 @@ MOSN is written in Go. Go has strong guarantees in terms of production efficienc
 - Multi-process plug-in mechanism, which can easily extend the plug-ins of independent MOSN processes through the plug-in framework, and do some other management, bypass and other functional module extensions;
 - Transport layer national secret algorithm support with Chinese encryption compliance;
 
-### Is the open source MOSN the same version as the MOSN used internally by Ant Financial?
+### Is the open source MOSN the same version as the MOSN used internally by Ant Group?
 
-First of all, there is no so-called independent MOSN version inside Ant Financial. Ant Financial has many modules developed based on MOSN, and the internal modules rely on the open source version of MOSN. The research and development of business-independent MOSN core capabilities are carried out directly on the open source version.
+First of all, there is no so-called independent MOSN version inside Ant Group. Ant Group has many modules developed based on MOSN, and the internal modules rely on the open source version of MOSN. The research and development of business-independent MOSN core capabilities are carried out directly on the open source version.
 
 ### What is the difference between the open source and commercial versions of MOSN?
 
-Ant Financial has commercial Mesh products. Commercial products mainly provide a complete solution from development to delivery runtime. At the same time, in order to meet the business needs of enterprise users, MOSN will be extended, so the so-called MOSN commercial version It mainly carries the version of the business user's own business module.
+Ant Group has commercial Mesh products. Commercial products mainly provide a complete solution from development to delivery runtime. At the same time, in order to meet the business needs of enterprise users, MOSN will be extended, so the so-called MOSN commercial version It mainly carries the version of the business user's own business module.
 
 ### What is MOSN's open source plan?
 
@@ -44,7 +44,7 @@ The release cycle of MOSN open source is one month. We are about to announce Roa
 
 ### What version of Istio does MOSN support? When will it be available in Istio?
 
-Currently, MOSN can be based on Istio 1.1.4 and run through the bookinfo example. Due to the latest version of Istio that has upgraded the XDS protocol and some enhancements, MOSN is currently adapting. It is expected that in October 2020, it will fully support HTTP of high-level Istio ability. To achieve this, the MOSN community has specifically established the [MOSN Istio Working Group](https://github.com/mosn/community/blob/master/wg-istio.md) to work with MOSN to adapt Istio.
+MOSN currently runs the [bookinfo example](/en/docs/quick-start/istio/) based on Istio 1.5.2. In September 2020, Istio is expected to fully support the capabilities of Istio and become an integral part of Istio Sidecar deployment options available. Please join the [MOSN community](/en/docs/community) to learn about working with Istio.
 
 ### What service registration and discovery mechanisms does MOSN support?
 

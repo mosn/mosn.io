@@ -3,6 +3,7 @@ title: "Router 配置"
 linkTitle: "Router 配置"
 date: 2020-03-13
 weight: 2
+aliases: "/zh/docs/server/router"
 description: >
   路由配置说明。
 ---

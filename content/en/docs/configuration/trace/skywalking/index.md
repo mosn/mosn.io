@@ -22,7 +22,12 @@ The SkyWalking configuration structure is shown as follows.
       "reporter": "gRPC",
       "backend_service": "127.0.0.1:11800",
       "service_name": "mosn",
-      "with_register": true
+      "max_send_queue_size": 30000,
+      "authentication": "mosn",
+      "tls": {
+        "cert_file": "cert.crt",
+        "server_name_override": "mosn.io"
+      }
     }
   }
 }
@@ -42,12 +47,32 @@ SkyWalking backend service address, used only if the reporter is `gRCP`.
 
 ## service_name
 
-To register the service name to SkyWalking.
+To register the service name to SkyWalking, used only if the reporter is `gRCP`.
 
 - If this field is left empty, `mosn` by default.
 
-## with_register
+## max_send_queue_size
 
-Boolean. When true, the coroutine is blocked until the registration is successful.
+Trace data cache queue size, used only if the reporter is `gRCP`.
 
-- If this field is left empty, `true` by default.
+- If this field is left empty, `30000` by default.
+
+## authentication
+
+`gRPC` authentication, used only if the reporter is `gRCP`.
+
+- If the field is not empty, this parameter is used for authentication when establishing a connection with the SkyWalking backend service.
+
+## tls
+
+Used only if the reporter is `gRCP`.
+
+-  If the field is not empty, TLS will be used to connect to the SkyWalking backend service.
+
+### cert_file
+
+TLS client certificate.
+
+### server_name_override
+
+Service name.

@@ -1,14 +1,15 @@
 ---
 title: "MOSN 扩展机制解析"
 linkTitle: "MOSN 的扩展机制解析"
-author: "[永鹏（蚂蚁金服）](https://github.com/nejisama)"
+author: "[永鹏（蚂蚁集团）](https://github.com/nejisama)"
 description: "本文根据 SOFAChannel#14 直播分享整理，主题：云原生网络代理 MOSN 扩展机制解析。"
 date: 2020-04-09T21:00:00+08:00
+aliases: "/zh/blog/posts/mosn-extensions"
 ---
 
 本文根据 SOFAChannel#14 直播分享整理，主题：云原生网络代理 MOSN 扩展机制解析。
 
-大家好，我是今天的讲师永鹏，来自蚂蚁金服，目前主要负责 MOSN 的开发，也是 MOSN 的Committer。今天我为大家分享的是云原生网络代理 MOSN 的扩展机制，希望通过这次分享以后，能让大家了解 MOSN 的可编程扩展能力，可以基于 MOSN 的扩展能力，按照自己实际的业务需求进行二次开发。
+大家好，我是今天的讲师永鹏，来自蚂蚁集团，目前主要负责 MOSN 的开发，也是 MOSN 的Committer。今天我为大家分享的是云原生网络代理 MOSN 的扩展机制，希望通过这次分享以后，能让大家了解 MOSN 的可编程扩展能力，可以基于 MOSN 的扩展能力，按照自己实际的业务需求进行二次开发。
 
 ### 前言
 

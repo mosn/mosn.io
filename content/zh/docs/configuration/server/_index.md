@@ -3,6 +3,7 @@ title: "Server 配置"
 linkTitle: "Server 配置"
 date: 2020-01-20
 weight: 2
+aliases: "/zh/docs/configuraion/server"
 description: 
   MOSN server 配置说明。
 ---

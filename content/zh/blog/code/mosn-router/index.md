@@ -4,6 +4,7 @@ linkTitle: "MOSN 源码解析 - 路由"
 date: 2020-04-26
 author: "[永鹏](https://github.com/nejisama)"
 description: "本文主要介绍 MOSN 的路由能力。"
+aliases: "/zh/blog/code/mosn-router"
 ---
 
 本文基于的内容是 MOSN v0.12.0。

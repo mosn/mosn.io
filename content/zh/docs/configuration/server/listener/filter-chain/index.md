@@ -3,6 +3,7 @@ title: "FilterChain"
 linkTitle: "FilterChain"
 date: 2020-01-20
 weight: 1
+aliases: "/zh/docs/configuration/server/listener/filter-chain"
 description: >
   MOSN 的 FilterChain 配置说明。
 ---

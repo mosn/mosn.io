@@ -8,7 +8,7 @@ menu:
 description: About MOSN community.
 ---
 
-MOSN is an open source project that anyone in the community can use, improve, and enjoy. It was open-sourced by Ant Financial on July, 2018. We'd love you to join us! Here's a few ways to find out what's happening and get involved.
+MOSN is an open source project that anyone in the community can use, improve, and enjoy. It was open-sourced by Ant Group on July, 2018. We'd love you to join us! Here's a few ways to find out what's happening and get involved.
 
 ## Community materials
 
@@ -181,6 +181,26 @@ The MOSN community actively embraces the open source ecosystem and has establish
   </table>
 </div>
 
+## Committers
+
+The MOSN Community Certified Committer is as follows.
+
+| Name        | GitHub                                          | 公司          |
+| ----------- | ----------------------------------------------- | ------------- |
+| Yang Tian   | [taoyuanyuan](https://github.com/taoyuanyuan)   | Ant Group |
+| Fakang Wang | [wangfakang](https://github.com/wangfakang)     | Ant Group |
+| Peng Bai    | [nejisama](https://github.com/nejisama)         | Ant Group |
+| Chunhui Cao | [cch123](https://github.com/cch123)             | Ant Group |
+| Fuze Sun    | [peacocktrain](https://github.com/peacocktrain) | zhipin.com    |
+| Peng Chen   | [champly](https://github.com/champly)           | dmall.com     |
+| Changyu Yao | [trainyao](https://github.com/trainyao)           | youmi.net |
+
+Committer is an individual with MOSN repository write access to the following criteria.
+
+- Individuals who can make sustained contributions to issues, PR over time.
+- Participate in the maintenance of issue lists and discussion of important features.
+- Active participation in code reviews and community meetings.
+
 ## Roadmap
 
 MOSN with Istio roadmap.
@@ -191,7 +211,7 @@ More information about MOSN roadmap, see the [Google Sheet](https://docs.google.
 
 ## Tutorials
 
-See MOSN [tutorials](/docs/tutorial/).
+See MOSN [tutorials](/en/docs/tutorial/).
 
 ## Communication
 

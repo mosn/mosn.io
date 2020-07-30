@@ -2,14 +2,14 @@
 title: "MOSN 多协议机制解析"
 linkTitle: "MOSN 多协议机制解析"
 date: 2020-03-26
-author: "[无钩（蚂蚁金服）](https://github.com/neverhook)"
+author: "[无钩（蚂蚁集团）](https://github.com/neverhook)"
 description: "本文根据 SOFAChannel#13 直播分享整理，主题：云原生网络代理 MOSN 多协议机制解析。"
-typora-root-url: ../multi-protocol-deep-dive
+aliases: "/zh/blog/posts/multi-protocol-deep-dive/"
 ---
 
 > 本文根据 SOFAChannel#13 直播分享整理，主题：云原生网络代理 MOSN 多协议机制解析，[查看视频回顾](https://tech.antfin.com/community/live/1131)。
 
-作者：无钩，目前主要从事蚂蚁金服网络代理相关的研发工作，也是 MOSN 的 Committer。
+作者：无钩，目前主要从事蚂蚁集团网络代理相关的研发工作，也是 MOSN 的 Committer。
 
 今天我要和大家分享的是《云原生网络代理 MOSN 多协议机制解析》，并介绍对应的私有协议快速接入实践案例以及对 MOSN 实现多协议低成本接入的设计进行解读。
 
@@ -27,7 +27,7 @@ typora-root-url: ../multi-protocol-deep-dive
 
 ![MOSN 简介](1585209248453-cbf84b1b-6765-4f05-bd8e-44300b995266.png)
 
-云原生网络代理 MOSN 定位是一个全栈的网络代理，支持包括网络接入层(Ingress)、API Gateway、Service Mesh 等场景，目前在蚂蚁金服内部的核心业务集群已经实现全面落地，并经受了 2019 年双十一大促的考验。今天要向大家介绍的是云原生网络代理 MOSN 核心特性之一的多协议扩展机制，目前已经支持了包括 SOFABolt、Dubbo、TARS 等多个协议的快速接入。
+云原生网络代理 MOSN 定位是一个全栈的网络代理，支持包括网络接入层(Ingress)、API Gateway、Service Mesh 等场景，目前在蚂蚁集团内部的核心业务集群已经实现全面落地，并经受了 2019 年双十一大促的考验。今天要向大家介绍的是云原生网络代理 MOSN 核心特性之一的多协议扩展机制，目前已经支持了包括 SOFABolt、Dubbo、TARS 等多个协议的快速接入。
 
 MOSN：[https://github.com/mosn/mosn](https://github.com/mosn/mosn)
 
@@ -37,9 +37,9 @@ MOSN：[https://github.com/mosn/mosn](https://github.com/mosn/mosn)
 
 ![多协议机制](1585209248463-b8b38ab0-09ed-4225-8d60-5bad3c2a372b.png)
 
-前面提到，蚂蚁金服 2019 年双十一核心链路百分之百 Mesh 化，是业界当时已知的最大规模的 Service Mesh 落地，为什么我们敢这么做？因为我们具备能够让架构平滑迁移的方案。"兼容性"是任何架构演进升级都必然要面对的一个问题，这在早已实践微服务化架构的蚂蚁金服内部同样如此。为了实现架构的平滑迁移，需要让新老节点的外在行为尽可能的表现一致，从而让依赖方无感知，这其中很重要的一点就是保持协议兼容性。
+前面提到，蚂蚁集团 2019 年双十一核心链路百分之百 Mesh 化，是业界当时已知的最大规模的 Service Mesh 落地，为什么我们敢这么做？因为我们具备能够让架构平滑迁移的方案。"兼容性"是任何架构演进升级都必然要面对的一个问题，这在早已实践微服务化架构的蚂蚁集团内部同样如此。为了实现架构的平滑迁移，需要让新老节点的外在行为尽可能的表现一致，从而让依赖方无感知，这其中很重要的一点就是保持协议兼容性。
 
-因此，我们需要在 Service Mesh 架构下，兼容现有微服务体系中的通信协议——也就是说需要在 MOSN 内实现对目前蚂蚁金服内部通信协议的扩展支持。
+因此，我们需要在 Service Mesh 架构下，兼容现有微服务体系中的通信协议——也就是说需要在 MOSN 内实现对目前蚂蚁集团内部通信协议的扩展支持。
 
 ![协议扩展支持](1585209248513-3bf90371-3d7c-4a0f-a98a-db4538bb2271.png)
 
@@ -87,7 +87,7 @@ MOSN：[https://github.com/mosn/mosn](https://github.com/mosn/mosn)
 
 ![SOFABolt 简介](1585209248663-0e25c95b-d711-4de2-9a42-f71d05b360df.png)
 
-这里先对 SOFABolt 进行一个简单介绍，SOFABolt 是一个开源的轻量、易用、高性能、易扩展的  RPC 通信框架，广泛应用于蚂蚁金服内部。
+这里先对 SOFABolt 进行一个简单介绍，SOFABolt 是一个开源的轻量、易用、高性能、易扩展的  RPC 通信框架，广泛应用于蚂蚁集团内部。
 
 SOFABolt：[https://github.com/sofastack/sofa-bolt](https://github.com/sofastack/sofa-bolt)
 

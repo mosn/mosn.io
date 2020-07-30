@@ -5,6 +5,7 @@ date: 2019-01-20
 description: >
   MOSN 的核心概念解析。
 weight: 1
+aliases: "/zh/docs/concept/core-concept"
 ---
 
 MOSN 主要划分为如下模块，包括了网络代理具备的基础能力，也包含了 [xDS](https://www.servicemesher.com/blog/envoy-xds-protocol/) 等云原生能力。
@@ -58,7 +59,7 @@ RawEpoll 模型如上图所示，使用 epoll 感知到可读事件之后，再�
 1. 链接建立后，向 Epoll 注册 oneshot 可读事件监听；并且此时不允许有协程调用 conn.read，避免与 runtime netpoll 冲突。
 1. 可读事件到达，从 goroutine pool 挑选一个协程进行读事件处理；由于使用的是 oneshot 模式，该 fd 后续可读事件不会再触发。
 1. 请求处理过程中，协程调度与经典 netpoll 模式一致。
-1. 请求处理完成，将协程归还给协程池；同时将 fd 重现添加到 RawEpoll 中。
+1. 请求处理完成，将协程归还给协程池；同时将 fd 重新添加到 RawEpoll 中。
 
 ## 协程模型
 

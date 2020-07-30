@@ -2,6 +2,7 @@
 title: "MOSN 作为 Istio 的数据平面"
 linkTitle: "集成 Istio"
 date: 2020-03-19
+aliases: "/zh/docs/istio"
 weight: 2
 description: >
   本文将介绍如何使用 MOSN 在 Istio 框架下搭建 Service Mesh 的开发环境，并验证 MOSN 的一些基础路由能力、负载均衡能力等。
@@ -150,7 +151,7 @@ root          1  0.0  0.6 131232  6360 ?        Ssl  Mar10   0:23 /usr/local/bin
 root         24  0.0  1.4 128068 15356 ?        Sl   Mar10   4:37 /usr/local/bin/mosn start --config /etc/istio/proxy/envoy-rev0.json --service-cluster istio-ingressgateway --service-node router~192.168.5.18~istio-ingressgateway-79b75c4db-8w646.istio-system~istio-system.svc.cluster.local
 root        175  0.0  0.1  11468  1056 pts/1    S+   13:06   0:00 grep --color=auto mosn
 
-``` 
+```
 
 ## BookInfo 实验
 

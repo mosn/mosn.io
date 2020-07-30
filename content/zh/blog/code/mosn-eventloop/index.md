@@ -2,6 +2,7 @@
 title: "MOSN 源码解析 - 协程模型"
 linkTitle: "MOSN 源码解析 - 协程模型"
 date: 2020-02-25
+aliases: "/zh/blog/code/mosn-eventloop"
 author: "[马振军（陌陌）](https://github.com/zhenjunMa)"
 description: >
   本文主要以 sofarpc-sample 为例来分析 MOSN 处理请求跟响应的整个流程。

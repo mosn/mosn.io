@@ -3,6 +3,7 @@ title: "自定义配置"
 linkTitle: "自定义配置"
 weight: 3
 date: 2020-01-20
+aliases: "zh/docs/configuration/custom"
 description: >
   MOSN 自定义配置说明。
 ---

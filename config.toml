@@ -10,8 +10,8 @@ theme = ["docsy"]
 enableGitInfo = true
 
 # Language settings
-contentDir = "content/en"
-defaultContentLanguage = "en"
+contentDir = "content/zh"
+defaultContentLanguage = "zh"
 defaultContentLanguageInSubdir = false
 # Useful when translating.
 enableMissingTranslationPlaceholders = true
@@ -57,6 +57,7 @@ title = "MOSN"
 description = "The Cloud Native Proxy for Edge or Service Mesh"
 languageName ="English"
 time_format_blog = "Jan 2, 2006"
+contentDir = "content/en"
 
 # Weight used for sorting.
 weight = 1
