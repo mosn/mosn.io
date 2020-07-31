@@ -87,7 +87,7 @@ Dubbo 最初是 [Java 开发的一套 RPC 框架](https://dubbo.apache.org/zh-cn
 
 ### 开发工作
 
-第一步，在 mosn 配置中增加 `dubbo_registry` 扩展选项：
+第一步，在 MOSN 配置中增加 `dubbo_registry` 扩展选项：
 
 ```json
   "extend" :  [{
@@ -121,7 +121,7 @@ Dubbo 最初是 [Java 开发的一套 RPC 框架](https://dubbo.apache.org/zh-cn
 
 Service 是正常的 dubbo service，所以会自动注册到 zk 中去，不需要我们帮它 pub，这里只要 sub 就可以了，所以执行流程为：
 
-第一步，修改 mosn 配置，增加 dubbo_registry 的 extend 扩展。
+第一步，修改 MOSN 配置，增加 dubbo_registry 的 extend 扩展。
 
 第二步，mosn start。
 
@@ -143,7 +143,7 @@ http --json post localhost:22222/sub registry:='{"type":"zookeeper", "addr" : "1
 
 直连的服务不会主动对自身进行发布，直连的 client 不会主动进行订阅。因此此例子中，pub 和 sub 都是由我们来辅助进行的。
 
-第一步，修改 mosn 配置，增加 dubbo_registry 的 extend 扩展。
+第一步，修改 MOSN 配置，增加 dubbo_registry 的 extend 扩展。
 
 第二步，mosn start
 
@@ -171,7 +171,7 @@ http --json post localhost:22222/pub registry:='{"type":"zookeeper", "addr" : "1
 
 Client 是正常 client，因此 client 会自己去 subscribe。我们只要正常地把服务 pub 出去即可：
 
-第一步，修改 mosn 配置，增加 dubbo_registry 的 extend 扩展。
+第一步，修改 MOSN 配置，增加 dubbo_registry 的 extend 扩展。
 
 第二步，mosn start
 
