@@ -6,7 +6,7 @@ author: MOSN Team
 description: "MOSN v0.15.0 changelog."
 ---
 
-We are happy to announce the release of [MOSN v0.15.0](https://github.com/mosn/mosn/releases/tag/v0.15.0). 
+We are happy to announce the release of [MOSN v0.15.0](https://github.com/mosn/mosn/releases/tag/v0.15.0), congratulations to Deng Qian ([@dengqian](https://github.com/dengqian)) on becoming a MOSN Committer and thanks for her contribution to the MOSN community.
 
 ## v0.15.0
 
@@ -36,4 +36,3 @@ We are happy to announce the release of [MOSN v0.15.0](https://github.com/mosn/m
 + Fix bug in AccessLog where variables of prefix match type don't work [@dengqian](https://github.com/dengqian)
 + Fix bug where Listener configuration parsing is not handled correctly [@nejisama](https://github.com/nejisama)
 + Fix Router/Cluster bug that fails to save when the Name field contains a path separator in the file persistence configuration type [@nejisama](https://github.com/nejisama)
-
