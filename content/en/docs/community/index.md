@@ -42,7 +42,7 @@ Partners participate in MOSN co-development to make MOSN better.
     <tr>
       <td align="center"  valign="middle">
         <a href="https://www.antfin.com" target="_blank">
-          <img width="222px"  src="/images/community/antfin.png">
+          <img width="222px"  src="/images/community/ant.png">
         </a>
       </td>
       <td align="center"  valign="middle">
@@ -187,13 +187,14 @@ The MOSN Community Certified Committer is as follows.
 
 | Name        | GitHub                                          | 公司          |
 | ----------- | ----------------------------------------------- | ------------- |
-| Yang Tian   | [taoyuanyuan](https://github.com/taoyuanyuan)   | Ant Group |
-| Fakang Wang | [wangfakang](https://github.com/wangfakang)     | Ant Group |
-| Peng Bai    | [nejisama](https://github.com/nejisama)         | Ant Group |
-| Chunhui Cao | [cch123](https://github.com/cch123)             | Ant Group |
+| Yang Tian   | [taoyuanyuan](https://github.com/taoyuanyuan)   | Ant Group     |
+| Fakang Wang | [wangfakang](https://github.com/wangfakang)     | Ant Group     |
+| Peng Bai    | [nejisama](https://github.com/nejisama)         | Ant Group     |
+| Chunhui Cao | [cch123](https://github.com/cch123)             | Ant Group     |
 | Fuze Sun    | [peacocktrain](https://github.com/peacocktrain) | zhipin.com    |
 | Peng Chen   | [champly](https://github.com/champly)           | dmall.com     |
-| Changyu Yao | [trainyao](https://github.com/trainyao)           | youmi.net |
+| Changyu Yao | [trainyao](https://github.com/trainyao)         | youmi.net     |
+| Qian Deng   | [dengqian](https://github.com/dengqian)         | Alibaba Cloud |
 
 Committer is an individual with MOSN repository write access to the following criteria.
 
