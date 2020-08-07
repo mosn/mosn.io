@@ -7,7 +7,7 @@ aliases: "/zh/blog/releases/v0.15.0"
 description: "MOSN v0.15.0 变更日志。"
 ---
 
-我们很高兴的宣布 [MOSN v0.15.0](https://github.com/mosn/mosn/releases/tag/v0.15.0) 发布。
+我们很高兴的宣布 [MOSN v0.15.0](https://github.com/mosn/mosn/releases/tag/v0.15.0) 发布，恭喜邓茜（[@dengqian](https://github.com/dengqian)）成为 MOSN Committer，感谢她为 MOSN 社区所做的贡献。
 
 以下是该版本的变更日志。
 
@@ -37,4 +37,3 @@ description: "MOSN v0.15.0 变更日志。"
 + 修复 AccessLog 中前缀匹配类型的变量不生效的 BUG [@dengqian](https://github.com/dengqian)
 + 修复 Listener 配置解析处理不正确的 BUG [@nejisama](https://github.com/nejisama)
 + 修复 Router/Cluster 在文件持久化配置类型中，Name 字段包含路径分隔符时会保存失败的 BUG [@nejisama](https://github.com/nejisama)
-
