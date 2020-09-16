@@ -211,7 +211,7 @@ Roadmap 详情见 [Google Sheet](https://docs.google.com/spreadsheets/d/1fALompY
 
 ## 教程
 
-MOSN 提供线上教程，见[教程页面](docs/tutorial/)。
+MOSN 提供线上教程，见[教程页面](/docs/tutorial/)。
 
 ## 加入社区
 
