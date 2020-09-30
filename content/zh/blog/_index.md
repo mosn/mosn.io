@@ -1,6 +1,7 @@
 ---
 title: "MOSN 博客"
 linkTitle: "博客"
+aliases: "/zh/blog"
 menu:
   main:
     weight: 30

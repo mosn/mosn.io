@@ -2,7 +2,7 @@
 title: MOSN 源码解析 - 变量机制
 linkTitle: MOSN 源码解析 - 变量机制
 date: 2020-02-16
-aliases: "/zh/blog/posts/mosn-variable"
+aliases: "blog/posts/mosn-variable"
 author: "[黄润豪（好雨云）](https://github.com/glyasai)"
 description: >
   MOSN 源码解析系列之变量机制的源码解析。
@@ -58,7 +58,7 @@ cat /tmp/mosn_bench/benchmark_access.log
 
 ### Variable 缓存
 
-`Variable 缓存` 是一组 Variable 的 key-value 对，key 是变量的名字，value 是 `Variable 接口`；以 map 的形式存在于内存中。Variable 接口含有`变量的名字`，`变量值得获取方式`, `变量值得设置方式` 等属性。
+`Variable 缓存` 是一组 Variable 的 key-value 对，key 是变量的名字，value 是 `Variable 接口`；以 map 的形式存在于内存中。Variable 接口含有`变量的名字`，`变量值的获取方式`, `变量值的设置方式` 等属性。
 
 ### 初始化阶段
 
@@ -376,6 +376,6 @@ func startTimeGetter(ctx context.Context, value *variable.IndexedValue, data int
 
 ## 总结
 
-`变量机制` 的实现是比较面向对象的，首先定义了结构体 `Variable`, 主要记录了变量名和获取对应变量值的实现`GetterFunc`；`GetterFunc` 定义好了获取变量值得函数定义，每个变量都得实现自己的 `getter`（`面向接口编程`）。 然后在代码初始化的时候把所有变量都实例化，并注册到作为缓存的全局变量 `variables` 中 （`表驱动法`）; 最后，更加变量名去缓存 `variables` 获取相应的实现，获取变量的实际值。
+`变量机制` 的实现是比较面向对象的，首先定义了结构体 `Variable`, 主要记录了变量名和获取对应变量值的实现`GetterFunc`；`GetterFunc` 定义好了获取变量值的函数定义，每个变量都得实现自己的 `getter`（`面向接口编程`）。 然后在代码初始化的时候把所有变量都实例化，并注册到作为缓存的全局变量 `variables` 中 （`表驱动法`）; 最后，更加变量名去缓存 `variables` 获取相应的实现，获取变量的实际值。
 
 另外，很好地利用了 `golang` 特有的 `context` 贯穿了整个流程。

@@ -2,10 +2,9 @@
 title: MOSN 源码解析 - 启动流程
 linkTitle: MOSN 源码解析 - 启动流程
 date: 2020-02-26
-aliases: "/zh/blog/posts/mosn-startup"
-author: "[joyme123](https://github.com/joyme123)"
-description: >
-  MOSN 源码解析之启动流程分析。
+aliases: "/blog/posts/mosn-startup"
+author: "[江鹏飞（鑫火信息）](https://github.com/joyme123)"
+description: MOSN 源码解析之启动流程分析。
 ---
 
 本文的目的是分析 MOSN 的启动流程。基于 mosn 版本 v0.4.0，commit 为: dc35c8fc95435a47e6393db1c79dd9f60f7eb898
@@ -496,7 +495,7 @@ utils.GoWithRecover(func() {
 }, nil)
 ```
 
-旧 MOSN 会通过 `conn.sock` 来发送长连接的文件描述符给新 MOSN。具体调用的方法是`pkg/network/transfer.go`中的`transferRead` 和 `transferWrite` 方法。关于长连接转移的细节非常复杂，MOSN 官网上提供了详细的文档，很值得学习：[MOSN 平滑升级原理解析](https://mosn.io/zh/docs/concept/smooth-upgrade/)
+旧 MOSN 会通过 `conn.sock` 来发送长连接的文件描述符给新 MOSN。具体调用的方法是`pkg/network/transfer.go`中的`transferRead` 和 `transferWrite` 方法。关于长连接转移的细节非常复杂，MOSN 官网上提供了详细的文档，很值得学习：[MOSN 平滑升级原理解析](/docs/concept/smooth-upgrade/)
 
 下面我们用时序图来展示一下长连接的转移过程：
 
@@ -571,5 +570,5 @@ func (srv *server) Start() {
 - [Service Mesh 架构反思：数据平面和控制平面的界线该如何划定？](https://skyao.io/post/201804-servicemesh-architecture-introspection/)
 - [深入解读 Service Mesh 背后的技术细节](https://www.cnblogs.com/163yun/p/8962278.html)
 - [使用 Istio 打造微服务（第1部分）](https://www.servicemesher.com/blog/back-to-microservices-with-istio-p1/)
-- [蚂蚁金服 Service Mesh 新型网络代理的思考与实践](https://www.servicemesher.com/blog/microservice-with-service-mesh-at-ant-financial/)
-- [MOSN 平滑升级原理解析](https://mosn.io/zh/docs/concept/smooth-upgrade/)
+- [蚂蚁集团 Service Mesh 新型网络代理的思考与实践](https://www.servicemesher.com/blog/microservice-with-service-mesh-at-ant-financial/)
+- [MOSN 平滑升级原理解析](/docs/concept/smooth-upgrade/)

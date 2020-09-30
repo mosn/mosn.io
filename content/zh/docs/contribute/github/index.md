@@ -2,6 +2,7 @@
 title: "文档贡献指南"
 linkTitle: "文档贡献指南"
 date: 2020-02-11
+aliases: "/zh/docs/contribute/github"
 weight: 1
 description: >
   我们很高兴您有兴趣参与 MOSN 的文档贡献！请先花点时间熟悉下 MOSN 的文档贡献流程。
