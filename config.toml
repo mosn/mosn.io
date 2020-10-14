@@ -140,11 +140,6 @@ no = 'Sorry to hear that. Please <a href="https://github.com/mosn/mosn.io/issues
 	url = "https://twitter.com/MosnProxy"
 	icon = "fab fa-twitter"
         desc = "Follow us on Twitter to get the latest news!"
-[[params.links.user]]
-	name ="Slack"
-	url = "https://join.slack.com/t/istio/shared_invite/zt-dhww29on-SvP1~DBvtrk3UdjjbO0SGQ"
-	icon = "fab fa-slack"
-        desc = "Join us!"
 # Developer relevant links. These will show up on right side of footer and in the community page if you have one.
 [[params.links.user]]
 	name ="Mailing list"
