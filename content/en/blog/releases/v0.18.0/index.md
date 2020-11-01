@@ -12,7 +12,7 @@ We are happy to announce the release of [MOSN v0.18.0](https://github.com/mosn/m
 
 ### New Features
 
-- add MOSN configure extendsion [@nejisama](https://github.com/nejisama)
+- Add MOSN configure extendsion [@nejisama](https://github.com/nejisama)
 - Add MOSN configure tool [mosn/configure](https://github.com/mosn/configure), improve user configure experience [@cch123](https://github.com/cch123)
 
 ### Optimization
