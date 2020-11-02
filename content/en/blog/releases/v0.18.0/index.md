@@ -25,6 +25,9 @@ We are happy to announce the release of [MOSN v0.18.0](https://github.com/mosn/m
 - Remove useless parameter of `network.NewClientConnection` method, remove ALPN detection in `Dispatch` method of struct `streamConn` [@nejisama](https://github.com/nejisama)
 - Add `TerminateStream` API to `StreamReceiverFilterHandler`, with which stream can be reset during handling [@nejisama](https://github.com/nejisama)
 - Add client TLS fallback [@nejisama](https://github.com/nejisama)
+- Add `payload` field to `dubbo.Frame` struct, for `SetData` method to save encoded frame [@lxd5866](https://github.com/lxd5866)
+- Fix TLS HashValue in host [@nejisama](https://github.com/nejisama)
+- Fix disable_log admin api typo [@nejisama](https://github.com/nejisama)
 
 ### Bug fixes
 

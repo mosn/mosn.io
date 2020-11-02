@@ -29,7 +29,9 @@ description: "MOSN v0.18.0 变更日志。"
 - 删除 `network.NewClientConnection` 方法冗余参数，删除 `streamConn` 结构体 `Dispatch` 方法 `ALPN` 检查 [@nejisama](https://github.com/nejisama)
 - `StreamReceiverFilterHandler` 增加 `TerminateStream` API，可在处理流的时候传入 HTTP code 异步关闭流 [@nejisama](https://github.com/nejisama)
 - client 端 TLS handshake 失败时增加降级逻辑 [@nejisama](https://github.com/nejisama)
-
+- `dubbo.Frame` struct 新增 `payload` 字段,`SetData` 设置 `payload` 字段保存编码后的 Frame [@lxd5866](https://github.com/lxd5866)
+- 修改 TLS hashvalue 计算方式 [@nejisama](https://github.com/nejisama)
+- 修正 disable_log admin api typo [@nejisama](https://github.com/nejisama)
 
 ### Bug 修复
 
