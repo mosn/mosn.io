@@ -91,7 +91,7 @@ $ brew install kubernetes-cli
 
 ```bash
 $ export ISTIO_VERSION=1.5.2 && curl -L https://istio.io/downloadIstio | sh -
-```bash
+```
 
 下载的 Istio 包名为 `istio-1.5.2`，包含：
 
