@@ -42,7 +42,7 @@ MOSN 社区定期召开社区会议。
     <tr>
       <td align="center"  valign="middle">
         <a href="https://www.antfin.com" target="_blank">
-          <img width="222px"  src="/images/community/antfin.png">
+          <img width="222px"  src="/images/community/ant.png">
         </a>
       </td>
       <td align="center"  valign="middle">
@@ -191,8 +191,9 @@ MOSN 社区认证的 Committer 如下：
 | 白鹏   | [nejisama](https://github.com/nejisama)         | 蚂蚁集团  |
 | 曹春晖 | [cch123](https://github.com/cch123)             | 蚂蚁集团  |
 | 孙福泽 | [peacocktrain](https://github.com/peacocktrain) | Boss 直聘 |
-| 陈鹏 | [champly](https://github.com/champly) | 多点生活 |
-| 姚昌宇 | [trainyao](https://github.com/trainyao) | 有米科技 |
+| 陈鹏   | [champly](https://github.com/champly)           | 多点生活  |
+| 姚昌宇 | [trainyao](https://github.com/trainyao)         | 有米科技  |
+| 邓茜   | [dengqian](https://github.com/dengqian)         | 阿里云    |
 
 Committer 是具有 MOSN 仓库写权限的个人，标准如下：
 
@@ -210,10 +211,10 @@ Roadmap 详情见 [Google Sheet](https://docs.google.com/spreadsheets/d/1fALompY
 
 ## 教程
 
-MOSN 提供线上教程，见[教程页面](docs/tutorial/)。
+MOSN 提供线上教程，见[教程页面](/docs/tutorial/)。
 
 ## 加入社区
 
 使用钉钉扫描下面的二维码加入 MOSN 用户群。
 
-<img alt="MOSN 用户交流钉钉群二维码" src="https://gw.alipayobjects.com/mdn/rms_91f3e6/afts/img/A*NyEzRp3Xq28AAAAAAAAAAABkARQnAQ"  width="128px" />
+<img alt="MOSN 用户交流钉钉群二维码" src="https://gw.alipayobjects.com/mdn/sofastack/afts/img/A*mARcS51zn2QAAAAAAAAAAAAAARQnAQ"  width="128px" />
