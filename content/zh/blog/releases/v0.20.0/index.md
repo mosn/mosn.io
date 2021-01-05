@@ -7,8 +7,7 @@ aliases: "/zh/blog/releases/v0.20.0"
 description: "MOSN v0.20.0 变更日志。"
 ---
 
-我们很高兴的宣布 [MOSN v0.20.0](https://github.com/mosn/mosn/releases/tag/v0.20.0) 发布，恭喜
-黄润豪（[@GLYASAI](https://github.com/GLYASAI)）成为 MOSN Committer，感谢他为 MOSN 社区所做的贡献。
+我们很高兴的宣布 [MOSN v0.20.0](https://github.com/mosn/mosn/releases/tag/v0.20.0) 发布，恭喜黄润豪（[@GLYASAI](https://github.com/GLYASAI)）成为 MOSN Committer，感谢他为 MOSN 社区所做的贡献。
 
 以下是该版本的变更日志。
 
