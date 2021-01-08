@@ -8,7 +8,8 @@ description: >
 ---
 
 {{% pageinfo color="primary" %}}
-MOSN succeeded in the Bookinfo test for Istio 1.1.4. For more information about the support from the latest version of Istio, see [Issue #933](https://github.com/mosn/mosn/issues/933).
+MOSN succeeded in the Bookinfo test for Istio 1.1.4. For more information about the support from the latest version of Istio, see [Issue #933](https://github.com/mosn/mosn/issues/933). 
+`Note: After the MOSN 0.14.0 or later can supports xDS, And tested pass all the sample of bookinfo in istio 1.5.2, here is an [MOSN with Istio](https://katacoda.com/mosn/courses/istio/mosn-with-istio) tutorial.`
 {{% /pageinfo %}}
 
 This topic covers the following content:

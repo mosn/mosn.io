@@ -194,6 +194,7 @@ MOSN 社区认证的 Committer 如下：
 | 陈鹏   | [champly](https://github.com/champly)           | 多点生活  |
 | 姚昌宇 | [trainyao](https://github.com/trainyao)         | 有米科技  |
 | 邓茜   | [dengqian](https://github.com/dengqian)         | 阿里云    |
+| 黄润豪   | [glyasai](https://github.com/glyasai)         | 好雨科技 |
 
 Committer 是具有 MOSN 仓库写权限的个人，标准如下：
 
@@ -217,4 +218,4 @@ MOSN 提供线上教程，见[教程页面](/docs/tutorial/)。
 
 使用钉钉扫描下面的二维码加入 MOSN 用户群。
 
-<img alt="MOSN 用户交流钉钉群二维码" src="https://gw.alipayobjects.com/mdn/rms_91f3e6/afts/img/A*NyEzRp3Xq28AAAAAAAAAAABkARQnAQ"  width="128px" />
+<img alt="MOSN 用户交流钉钉群二维码" src="https://github.com/mosn/assets/blob/master/qrcode.jpg?raw=true"  width="128px" />
