@@ -194,7 +194,8 @@ MOSN 社区认证的 Committer 如下：
 | 陈鹏   | [champly](https://github.com/champly)           | 多点生活  |
 | 姚昌宇 | [trainyao](https://github.com/trainyao)         | 有米科技  |
 | 邓茜   | [dengqian](https://github.com/dengqian)         | 阿里云    |
-| 黄润豪   | [glyasai](https://github.com/glyasai)         | 好雨科技 |
+| 黄润豪 | [glyasai](https://github.com/glyasai)           | 好雨科技  |
+| 郑泽超 | [CodingSinger](https://github.com/CodingSinger) | 字节跳动  |
 
 Committer 是具有 MOSN 仓库写权限的个人，标准如下：
 
