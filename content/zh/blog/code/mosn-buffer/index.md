@@ -1,8 +1,10 @@
 ---
-title: MOSN 源码分析 - 内存复用机制
-linkTitle: MOSN 源码分析 - 内存复用机制
+title: MOSN 源码解析 - 内存复用机制
+linkTitle: MOSN 源码解析 - 内存复用机制
 date: 2020-02-15
-aliases: "/zh/blog/posts/mosn-buffer"
+aliases: 
+- "/blog/posts/mosn-buffer"
+- "/zh/blog/posts/mosn-buffer"
 author: "[姚昌宇（有米科技）](https://trainyao.github.io)"
 description: >
   MOSN 源码解析系列之内存复用机制。

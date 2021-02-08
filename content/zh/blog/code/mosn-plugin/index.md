@@ -2,17 +2,18 @@
 title: MOSN 源码解析 - Plugin 机制
 linkTitle: MOSN 源码解析 - plugin 机制
 date: 2020-02-14
-aliases: "/zh/blog/posts/mosn-plugin"
-author: "[烈元（蚂蚁金服）](https://github.com/taoyuanyuan)"
+aliases: "blog/posts/mosn-plugin"
+author: "[烈元（蚂蚁集团）](https://github.com/taoyuanyuan)"
 description: >
   MOSN 源码解析系列之 Plugin 机制的源码解析。
 ---
 
 ## 概述
-Plugin 机制是 MOSN 提供的一种方式，可以让 MOSN 和一个独立的进程进行交互，这个进程可以用任何语言开发，只要满足 GRPC 的 proto 定义。
-![plugin](plugin.png) 
+Plugin 机制是 MOSN 提供的一种方式，可以让 MOSN 和一个独立的进程进行交互，这个进程可以用任何语言开发，只要满足 gRPC 的 proto 定义。
 
-为什么我们支持这个功能，跟我们遇到的一些业务场景有关： 
+![plugin](plugin.png)
+
+为什么我们支持这个功能，跟我们遇到的一些业务场景有关：
 
 * 比如 log 打印，在 io 卡顿的时候会影响 Go Runtime 的调度，导致请求延迟。我们需要把 log 独立成进程做隔离。
 * 我们会有一些异构语言的扩展，比如 streamfilter 的实际逻辑是一个 Java 语言实现的。

@@ -3,7 +3,7 @@ title: "直播预告：MOSN 的多协议机制解析"
 linkTitle: "直播预告：MOSN 的多协议机制解析"
 date: 2020-03-03
 author: "MOSN 团队"
-weight: 1
+aliases: "/zh/blog/news/mosn-channel-1"
 description: >
   本次直播活动的演讲者无钩，将向大家介绍 MOSN 实现多协议低成本接入的设计思路，以及相应的快速接入实践案例。
 ---
@@ -25,4 +25,4 @@ description: >
 
 直播报名：https://tech.antfin.com/community/live/1131
 
-扫描[社区](/zh/community/)页面的二维码加入钉钉群参与互动。
+扫描[社区](community/)页面的二维码加入钉钉群参与互动。

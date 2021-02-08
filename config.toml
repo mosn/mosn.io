@@ -10,8 +10,8 @@ theme = ["docsy"]
 enableGitInfo = true
 
 # Language settings
-contentDir = "content/en"
-defaultContentLanguage = "en"
+contentDir = "content/zh"
+defaultContentLanguage = "zh"
 defaultContentLanguageInSubdir = false
 # Useful when translating.
 enableMissingTranslationPlaceholders = true
@@ -57,6 +57,7 @@ title = "MOSN"
 description = "The Cloud Native Proxy for Edge or Service Mesh"
 languageName ="English"
 time_format_blog = "Jan 2, 2006"
+contentDir = "content/en"
 
 # Weight used for sorting.
 weight = 1
@@ -113,7 +114,7 @@ breadcrumb_disable = false
 #  Set to true to hide the sidebar search box (the top nav search box will still be displayed if search is enabled)
 sidebar_search_disable = false
 #  Set to false if you don't want to display a logo (/assets/icons/logo.svg) in the top nav bar
-navbar_logo = false
+navbar_logo = true
 # Set to true to disable the About link in the site footer
 footer_about_disable = true
 
@@ -122,7 +123,7 @@ footer_about_disable = true
 # If you want this feature, but occasionally need to remove the "Feedback" section from a single page,
 # add "hide_feedback: true" to the page's front matter.
 [params.ui.feedback]
-enable = true
+enable = false
 # The responses that the user sees after clicking "yes" (the page was helpful) or "no" (the page was not helpful).
 yes = 'Glad to hear it! Please <a href="https://github.com/mosn/mosn.io/issues/new">tell us how we can improve</a>.'
 no = 'Sorry to hear that. Please <a href="https://github.com/mosn/mosn.io/issues/new/">tell us how we can improve</a>.'
@@ -139,11 +140,6 @@ no = 'Sorry to hear that. Please <a href="https://github.com/mosn/mosn.io/issues
 	url = "https://twitter.com/MosnProxy"
 	icon = "fab fa-twitter"
         desc = "Follow us on Twitter to get the latest news!"
-[[params.links.user]]
-	name ="Slack"
-	url = "https://mosnproxy.slack.com"
-	icon = "fab fa-slack"
-        desc = "Join us!"
 # Developer relevant links. These will show up on right side of footer and in the community page if you have one.
 [[params.links.user]]
 	name ="Mailing list"

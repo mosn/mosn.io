@@ -1,8 +1,8 @@
 ---
-title: MOSN 源码分析
-linkTitle: MOSN 源码分析 - XDS
+title: MOSN 源码解析 - XDS
+linkTitle: MOSN 源码解析 - xDS
 date: 2020-02-13
-aliases: "/zh/blog/posts/mosn-xds"
+aliases: "blog/posts/mosn-xds"
 author: "[孙福泽（Boss 直聘）](https://github.com/peacocktrain)"
 description: >
   MOSN 源码解析之 XDS 模块。

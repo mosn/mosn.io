@@ -2,10 +2,10 @@
 title: "Nginx vs Envoy vs MOSN 平滑升级原理解析"
 linkTitle: "Nginx vs Envoy vs MOSN 平滑升级原理解析"
 date: 2019-12-28
-weight: 1
 author: "[@ms2008](https://ms2008.github.io)"
 description: >
   本文是对 Nginx、Envoy 及 MOSN 的平滑升级原理区别的分析，适合对 Nginx 实现原理比较感兴趣的同学阅读，需要具备一定的网络编程知识。
+aliases: "/zh/blog/posts/nginx-envoy-mosn-hot-upgrade"
 ---
 
 ## 前言

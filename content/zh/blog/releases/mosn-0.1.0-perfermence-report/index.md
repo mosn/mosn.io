@@ -2,6 +2,7 @@
 title: "MOSN 0.1.0 性能报告"
 linkTitle: "MOSN 0.1.0 性能报告"
 date: 2019-12-04
+aliases: "/zh/blog/releases/mosn-0.1.0-perfermence-report"
 author: MOSN 团队
 description: >
   本性能报告为 MOSN 0.1.0 在做 Bolt 与 HTTP1.x 协议的纯 TCP 转发上与 envoy 的一些性能对比数据，主要表现在 QPS、RTT、失败率/成功率等。
@@ -30,7 +31,7 @@ description: >
 
 ### Bolt 协议（发送 1K 字符串）
 
-发送 Bolt 协议数据的客户端使用 "蚂蚁金服"内部开发的线上压力机，并部署 sofa rpc client。 通过压力机的性能页面，可反映压测过程中的QPS、成功/失败次数，以及RT等参数。
+发送 Bolt 协议数据的客户端使用 "蚂蚁集团"内部开发的线上压力机，并部署 sofa rpc client。 通过压力机的性能页面，可反映压测过程中的QPS、成功/失败次数，以及RT等参数。
 
 ### HTTP1.1 协议（发送 1K 字符串）
 

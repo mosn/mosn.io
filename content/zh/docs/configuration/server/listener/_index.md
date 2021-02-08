@@ -3,6 +3,7 @@ title: "Listener 配置"
 linkTitle: "Listener 配置"
 date: 2020-01-20
 weight: 2
+aliases: "/zh/docs/configuration/server/listener"
 description: >
   MOSN listener 配置说明。
 ---
