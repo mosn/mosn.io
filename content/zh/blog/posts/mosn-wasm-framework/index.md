@@ -186,7 +186,7 @@ git clone https://github.com/mosn/mosn.git
 
 # step 3: 
 # 编译，以下命令最终将产生 mosn 可执行文件
-sudo make build-local
+sudo make build-local tags=wasmer
 mv build/bundles/v0.21.0/binary/mosn mosn
 ```
 
