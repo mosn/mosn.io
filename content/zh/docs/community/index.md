@@ -180,6 +180,7 @@ MOSN 社区积极拥抱开源生态，与以下开源社区建立了良好的合
     </tbody>
   </table>
 </div>
+
 ## Committer 列表
 
 MOSN 社区认证的 Committer 如下：
