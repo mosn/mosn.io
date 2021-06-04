@@ -6,7 +6,7 @@ author: MOSN Team
 description: "MOSN v0.22.0 changelog."
 ---
 
-We are happy to announce the release of [MOSN v0.22.0](https://github.com/mosn/mosn/releases/tag/v0.21.0)
+We are happy to announce the release of [MOSN v0.22.0](https://github.com/mosn/mosn/releases/tag/v0.22.0)
 
 ## v0.22.0
 
