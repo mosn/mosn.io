@@ -8,15 +8,16 @@ description: >
   本文将介绍如何使用 MOSN 在 Istio 框架下搭建 Service Mesh 的开发环境，并验证 MOSN 的一些基础路由能力、负载均衡能力等。
 ---
 
-{{% pageinfo color="primary" %}}    
-MOSN 已通过 Istio 1.4.6 的 `BookInfo` 测试，关于最新版 Istio 的支持情况可关注 [MOSN Istio WG](https://github.com/mosn/community/blob/master/wg-istio.md)。
-{{% /pageinfo %}}  
+{{% pageinfo color="primary" %}}
+MOSN 已通过 Istio 1.5.2 的 `BookInfo` 测试，关于最新版 Istio 的支持情况可关注 [MOSN Istio WG](https://github.com/mosn/community/blob/master/wg-istio.md)。
+{{% /pageinfo %}}
 
-本文介绍的内容将包括 : 
+本文介绍的内容将包括 :
 
 - MOSN 与 Istio 的关系
+- MOSN 与 Istio 的 proxyv2 镜像 build 方法
 - 准备工作
-- 源码方式部署 Istio
+- 部署 Istio 与 MOSN
 - Bookinfo 实验
 
 ## MOSN 与 Istio 的关系
@@ -25,7 +26,61 @@ MOSN 已通过 Istio 1.4.6 的 `BookInfo` 测试，关于最新版 Istio 的支�
 
 下图是 Istio 整体框架下，MOSN 的工作示意图。
 
-<div align=center><img src="mosn-with-service-mesh.png" width = "450" height = "400" alt="MOSN 介绍" /></div>
+<div align=center><img src="mosn-with-service-mesh.svg" width = "450" height = "400" alt="MOSN 介绍" /></div>
+
+## MOSN 与 Istio 的 proxyv2 镜像 build 方法
+
+MOSN 提供了如下两种方式来构建 Istio 的 proxyv2 镜像，如果只有 MOSN 代码发生变化，则推荐使用方式二。
+
+方式一（更新 Istio 版本）
+==========
+
+1、下载对应的 Istio 版本，当前 MOSN 的 [master](https://github.com/mosn/mosn) 分支是支持 istio 1.5.2 ，[feature-istio_adapter](https://github.com/mosn/mosn/tree/feature-istio_adapter) 分支是支持 istio 1.7.x。
+2、下载完 Istio 代码后，进入到 istio 目录执行如下命令：
+注意：在执行如下命令前，还需要做一些准备工作，将对应的 `mosn` 版本编译为二进制后压缩为 `mosn.tgz` 并上传至对应的存储服务中（如 github），另外 macos 的也得编译一份 `mosn-macos.tar.gz` ：
+
+```
+ISTIO_ENVOY_VERSION=v0.15.0                                                                            # 对应 mosn 的版本
+ISTIO_ENVOY_RELEASE_URL=https://github.com/mosn/mosn/releases/download/0.15.0/mosn.tgz                 # 对应 Linux 环境下的二进制压缩包下载路径（存储路径需自定义）
+ISTIO_ENVOY_MACOS_RELEASE_URL=https://github.com/mosn/mosn/releases/download/0.15.0/mosn-macos.tar.gz  # 对应 Macos 环境下的二进制压缩包下载路径
+ISTIO_ENVOY_MACOS_RELEASE_NAME=mosn-0.15.0                                                             # 设置 macos 的 sidecar 名称
+SIDECAR=mosn                                                                                           # 设置 istio 的 sidecar 为 mosn
+make docker.proxyv2                                                                                    # 编译构建 proxv2 镜像
+```
+
+
+另外由于目前 istio 默认在构建 `proxyv2` image 的时候会默认加载 `wasm`，所以需要显示的在其编译脚本里面注释掉 `wasm` 相关的编译内容：
+
+```
+bin/init.sh
+bin/update_proxy.sh
+tools/istio-docker.mk
+```
+
+3、将新构建的 proxyv2 镜像打上对应的版本 tag 
+```
+docker images | grep proxyv2                                                                           # 找到上一步 build 出来的 image，如名称为${PROXYV2} 版本为 ${TAG}
+docker tag ${PROXYV2}:${TAG}  mosnio/proxyv2:${MOSNVERSION}                                            # ${MOSNVERSION}代码 MOSN 版本 ，其值是 `cat ./VERSION` 的输出
+
+```
+
+方式二（更新 MOSN 版本）
+==========
+
+将编译好的 `mosn` 二进制拷贝到当前目录并在当前目录增加 `Dockerfile` 文件,其文件内容如下：
+```
+FROM mosnio/proxyv2:1.5.2-mosn
+COPY mosn /usr/local/bin/mosn
+```
+
+然后在当前目录执行如下命令：
+```
+docker build --no-cache --rm -t mosnio/proxyv2:${MOSNVERSION} ./
+```
+其中 `${MOSNVERSION}` 的值是 `cat ./VERSION` 的输出，当执行完成后就会在本地生成一个 `mosnio/proxyv2` 镜像。
+
+
+
 
 ## 准备工作
 
@@ -71,7 +126,7 @@ $ minikube start --memory=8192 --cpus=4 --kubernetes-version=v1.15.0 --vm-driver
 
 创建 istio 命名空间
 
-```
+```bash
 $ kubectl create namespace istio-system
 ```
 
@@ -83,77 +138,85 @@ kubectl 是用于针对 Kubernetes 集群运行命令的命令行接口，安装
 $ brew install kubernetes-cli
 ```
 
-#### 安装 Helm
+## 部署Istio与MOSN
 
-Helm 是一个 Kubernetes 的包管理工具，安装参考 [helm doc](https://docs.helm.sh/using_helm/#installing-helm)：
+### 安装 Istio
 
-```bash
-$ brew install kubernetes-helm
-```
-
-## 源码方式部署 Istio
-
-MOSN 已通过 Istio 1.4.6 的 `BookInfo` 测试，相关支持动态请关注 [MOSN Istio WG](https://github.com/mosn/community/blob/master/wg-istio.md)。
-
-#### 下载适配过 MOSN 的 Istio 源码
+您可以在 [Istio release](https://github.com/istio/istio/releases/tag/1.5.2) 页面下载与您操作系统匹配的压缩文件，该文件中包含：安装文件、示例和 istioctl 命令行工具。使用如下命令来下载 Istio（本文示例使用的是 Istio 1.5.2）：
 
 ```bash
-$ git clone -b feature-mosn_adapter https://github.com/mosn/istio.git
+$ export ISTIO_VERSION=1.5.2 && curl -L https://istio.io/downloadIstio | sh -
 ```
 
-#### 通过 Helm 安装 Istio
+下载的 Istio 包名为 `istio-1.5.2`，包含：
 
+- `install/kubernetes`：包含 Kubernetes 相关的 YAML 安装文件;
+- `examples/`：包含示例应用程序;
+- `bin/`：包含 istioctl 的客户端文件;
 
-**使用 `helm template` 安装**
-
-首先需要切换到 Istio 源码所在目录，然后使用 helm 安装 Istio CRD 以及各个组件： 
+切换到 Istio 包所在目录：
 
 ```bash
-$ cd istio
-$ helm template install/kubernetes/helm/istio-init --set global.hub=docker.io/istio --set global.tag=1.4.6  --name istio-init --namespace istio-system >istio_init.yaml
-
-$ helm template install/kubernetes/helm/istio --set global.sidecar.binaryPath=/usr/local/bin/mosn  --set global.hub=docker.io/istio --set global.tag=1.4.6  --set global.sidecar.image=mosnio/proxyv2:1.4.6-mosn  --name istio --namespace istio-system >istio.yaml
-
-$ kubectl apply -f istio_init.yaml
-$ kubectl apply -f istio.yaml
-
+$ cd istio-$ISTIO_VERSION/
 ```
 
-#### 验证安装
-
-`istio-system` 命名空间下的 pod 状态都是 Running 时，说明已经部署成功。
-如果仅仅是为了运行 `BookInfo`，只需要 pilot、injector、citadel 这三个 pod 运行成功就可以满足最低要求。
+使用如下命令将 istioctl 客户端路径加入 $PATH 中：
 
 ```bash
-$ kubectl get pods -n istio-system
-NAME                                        READY   STATUS      RESTARTS   AGE
-istio-citadel-6b7796cbc7-8q72s              1/1     Running     0          9d
-istio-galley-5545dff574-6qls6               1/1     Running     0          9d
-istio-ingressgateway-79b75c4db-8w646        1/1     Running     0          9d
-istio-init-crd-10-1.4-dev-9m7g6             0/1     Completed   0          9d
-istio-init-crd-11-1.4-dev-j27vt             0/1     Completed   0          9d
-istio-init-crd-14-1.4-dev-4h9ts             0/1     Completed   0          9d
-istio-pilot-6654897fc6-vh299                2/2     Running     0          9d
-istio-policy-68774796b8-qq5kz               2/2     Running     0          9d
-istio-security-post-install-1.4-dev-g98ws   0/1     Completed   0          9d
-istio-sidecar-injector-f7b64d984-hw8p4      1/1     Running     0          9d
-istio-telemetry-5f5d94c78-zw847             2/2     Running     0          9d
-prometheus-6c9c8f9c97-mkcnp                 1/1     Running     0          9d
+$ export PATH=$PATH:$(pwd)/bin
 ```
 
-我们可以登录到 `istio-ingressgateway-79b75c4db-8w646` pod 上查看该网关已经成功使用MOSN作为 `ingress-gateway`：
+截止目前，我们已经可以通过 istioctl 命令行工具来灵活的自定义 Istio 控制平面和数据平面配置参数。
+
+### 设置 MOSN 作为 Istio 的 Sidecar
+
+通过 istioctl 命令的参数指定 MOSN 作为 Istio 中的数据面：
 
 ```bash
-#kubectl -n istio-system exec -it  istio-ingressgateway-79b75c4db-8w646  bash 
-
-root@istio-ingressgateway-79b75c4db-8w646:/# ps aux | grep mosn
-root          1  0.0  0.6 131232  6360 ?        Ssl  Mar10   0:23 /usr/local/bin/pilot-agent proxy router --domain istio-system.svc.cluster.local --log_output_level=default:info --binaryPath /usr/local/bin/mosn --drainDuration 45s --parentShutdownDuration 1m0s --connectTimeout 10s --serviceCluster istio-ingressgateway --zipkinAddress zipkin:9411 --proxyAdminPort 15000 --statusPort 15020 --controlPlaneAuthPolicy NONE --discoveryAddress istio-pilot:15010
-root         24  0.0  1.4 128068 15356 ?        Sl   Mar10   4:37 /usr/local/bin/mosn start --config /etc/istio/proxy/envoy-rev0.json --service-cluster istio-ingressgateway --service-node router~192.168.5.18~istio-ingressgateway-79b75c4db-8w646.istio-system~istio-system.svc.cluster.local
-root        175  0.0  0.1  11468  1056 pts/1    S+   13:06   0:00 grep --color=auto mosn
-
+$ istioctl manifest apply  --set .values.global.proxy.image="mosnio/proxyv2:1.5.2-mosn"   --set meshConfig.defaultConfig.binaryPath="/usr/local/bin/mosn"
 ```
 
-## BookInfo 实验
+### 修改 prometheus deployment
+
+当前版本的部署的 istio 自带的 `prometheus`，有2个小问题需要手动调整下。
+
+```bash
+$ kubectl edit deployments -n istio-system prometheus
+```
+
+1. 将容器 `istio-proxy` 的镜像改为 `mosnio/proxyv2:1.5.2-mosn`
+2. 将容器 `istio-proxy` 启动参数中的 `--binaryPath` 的值改为 `/usr/local/bin/mosn`
+
+### 验证安装
+
+检查 Istio 相关 pod 服务是否部署成功：
+
+```bash
+$ kubectl get pod -n istio-system
+NAME                                    READY   STATUS    RESTARTS   AGE
+istio-ingressgateway-6f68796974-mtp2q   1/1     Running   0          6h10m
+istiod-768488f855-c7bf6                 1/1     Running   0          6h35m
+prometheus-6cd5bb8f99-8szvt             2/2     Running   0          13m
+```
+
+如果服务状态 STATUS 为 Running，则表示 Istio 已经成功安装，后面就可以部署 Bookinfo 示例了。
+
+我们可以登录到 `istio-ingressgateway-6f68796974-mtp2q` pod 上查看该网关已经成功使用MOSN作为 `ingress-gateway`：
+
+```bash
+$ kubectl -n istio-system exec -it istio-ingressgateway-6f68796974-mtp2q -- bash
+root@istio-ingressgateway-6f68796974-mtp2q:/# ps aux | grep mosn
+root        21  0.1  0.3 129588 26080 ?        Sl   10:47   0:38 /usr/local/bin/mosn start --config /etc/istio/proxy/envoy-rev0.json --service-cluster istio-ingressgateway --service-node router~172.17.0.5~istio-ingressgateway-6f68796974-mtp2q.istio-system~istio-system.svc.cluster.local
+root        57  0.0  0.0  11468  1012 pts/0    S+   16:58   0:00 grep --color=auto mosn
+```
+
+## Bookinfo 示例
+
+MOSN 已通过 Istio 1.5.2 的 `BookInfo` 测试，相关支持动态请关注 [MOSN Istio WG](https://github.com/mosn/community/blob/master/wg-istio.md)。
+
+可以通过 [MOSN with Istio](https://katacoda.com/mosn/courses/istio/mosn-with-istio) 的教程来进行 Bookinfo 示例的演示操作，另外在该教程中您也可以找到更多关于使用 MOSN 和 Istio 的说明。
+
+### BookInfo 实验
 
 `BookInfo` 是一个类似豆瓣的图书应用，它包含四个基础服务：
 
@@ -168,55 +231,57 @@ root        175  0.0  0.1  11468  1056 pts/1    S+   13:06   0:00 grep --color=a
 
 > 详细过程可以参考 [BookInfo doc](https://istio.io/docs/examples/bookinfo/)
 
-
-注入 MOSN。
-
-```bash
-$ kubectl label namespace default istio-injection=enabled
-```
-
-部署 `Bookinfo`。
+通过 kube-inject 的方式实现Sidecar注入：
 
 ```bash
-$ kubectl apply -f samples/bookinfo/platform/kube/bookinfo.yaml
+$ istioctl kube-inject -f samples/bookinfo/platform/kube/bookinfo.yaml > bookinfo.yaml && sed -i "s/\/usr\/local\/bin\/envoy/\/usr\/local\/bin\/mosn/g" ./bookinfo.yaml
 ```
 
-验证部署是否成功。
+部署注入 Sidecar 后的 Bookinfo 应用：
+
+```bash
+$ kubectl apply -f bookinfo.yaml
+```
+
+验证部署是否成功：
 
 ```bash
 $ kubectl get services
-NAME          TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
-details       ClusterIP   10.103.220.246   <none>        9080/TCP   9d
-kubernetes    ClusterIP   10.96.0.1        <none>        443/TCP    9d
-productpage   ClusterIP   10.110.90.147    <none>        9080/TCP   9d
-ratings       ClusterIP   10.105.187.190   <none>        9080/TCP   9d
-reviews       ClusterIP   10.101.193.74    <none>        9080/TCP   9d
-
+NAME          TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+details       ClusterIP   10.107.154.89   <none>        9080/TCP   65m
+kubernetes    ClusterIP   10.96.0.1       <none>        443/TCP    10h
+productpage   ClusterIP   10.101.154.61   <none>        9080/TCP   65m
+ratings       ClusterIP   10.103.70.21    <none>        9080/TCP   65m
+reviews       ClusterIP   10.96.56.145    <none>        9080/TCP   65m
 ```
 
-等待所有的 pod 等成功运行起来。
+等待所有的 pod 等成功运行起来：
 
 ```bash
 $ kubectl get pods
-NAME                             READY   STATUS    RESTARTS   AGE
-details-v1-794574bdfc-hskqt      2/2     Running   0          9d
-productpage-v1-7b8fdcd7f-vcbwg   2/2     Running   0          9d
-ratings-v1-57fb894f57-gmff7      2/2     Running   0          9d
-reviews-v1-6b6688d988-h4qgv      2/2     Running   0          9d
-reviews-v2-58bfbbb44-ktrcs       2/2     Running   0          9d
-reviews-v3-86876fd564-z4kdb      2/2     Running   0          9d
+NAME                              READY   STATUS    RESTARTS   AGE
+details-v1-547d75b975-zrhtf       2/2     Running   0          66m
+productpage-v1-84b8bbd5bb-pc2hc   2/2     Running   0          66m
+ratings-v1-b78b5cb7-hvtwv         2/2     Running   0          66m
+reviews-v1-576d4b46f4-84cw9       2/2     Running   0          66m
+reviews-v2-68b67dcd98-d286b       2/2     Running   0          66m
+reviews-v3-784c6444b-blbgr        2/2     Running   0          66m
+```
 
+当上述状态为 Running 后，可通过如下方式确认 Bookinfo 应用是否正常运行：
+
+```bash
+kubectl exec -it $(kubectl get pod -l app=ratings -o jsonpath='{.items[0].metadata.name}') -c ratings -- curl productpage:9080/productpage | grep -o "<title>.*</title>"
 ```
 
 同样我们可以查看此时 `BookInfo` 应用的每一个 pod 都运行了 2 个容器，一个容器是 `BookInfo` 自身业务容器，另一个容器是Istio注入的 sidecar MOSN 容器。
 
 ```bash
-#kubectl exec -it productpage-v1-7b8fdcd7f-vcbwg  -c istio-proxy  bash 
-
-istio-proxy@productpage-v1-7b8fdcd7f-vcbwg:/$ ps aux | grep mosn
-istio-p+      1  0.0  0.6 131224  6744 ?        Ssl  Mar10   0:23 /usr/local/bin/pilot-agent proxy sidecar --domain default.svc.cluster.local --configPath /etc/istio/proxy --binaryPath /usr/local/bin/mosn --serviceCluster productpage.default --drainDuration 45s --parentShutdownDuration 1m0s --discoveryAddress istio-pilot.istio-system:15010 --zipkinAddress zipkin.istio-system:9411 --dnsRefreshRate 300s --connectTimeout 10s --proxyAdminPort 15000 --concurrency 2 --controlPlaneAuthPolicy NONE --statusPort 15020 --applicationPorts 9080
-istio-p+     13  0.0  2.0 128060 21344 ?        Sl   Mar10   5:12 /usr/local/bin/mosn start --config /etc/istio/proxy/envoy-rev0.json --service-cluster productpage.default --service-node sidecar~192.168.5.14~productpage-v1-7b8fdcd7f-vcbwg.default~default.svc.cluster.local
-istio-p+     95  0.0  0.0  11460  1036 pts/0    S+   13:15   0:00 grep --color=auto mosn
+$ kubectl exec -it productpage-v1-84b8bbd5bb-pc2hc -c istio-proxy -- bash
+istio-proxy@productpage-v1-84b8bbd5bb-pc2hc:/$ ps aux | grep mosn
+istio-p+     1  0.1  0.5 153964 41372 ?        Ssl  16:59   0:04 /usr/local/bin/pilot-agent proxy sidecar --domain default.svc.cluster.local --configPath /etc/istio/proxy --binaryPath /usr/local/bin/mosn --serviceCluster productpage.default --drainDuration 45s --parentShutdownDuration 1m0s --discoveryAddress istiod.istio-system.svc:15012 --zipkinAddress zipkin.istio-system:9411 --proxyLogLevel=warning --proxyComponentLogLevel=misc:error --connectTimeout 10s --proxyAdminPort 15000 --concurrency 2 --controlPlaneAuthPolicy NONE --dnsRefreshRate 300s --statusPort 15020 --trust-domain=cluster.local --controlPlaneBootstrap=false
+istio-p+    18  0.1  0.3 129584 25904 ?        Sl   16:59   0:05 /usr/local/bin/mosn start --config /etc/istio/proxy/envoy-rev0.json --service-cluster productpage.default --service-node sidecar~172.17.0.14~productpage-v1-84b8bbd5bb-pc2hc.default~default.svc.cluster.local
+istio-p+    59  0.0  0.0  11464  1156 pts/0    S+   17:54   0:00 grep --color=auto mosn
 ```
 
 #### 访问 BookInfo 服务
@@ -239,10 +304,10 @@ $ export INGRESS_HOST=$(minikube ip)
 $ export GATEWAY_URL=$INGRESS_HOST:$INGRESS_PORT
 ```
 
-验证 gateway 是否生效。
+验证 gateway 是否生效，输出 `200` 表示成功。
 
 ```bash
-$ curl -o /dev/null -s -w "%{http_code}\n"  http://$GATEWAY_URL/productpage   //输出 200 表示成功 
+$ curl -o /dev/null -s -w "%{http_code}\n"  http://$GATEWAY_URL/productpage
 200
 ```
 
@@ -307,7 +372,7 @@ $ kubectl apply -f samples/bookinfo/networking/virtual-service-reviews-test-v2.y
 ![版本一](v1.png)
 
 
-#### 卸载 BookInfo
+### 卸载 BookInfo
 
 可以使用下面的命令来完成应用的删除和清理工作：
 
@@ -326,14 +391,12 @@ $ kubectl get gateway           #-- there should be no gateway
 $ kubectl get pods              #-- the Bookinfo pods should be deleted
 ```
 
-#### 卸载 Istio
+## 卸载 Istio
 
 执行如下命令，删除 Istio 相关 CRD 以及 pod 等资源：
 
 ```bash
-$ kubectl delete -f istio_init.yaml
-$ kubectl delete -f istio.yaml
-$ kubectl delete namespace istio-system
+istioctl manifest generate --set .values.global.proxy.image="mosnio/proxyv2:1.5.2-mosn" --set meshConfig.defaultConfig.binaryPath="/usr/local/bin/mosn" | kubectl delete -f -
 ```
 
 确认 Istio 是否成功卸载：
