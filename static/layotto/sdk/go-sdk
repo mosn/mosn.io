@@ -1,0 +1,6 @@
+<html>
+  <head>
+    <meta name="go-import" content="mosn.io/layotto/sdk/go-sdk git https://github.com/mosn/layotto/tree/main/sdk/go-sdk">
+    <meta name="go-source" content="mosn.io/layotto/sdk/go-sdk     https://github.com/mosn/layotto/tree/main/sdk/go-sdk https://github.com/mosn/layotto/tree/main/sdk/go-sdk{/dir} https://github.com/mosn/layotto/blob/main/sdk/go-sdk{/dir}/{file}#L{line}">
+  </head>
+</html>
