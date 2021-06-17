@@ -202,13 +202,8 @@ Committer is an individual with MOSN repository write access to the following cr
 - Participate in the maintenance of issue lists and discussion of important features.
 - Active participation in code reviews and community meetings.
 
-## Roadmap
-
-MOSN with Istio roadmap.
-
-![MOSN with Istio roadmap](mosn-with-istio-roadmap.png)
-
-More information about MOSN roadmap, see the [Google Sheet](https://docs.google.com/spreadsheets/d/1fALompY9nKZNImOuxQw23xtMD-5rCBrXWziJZkj76bo/edit#gid=0).
+## Meetup
+https://github.com/mosn/meetup
 
 ## Tutorials
 
