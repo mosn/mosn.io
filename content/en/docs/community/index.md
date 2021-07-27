@@ -195,6 +195,8 @@ The MOSN Community Certified Committer is as follows.
 | Peng Chen   | [champly](https://github.com/champly)           | dmall.com     |
 | Changyu Yao | [trainyao](https://github.com/trainyao)         | youmi.net     |
 | Qian Deng   | [dengqian](https://github.com/dengqian)         | Alibaba Cloud |
+| Runhao Huang| [glyasai](https://github.com/glyasai)           | goodrain      |
+| Zechao Zheng| [CodingSinger](https://github.com/CodingSinger) | ByteDance     |
 
 Committer is an individual with MOSN repository write access to the following criteria.
 
