@@ -90,7 +90,7 @@ Dubbo 最初是 [Java 开发的一套 RPC 框架](https://dubbo.apache.org/zh-cn
 第一步，在 MOSN 配置中增加 `dubbo_registry` 扩展选项：
 
 ```json
-  "extend" :  [{
+  "extends" :  [{
     "type" : "dubbo_registry",
     "config" : {
       "enable" : true,
