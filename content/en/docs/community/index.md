@@ -197,6 +197,7 @@ The MOSN Community Certified Committer is as follows.
 | Qian Deng   | [dengqian](https://github.com/dengqian)         | Alibaba Cloud |
 | Runhao Huang| [glyasai](https://github.com/glyasai)           | goodrain      |
 | Zechao Zheng| [CodingSinger](https://github.com/CodingSinger) | ByteDance     |
+| Jianhao Fu  | [AlphaBaby](https://github.com/alpha-baby)      | JD.com        |
 
 Committer is an individual with MOSN repository write access to the following criteria.
 
