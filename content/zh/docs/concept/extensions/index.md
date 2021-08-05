@@ -7,13 +7,13 @@ aliases: "/zh/docs/concept/extensions"
 date: 2020-04-09T21:00:00+08:00
 ---
 
-本文将才从以下几个方面介绍 MOSN 的扩展机制：
+本文将从以下几个方面介绍 MOSN 的扩展机制：
 
 - MOSN 扩展能力和扩展机制的详细介绍；
 - 结合示例对 MOSN 的 Filter 扩展机制与插件扩展机制进行详细介绍；
 - MOSN 后续扩展能力规划与展望；
 
-本问中的示例在 MOSN 的 Github 的 `examples/codes/mosn-extensions` 目录下，大家也可以下载下来运行一下。
+本文中的示例在 MOSN 的 Github 的 `examples/codes/mosn-extensions` 目录下，大家也可以下载下来运行一下。
 
 ### MOSN 简介
 
@@ -56,7 +56,7 @@ MOSN 作为一款网络代理，在转发链路上的网络层、协议层、转
 
 ![image.png](1586436269017-a78ea077-adea-4e5c-bb19-48843553362d.png)
 
-当 MOSN 经过协议解析，收到一个完整的请求时，会创建一个 Stream。此时收到请求的 Listener 中每存在 StreamFilterFactory，就会生成一个 StreamFilter 对象，随后进入到 proxy 流程。
+当 MOSN 经过协议解析，收到一个完整的请求时，会创建一个 Stream。此时收到请求的 Listener 中每存在一个 StreamFilterFactory，就会生成一个 StreamFilter 对象，随后进入到 proxy 流程。
 
 进入 proxy 流程以后，如果存在 ReceiverFilter，那么就会执行对应的逻辑，ReceiverFilter 包括两个阶段，“路由前”和“路由后”，在每个 Filter 处理完成以后，会返回一个状态，如果是 Stop 则会中止后续尚未执行的 ReceiverFilter，通常情况下，返回 Stop 状态的 Filter 都会回写一个响应。如果是 Continue 则会执行下一个 ReceiverFilter，直到本阶段的 ReceiverFilter 都执行完成或中止；路由前阶段的 ReceiverFIlter 执行完成后，就会执行路由后阶段，其逻辑和路由前一致。如果是正常转发，那么随后 MOSN 会收到一个响应或者发现其他异常直接回写一个响应，此时就会进入到 SenderFilter 的流程中，完成 SenderFilter 的处理。SenderFilter 处理完成以后，MOSN 会写响应给 Client，并且完成最后的收尾工作，收尾工作包括一些数据的回收、日志的记录，以及 StreamFilter 的“销毁”（调用 OnDestroy）。
 
