@@ -132,6 +132,11 @@ The MOSN users.
           <img width="222px"  src="/images/community/tuya.png">
         </a>
       </td>
+      <td align="center" valign="middle">
+        <a href="https://www.meicai.cn/" trget="_blank">
+	  <img width="222px"  src="/images/community/meicai.png">
+	</a>
+      </td>
     </tr>
   </tbody>
 </table>
@@ -176,9 +181,14 @@ The MOSN community actively embraces the open source ecosystem and has establish
           <img width="222px"  src="/images/community/sofastack.png">
         </a>
       </td>
-      </tr>
-    </tbody>
-  </table>
+      <td align="center" valign="middle">
+        <a href="http://seata.io/en-us/" target="_blank">
+	  <img width="222px"  src="/images/community/seata.png">
+	</a>
+      </td>
+    </tr>
+  </tbody>
+</table>
 </div>
 
 ## Committers
