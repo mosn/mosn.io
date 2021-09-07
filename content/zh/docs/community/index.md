@@ -182,11 +182,6 @@ MOSN 社区积极拥抱开源生态，与以下开源社区建立了良好的合
         </a>
       </td>
       <td align="center" valign="middle">
-        <a href="https://www.jaegertracing.io/" target="_blank">
-          <img width="222px"  src="/images/community/jaeger.png">
-        </a>
-      </td>
-      <td align="center" valign="middle">
         <a href="http://seata.io/zh-cn/" target="_blank">
           <img width="222px"  src="/images/community/seata.png">
         </a>

@@ -182,11 +182,6 @@ The MOSN community actively embraces the open source ecosystem and has establish
         </a>
       </td>
       <td align="center" valign="middle">
-        <a href="https://www.jaegertracing.io/" target="_blank">
-	  <img width="222px"  src="/images/community/jaeger.png">
-	</a>
-      </td>
-      <td align="center" valign="middle">
         <a href="http://seata.io/en-us/" target="_blank">
 	  <img width="222px"  src="/images/community/seata.png">
 	</a>
