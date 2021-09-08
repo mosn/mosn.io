@@ -5,7 +5,8 @@ date: 2021-09-08
 aliases: "/zh/docs/dev/code-review"
 weight: 2
 description: >
-  本页介绍MOSN的代码规范。
+  本页介绍MOSN的编码规范。
 ---
 
-## MOSN的代码规范
+## MOSN编码规范
+Go Code Review Comments https://github.com/golang/go/wiki/CodeReviewComments
