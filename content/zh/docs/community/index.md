@@ -227,4 +227,4 @@ MOSN 提供线上教程，见[教程页面](/docs/tutorial/)。
 
 使用钉钉扫描下面的二维码加入 MOSN 用户群。
 
-<img alt="MOSN 用户交流钉钉群二维码" src="https://github.com/mosn/assets/blob/master/qrcode.jpg?raw=true"  width="128px" />
+<img alt="MOSN 用户交流钉钉群二维码" src="https://github.com/mosn/mosn.io/blob/master/assets/img/dingtalk.jpg?raw=true"  width="128px" />
