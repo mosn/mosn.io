@@ -76,6 +76,15 @@ ps: 上面的代码意思是基于 eureka 的数据，进行动态更新。
 这样，我们就能够完成更加复杂的分组路由。
 
 
-## 5 总结
+## 5 再谈 MetaData
 
-以上，就是如何基于 subset + StreamFilter 在 MOSN 中使用路由的基本思路。
+事实上, 我们不仅可以在 请求级别(varRouterMeta)设置元数据对 host 进行匹配, 也可以在路由信息中,配置元数据. 如下图:
+
+![](888.jpg)
+
+上图中,左边是 host 配置,右边是 router 配置. 
+
+这个路由配置的意思是,当请求者的 header 里指定了 name 和 value, 且其值匹配这个路由值 service 和 service.green, 那么该请求就被路由到了这个 cluster_subset 集群中,然后, 这个集群可能有多个机器, 那么需要这个机器的元数据和路由配置的元数据相同.
+必须都是 subset:green, 才能匹配上这个 Host;
+
+另外, 如果路由配置中配置 MetaData, 请求级别也配置了 MetaData, 那么, MOSN 会将 2 个元数据进行合并, 来和 Host 进行匹配. 这个逻辑在 `pkg/proxy/downstream.go:1497` 代码中有体现.
