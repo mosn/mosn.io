@@ -1,17 +1,17 @@
 ---
-title: "Mosn 动态路由的使用"
-linkTitle: "Mosn 动态路由的使用"
+title: "MOSN 动态路由的使用"
+linkTitle: "MOSN 动态路由的使用"
 date: 2021-11-25
 author: "[stateis0](https://github.com/stateIs0)"
-description: "本文描述如何基于 mosn 实现 subset 的动态路由"
+description: "本文描述如何基于 MOSN 实现 subset 的动态路由"
 aliases: "/zh/blog/posts/how-use-dynamic-metadata"
 ---
 
-在使用 mosn 进行路由时，默认的路由策略可能无法满足你的需求，例如，当你的服务集群里，有多个版本时，就需要更复杂的路由逻辑。通常 proxy 在处理此类问题时，都会使用 subsets 的方案。
+在使用 MOSN 进行路由时，默认的路由策略可能无法满足你的需求，例如，当你的服务集群里，有多个版本时，就需要更复杂的路由逻辑。通常 proxy 在处理此类问题时，都会使用 subsets 的方案。
 
 关于此功能更详细的介绍，可参考 envoy 的 [文档](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/subsets).
 
-下面介绍如何在mosn 中，使用 subset 来动态路由分组。
+下面介绍如何在 MOSN 中，使用 subset 来动态路由分组。
 
 ## 1 设置 host 的 subSet key 和  MetaData
 
@@ -28,7 +28,7 @@ ps: 上面的代码意思是基于 eureka 的数据，进行动态更新。
 
 ![img](20211125103943.jpg)
 
-创建一个自己的 stream filter。在 stream filter 路由前，设置请求级别元数据。我们这里创建的是 eurekaRPCGroupFilter。
+创建一个自己的 StreamFilter。在 StreamFilter 路由前，设置请求级别元数据。我们这里创建的是 eurekaRPCGroupFilter。
 
 ## 3 原理
 
@@ -65,7 +65,7 @@ ps: 上面的代码意思是基于 eureka 的数据，进行动态更新。
 
 ![img](20211125104029.jpg)
 
-上面的代码，展示了：我们将多个分组标签，转换成 mosn 可以认识的元数据kv，每个标签对应一个固定的 value true（其实没有意义）。同时注意，这些 key，都要保存到 SubsetSelectors 中，否则，mosn 无法识别。
+上面的代码，展示了：我们将多个分组标签，转换成 MOSN 可以认识的元数据kv，每个标签对应一个固定的 value true（其实没有意义）。同时注意，这些 key，都要保存到 SubsetSelectors 中，否则，MOSN 无法识别。
 
 每次调用时，我们在 filter 里，从 header 里面取出分组标签，然后设置进“上下文变量”中。例如：
 
@@ -76,4 +76,4 @@ ps: 上面的代码意思是基于 eureka 的数据，进行动态更新。
 
 ## 5 总结
 
-以上，就是如何基于 subset + filter 在 mosn 中使用路由的基本思路。
+以上，就是如何基于 subset + StreamFilter 在 MOSN 中使用路由的基本思路。
