@@ -88,3 +88,80 @@ ps: 上面的代码意思是基于 eureka 的数据，进行动态更新。
 必须都是 subset:green, 才能匹配上这个 Host;
 
 另外, 如果路由配置中配置 MetaData, 请求级别也配置了 MetaData, 那么, MOSN 会将 2 个元数据进行合并, 来和 Host 进行匹配. 这个逻辑在 `pkg/proxy/downstream.go:1497` 代码中有体现.
+
+## 6 如何动态选择 Cluster？
+上面提到的是如何选择 cluster 里面的分组，其实动态路由，还包含如何动态选择 cluster 的场景。cluster 和 subset 的关系如下图：
+
+![](20211127163435.jpg)
+
+
+正常情况下，如果我们的路由逻辑很简单，例如根据 header 里的某个名字，找到对应的 cluster，代码或者配置就是这么写的：
+```go
+router := v2.Router{
+    // header 匹配
+    RouterConfig: v2.RouterConfig{
+        Match: v2.RouterMatch{
+            Headers: []v2.HeaderMatcher{
+                // 这个 header 匹配, 就转发到 app.Name cluster.
+                {
+                    Name:  "X-service-id",
+                    Value: strings.ToLower(app.Name),
+                },
+            },
+        },
+        // cluster 名称匹配.
+        Route: v2.RouteAction{
+            RouterActionConfig: v2.RouterActionConfig{
+                ClusterName: app.Name,
+            },
+        },
+    },
+}
+r.VirtualHosts[0].Routers = append(r.VirtualHosts[0].Routers, router)
+```
+上面代码的意思是如果 header 里有 X-service-id 这个 kv，那么就能找到下面 RouteAction 对应的 Cluster 了。
+
+那如果是更复杂的逻辑呢？比如随机找一个 Cluster？
+
+此时，通过配置已经无法解决这个需求，因为这其中涉及到了计算逻辑。
+
+MOSN 通过动态配置可以支持该需求。如下图配置：
+
+
+![](11111122.png)
+
+我们设置了一个 "cluster_variable": "My-ClusterVariable" 的 KV 配置。
+
+同时，我们还需要在 StreamFilter 中，利用变量机制，设置 key 为 “My-ClusterVariable” 的 value，这个 value 就是计算出来的 Cluster 名称。
+
+代码如下：
+
+```go
+// 先注册这个 key 到变量表中。
+func init() {
+	variable.Register(variable.NewStringVariable("My-ClusterVariable", nil, nil, variable.DefaultStringSetter, 0))
+}
+
+
+var clusterMap = make(map[int]string, 0)
+
+func (f *MyFilter) OnReceive(ctx context.Context, headers api.HeaderMap, buf buffer.IoBuffer, trailers api.HeaderMap) api.StreamFilterStatus {
+	l := len(clusterMap)
+    // 随机找一个 Cluster
+	cluster := clusterMap[rand.Intn(l)]
+    // 设置到上下文变量中。这个 key 必须和配置文件中保持一致。
+	variable.SetString(ctx, "My-ClusterVariable", cluster)
+	return api.StreamFilterContinue
+}
+```
+
+上面的代码展示了如何基于变量机制动态的找到 Cluster，这种机制在面对复杂路由逻辑的场景时，能够解决你的问题。
+
+## 7 总结
+
+尝试用一张图来解释 MOSN 路由和 Cluster 的关系。大部分情况下，我们用 json 配置就能解决我们的路由问题。
+如果路由逻辑较为复杂，可以使用 Stream Filter + varRouterMeta 、Stream Filter  +  cluster_variable 等方式，来进行动态路由。
+
+![](20211127183927.jpg)
+
+EOF
