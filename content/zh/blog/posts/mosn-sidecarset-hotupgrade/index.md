@@ -10,7 +10,9 @@ aliases: "/zh/blog/posts/mosn-sidecarset-hotupgrade"
 ## 前言
 MOSN 作为 Sidecar 容器部署时，对于 MOSN 容器自身的升级，可以采用的一种形式是先将业务切流，再升级版本。这种形式用户POD需要销毁、重新调度、重建，带来较大开销的同时，也可能影响业务的稳定性。
 
-本文将介绍如何利用 [OpenKruise](http://openkruise.io/) 对 Kubernetes 的扩展 SidecarSet，来实现 MOSN 容器的原地热升级。
+为此 MOSN 提供了对业务无感的热升级方式，具体的原理可移步[这里查阅](/docs/concept/smooth-upgrade/)。
+
+本文将介绍如何利用 [OpenKruise](http://openkruise.io/) 对 Kubernetes 的扩展 SidecarSet，来具体操作 MOSN 容器的原地热升级。
 
 ## 环境准备
 
@@ -19,12 +21,14 @@ MOSN 作为 Sidecar 容器部署时，对于 MOSN 容器自身的升级，可以
 ## 测试步骤
 ### 打包 MOSN 镜像
 本文利用当前 MOSN 社区提供的构建镜像的方式来准备测试用的 MOSN 镜像，在构建镜像之前需要做如下调整：
+
 1. 修改```etc/supervisor/supervisord.conf```, 因为当前 supervisor 配置使用```/dev/shm/```目录，同一 POD 内不同容器之间会冲突，会导致新容器启动失败
 ```bigquery
 [unix_http_server]
 -file=/dev/shm/supervisor.sock
 +file=/var/run/supervisor_mosn.sock
 ```
+
 2. 修改 MOSN 配置文件```configs/mosn_config.json```, 添加配置：
 ```bigquery
 {
@@ -36,6 +40,7 @@ MOSN 作为 Sidecar 容器部署时，对于 MOSN 容器自身的升级，可以
 其中```udx_dir```为 MOSN ```reconfig.sock```存储目录，该目录需要挂载为共享卷，使得热升级过程中两个容器之间可以相互访问。
 
 如果从pilot获取动态下发的配置，则需要添加```inherit_old_mosnconfig```配置项，新的 MOSN 进程启动之后继承老的 MOSN 进程监听的fd，避免端口冲突导致进程启动失败。
+
 3. 构建镜像，并上传至可访问的镜像仓库
 ```bigquery
 make image
@@ -48,6 +53,7 @@ docker push [repo:tag]
 - 注意
   - image 修改为自己使用版本
   - volume 挂载目录和配置文件中```uds_dir```目录保持一致
+
 ```bigquery
 $ kubectl apply -f sidecarset.yaml 
 $ cat sidecarset.yaml
@@ -93,6 +99,7 @@ spec:
   - emptyDir: {}
     name: mosn-log
 ```
+
 ### 部署测试应用
 #### 配置示例
 ```bigquery
@@ -116,6 +123,7 @@ spec:
         - name: test-app
           image: nginx:1.20
 ```
+
 部署应用之后，查看 POD
 ```bigquery
 $ kubectl get pods -n ppe-t-e3496bc319e941ed8ec8349b8c65b366-cn3691    -o wide
@@ -136,8 +144,11 @@ NAME                             READY   STATUS                     RESTARTS   A
 test-app-5fd64d788c-g9wg9        3/3     Running                    2          10m
 ```
 实际的升级过程为：
+
 1. empty 容器升级为 MOSN v2 版本容器
+   
 2. MOSN v2 版本容器和v1版本容器之间进行连接迁移
+   
 3. MOSN v1 版本容器退出，变更为 empty 容器
 
 ![](mosn-hotupgrade.png)
