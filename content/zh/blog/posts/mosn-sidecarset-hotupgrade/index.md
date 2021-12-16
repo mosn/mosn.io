@@ -22,14 +22,16 @@ MOSN 作为 Sidecar 容器部署时，对于 MOSN 容器自身的升级，可以
 ### 打包 MOSN 镜像
 本文利用当前 MOSN 社区提供的构建镜像的方式来准备测试用的 MOSN 镜像，在构建镜像之前需要做如下调整：
 
-1. 修改```etc/supervisor/supervisord.conf```, 因为当前 supervisor 配置使用```/dev/shm/```目录，同一 POD 内不同容器之间会冲突，会导致新容器启动失败
+- 修改```etc/supervisor/supervisord.conf```, 因为当前 supervisor 配置使用```/dev/shm/```目录，同一 POD 内不同容器之间会冲突，会导致新容器启动失败
+
 ```bigquery
 [unix_http_server]
 -file=/dev/shm/supervisor.sock
 +file=/var/run/supervisor_mosn.sock
 ```
 
-2. 修改 MOSN 配置文件```configs/mosn_config.json```, 添加配置：
+- 修改 MOSN 配置文件```configs/mosn_config.json```, 添加配置：
+
 ```bigquery
 {
     "uds_dir": "/home/admin/mosn/logs",
@@ -37,11 +39,13 @@ MOSN 作为 Sidecar 容器部署时，对于 MOSN 容器自身的升级，可以
     ...
 }
 ```
+
 其中```udx_dir```为 MOSN ```reconfig.sock```存储目录，该目录需要挂载为共享卷，使得热升级过程中两个容器之间可以相互访问。
 
 如果从pilot获取动态下发的配置，则需要添加```inherit_old_mosnconfig```配置项，新的 MOSN 进程启动之后继承老的 MOSN 进程监听的fd，避免端口冲突导致进程启动失败。
 
-3. 构建镜像，并上传至可访问的镜像仓库
+- 构建镜像，并上传至可访问的镜像仓库
+
 ```bigquery
 make image
 docker tag [imageid] [repo:tag]
@@ -49,7 +53,6 @@ docker push [repo:tag]
 ```
 
 ### 创建SidecarSet资源
-#### 配置示例
 - 注意
   - image 修改为自己使用版本
   - volume 挂载目录和配置文件中```uds_dir```目录保持一致
@@ -101,7 +104,6 @@ spec:
 ```
 
 ### 部署测试应用
-#### 配置示例
 ```bigquery
 apiVersion: extensions/v1beta1
 kind: Deployment
