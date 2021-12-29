@@ -1,7 +1,7 @@
 ---
 title: "MOSN v0.26.0 发布"
 linkTitle: "MOSN v0.26.0 发布"
-date: 2021-10-12
+date: 2021-12-29
 author: "MOSN 团队"
 aliases: "/zh/blog/releases/v0.26.0"
 description: "MOSN v0.26.0 变更日志。"

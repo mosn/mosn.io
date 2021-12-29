@@ -1,7 +1,7 @@
 ---
 title: "Announcing MOSN v0.26.0"
 linkTitle: "Announcing MOSN v0.26.0"
-date: 2021-10-12
+date: 2021-12-29
 author: MOSN Team
 description: "MOSN v0.26.0 changelog."
 ---
