@@ -15,7 +15,7 @@ description: "MOSN v0.26.0 变更日志。"
 ### 不兼容变更
 
 为了更自然的添加扩展协议，新版对 XProtocol 进行了重构，XProtocol 不再是一种协议，而是便于协议扩展实现的框架。
-扩展协议的实现需要一些调整，具体请见 [XProtocol协议改造适配指南](reports/xprotocol_0.26.0.md)
+扩展协议的实现需要一些调整，具体请见 [XProtocol协议改造适配指南](https://github.com/mosn/mosn/blob/v0.26.0/reports/xprotocol_0.26.0.md)
 
 ### 新功能
 

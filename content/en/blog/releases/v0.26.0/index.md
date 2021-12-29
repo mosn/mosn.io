@@ -15,7 +15,7 @@ We are happy to announce the release of [MOSN v0.26.0](https://github.com/mosn/m
 For implementing new protocols more nature, XProtocol is no longer as a protocol and no subprotocol any more.
 XProtocol is a framework to implement protocol easier now.
 So, the old existing code for implementing new protocols need some changes,
-please see [this doc](reports/xprotocol_0.26.0.md)(In Chinese) for changing the old existing code suit for the new release.
+please see [this doc](https://github.com/mosn/mosn/blob/v0.26.0/reports/xprotocol_0.26.0.md)(In Chinese) for changing the old existing code suit for the new release.
 
 ### New Features
 
