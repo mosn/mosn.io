@@ -5,7 +5,7 @@ date: 2022-03-15
 aliases: "/zh/docs/dev/contribute"
 weight: 1
 description: >
-本页介绍如何为 MOSN 贡献代码。
+   本页介绍如何为 MOSN 贡献代码。
 ---
 
 ## MOSN 贡献指引
