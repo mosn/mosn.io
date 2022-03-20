@@ -19,7 +19,7 @@ aliases: "/zh/blog/posts/mosn-holmes-design"
 
 ## Quick Start
 
-使用`holmes`使用方式十分简单，只需要在您的系统初始化逻辑内添加以下代码：
+使用`holmes`的方式十分简单，只需要在您的系统初始化逻辑内添加以下代码：
 ```go
     // 配置规则
     h, _ := holmes.New(
