@@ -1,6 +1,6 @@
 ---
-title: "holmes 原理浅析"
-linkTitle: "mosn/holmes 原理浅析"
+title: "Holmes 原理浅析"
+linkTitle: "Holmes 原理浅析"
 date: 2022-03-19
 author: "[Jun10ng](https://github.com/Jun10ng)"
 description: "本文简单介绍了holmes的原理"
