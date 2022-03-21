@@ -73,7 +73,8 @@ MOSN社区的[Holmes](https://github.com/mosn/holmes)是一个基于golang实现
 ### 根据`CollectInterval`周期采集
 
 `holmes`每隔一段时间采集应用各项指标，并使用一个固定大小的[循环链表](https://github.com/mosn/holmes/blob/master/ring.go)来存储它们。
-[!ring](./ring.png)
+
+![ring](./ring.png)
 
 ### 根据`GC`周期采集
 
@@ -155,6 +156,7 @@ MOSN社区的[Holmes](https://github.com/mosn/holmes)是一个基于golang实现
 并对接告警系统(邮件/短信等)，搭建一套简单的监控系统。
 
 具体架构如下:
+
 ![system](./system.png)
 
 ## 总结
