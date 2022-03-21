@@ -165,7 +165,7 @@ MOSN社区的[Holmes](https://github.com/mosn/holmes)是一个基于golang实现
 
 
 ## 参考
-[Holmes](https://github.com/mosn/holmes)
-[无人值守的自动 dump(一)](https://xargin.com/autodumper-for-go/)
-[无人值守的自动 dump(一)](https://xargin.com/autodumper-for-go-ii/)
-[go 语言 pprof heap profile 实现机制](https://uncledou.site/2022/go-pprof-heap/)
+- [Holmes](https://github.com/mosn/holmes)
+- [无人值守的自动 dump(一)](https://xargin.com/autodumper-for-go/)
+- [无人值守的自动 dump(一)](https://xargin.com/autodumper-for-go-ii/)
+- [go 语言 pprof heap profile 实现机制](https://uncledou.site/2022/go-pprof-heap/)
