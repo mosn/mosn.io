@@ -309,8 +309,6 @@ description: >
 ```
 
 
-
-
 ### 匹配动作 - redirect
 除了转发到 cluster 之外，也支持 redirect 的匹配动作。
 下例将 `301` 跳转，`Location: http://test/b`
