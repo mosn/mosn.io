@@ -9,6 +9,7 @@ description: >
   本页介绍了 MOSN 的变量机制。
 ---
 
+
 # 一、前言
 MOSN 为开发者提供了灵活的变量机制，用户通过变量机制能够实现以下目的：
 
@@ -16,16 +17,18 @@ MOSN 为开发者提供了灵活的变量机制，用户通过变量机制能够
 - 在一次请求的生命周期内传递自定义数据 (跨 Filter 传递数据)
 - 影响 MOSN 路由框架的运行结果
 
+
 # 二、Quick Start
 假设我们现在正在开发一个 `simpleFilter`，该 Filter 处理 Http 请求，且需要实现以下功能：
 
 - 判断请求的 `Method`，只接受`Post`请求 
 - 修改 `Post`请求 URL 中的 `Query String`
 
-显然，通过请求的 `Header`、`Body` 和 `Trailer`是无法获取请求的 `IP`和`Method`信息，也无法修改请求的 URL，此时我们便可以通过变量机制实现以上功能：
+显然，通过请求的 `Header`、`Body` 和 `Trailer`是无法获取请求的`Method`信息，也无法修改请求的 URL，但我们可以通过变量机制实现以上功能：
+
 ```go
 func (f *simpleFilter) OnReceive(ctx context.Context, headers api.HeaderMap, buf buffer.IoBuffer, trailers api.HeaderMap) api.StreamFilterStatus {   
-    // 1. 通过变量机制获取 Method 信息
+    // 1. 通过变量机制获取请求 Method
     method, err := variable.GetString(ctx, types.VarMethod)
     if err != nil {
         return api.StreamFilterStop
@@ -45,13 +48,18 @@ func (f *simpleFilter) OnReceive(ctx context.Context, headers api.HeaderMap, buf
 
 从上述简单例子可见，MOSN 变量机制允许开发者灵活地获取请求上下文的相关信息，并按需修改请求的内容。当然，变量机制的功能远不止上述 Filter 展现的能力，下文将详细介绍变量机制的方方面面。
 
+
 # 三、现有变量
-上文的例子展示了如何通过变量机制获取请求的 `Method`信息。除此之外，MOSN 还提供了大量变量，用于提供请求的上下文信息。下文表格中，`变量名`一列方便开发者在编写代码的过程中获取变量内容；`字符串值`一列则方便在配置文件中获取变量值(例如配置 `access_log`时使用 `%bytes_received%` 获取变量内容)。
+上文的例子展示了如何通过变量机制获取请求的 `Method`信息。除此之外，MOSN 还提供了大量变量，用于提供请求的上下文信息。
+
+下面的表格中，`变量名`一列方便开发者在编写代码的过程中获取变量内容；`字符串值`一列则方便在配置文件中获取变量值 (例如配置 `access_log`时使用 `%bytes_received%` 获取变量内容)。
 
 需要注意的是：
 
 1. 大部分变量通常具有只读属性，若不清楚后续影响，请不要试图修改变量值
 1. MOSN 的变量机制支持任意类型 `interface{}`的变量，但目前提供的绝大多数变量都是 string 类型的，下文如无特殊备注，均为 string 类型。
+
+
 ###  3.1 通用变量
 | 变量名 | 字符串值 | 含义 | 备注 |
 | --- | --- | --- | --- |
@@ -109,9 +117,9 @@ func (f *simpleFilter) OnReceive(ctx context.Context, headers api.HeaderMap, buf
 | VarHttpRequestPathOriginal | "Http1_request_path_original" | 请求原始 Path |  |
 | VarHttpRequestArg | "Http1_request_arg" | 请求 Query |  |
 |  |  |  |  |
-| VarPrefixHttpHeader | "Http1_request_header_" | 获取请求 Header 值 | 前缀变量，需 + "headerName" 获取对应 header 的值 |
-| VarPrefixHttpArg | "Http1_request_arg_" | 获取请求 Query 值  | 前缀变量，需 + "QueryName" 获取对应 query 的值 |
-| VarPrefixHttpCookie | "Http1_cookie_" | 获取请求 Cookie 值 | 前缀变量，需 + "CookieName" 获取对应 cookie 的值 |
+| VarPrefixHttpHeader | "Http1_request\_header\_" | 获取请求 Header 值 | 前缀变量，需 + "headerName" 获取对应 header 的值 |
+| VarPrefixHttpArg | "Http1_request\_arg\_" | 获取请求 Query 值  | 前缀变量，需 + "QueryName" 获取对应 query 的值 |
+| VarPrefixHttpCookie | "Http1\_cookie\_" | 获取请求 Cookie 值 | 前缀变量，需 + "CookieName" 获取对应 cookie 的值 |
 
 
 ### 3.3 Http2 协议变量
@@ -127,9 +135,9 @@ func (f *simpleFilter) OnReceive(ctx context.Context, headers api.HeaderMap, buf
 | VarHttp2RequestUseStream | "Http2_request_use_stream" | 请求是否为流式 |  |
 | VarHttp2ResponseUseStream | "Http2_response_use_stream" | 响应是否为流式 |  |
 |  |  |  |  |
-| VarPrefixHttp2Header | "Http2_request_header_" | 获取请求 Header 值 | 前缀变量，需 + "headerName" 获取对应 header 的值 |
-| VarPrefixHttp2Arg | "Http2_request_arg_" | 获取请求 Query 值  | 未实现 |
-| VarPrefixHttp2Cookie | "Http2_cookie_" | 获取请求 Cookie 值 | 前缀变量，需 + "CookieName" 获取对应 cookie 的值 |
+| VarPrefixHttp2Header | "Http2_request\_header\_" | 获取请求 Header 值 | 前缀变量，需 + "headerName" 获取对应 header 的值 |
+| VarPrefixHttp2Arg | "Http2_request\_arg\_" | 获取请求 Query 值  | 未实现 |
+| VarPrefixHttp2Cookie | "Http2\_cookie\_" | 获取请求 Cookie 值 | 前缀变量，需 + "CookieName" 获取对应 cookie 的值 |
 
 
 ### 3.4 其它变量
@@ -157,6 +165,7 @@ MOSN 还包含一些特殊模块的变量，对于这些变量，基本原则是
 - 方案二：使用请求 ctx 携带自定义数据
 
 方案一的缺点在于会污染用户的原始请求，`Filter1`塞进 Header 的数据需要在后续 `Filter`中清理掉，否则就是被带到上游服务端。此外，受限于 Header 值的类型是 string，方案一无法携带非 string 类型的数据。
+
 方案二的缺点在于性能，ctx 的底层实现是单链表结构，每使用 `context.WithValue`添加一个数据时均会将单链表延长一节，且从 ctx 获取数据时，需要遍历单链表，时间复杂度为 `O(n)`
 
 MOSN 提供的变量机制即是解决上述问题的推荐方案。使用变量机制传递自定义数据具有以下优点：
@@ -169,6 +178,7 @@ MOSN 变量框架提供一下 API 来操作变量：
 本节所有 API 均位于 [mosn.io/mosn/pkg/variable](https://github.com/mosn/mosn/tree/master/pkg/variable) 包
 
 ### 4.1 注册
+
 ```go
 // 注册新变量
 // 需要在 init 函数中调用，否则可能不生效
@@ -183,6 +193,7 @@ func Check(name string) (Variable, error)
 ```
 
 ### 4.2 创建
+
 Variable 类型的变量通过以下 API 创建：
 ```go
 // 新建 string 类型变量
@@ -191,7 +202,9 @@ func NewStringVariable(name string, data interface{}, getter StringGetterFunc, s
 // 新建 interface{} 类型变量
 func NewVariable(name string, data interface{}, getter GetterFunc, setter SetterFunc, flags uint32) Variable
 ```
+
 对于绝大多数 (99.99%) 使用场景而言，并不需要去理解上述两个 API 的所有入参的含义，MOSN 变量框架提供了默认实现，直接 Ctrl-CV 即可：
+
 ```go
 // 方式一：
 // 创建并注册新变量：Hello_Variable_1
@@ -201,13 +214,16 @@ variable.NewVariable("Hello_Variable_1", nil, nil, variable.DefaultSetter, 0)
 // 创建并注册新变量：Hello_Variable_2
 variable.NewVariable("Hello_Variable_2", nil, valueGetter, nil, 0)
 ```
+
 上述两种方式的主要区别在于新创建的变量是否有初始值：
 
 - 方式一创建的变量没有初始值，需要先调用 `Set`方法设置内容后，`Get`方法才能获取到
 - 方式二创建的变量有初始值，初始值由自定义函数 `valueGetter`提供，无需先 `Set`便可获取到内容
 
 方式一通常更符合自定义变量的使用场景，即自定义变量需要先 `Set`后 `Get`
+
 方式二则是 MOSN 框架自身常用的用法，例如：对于 `"Http1_request_method"`这个变量而言，① 它是有初始值的，无需先`Set`；② 它的获取方式较为复杂，需要用底层 Http 请求的结构体中获取，因此在 MOSN 中，该变量的创建方式为：
+
 > variable.NewStringVariable(types._VarHttpRequestMethod_, nil, requestMethodGetter, nil, 0)
 
 其中 `requestMethodGetter`便是从 Http 请求的底层结构体获取 Method 值。
