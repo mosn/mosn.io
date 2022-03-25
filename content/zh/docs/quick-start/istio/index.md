@@ -69,7 +69,7 @@ func main() {
   address := "" // an address can be reached when proxyv2 image build. for example, 0.0.0.0:8080
   filespath := "" // where the .tar.gz files stored.
   http.ListenAndServe(address, http.FileServer(http.Dir(filespath)))
-
+}
 ```
 
 6、指定参数，开始编译 proxyv2 镜像
