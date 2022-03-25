@@ -52,6 +52,8 @@ description: >
 
 - `match`，路由的匹配参数。
 - `route`，路由行为，描述请求将被路由的 upstream 信息。
+- `redirect`，路由行为，直接转发。
+- `direct_response`， 路由行为，直接响应。
 - `per_filter_config`，是一个 `key: json` 格式的 json。
 - 其中 key 需要匹配一个 stream filter 的 type，key 对应的 json 是该 stream filter 的 config。
   - 当配置了该字段时，对于某些 stream filter（依赖具体 filter 的实现），可以使用该字段表示的配置覆盖原有 stream filter 的配置，以此做到路由匹配级别的 stream filter 配置。
@@ -81,7 +83,7 @@ description: >
 - DSL 匹配
   - dsl_expressions，表示一组请求需要匹配的 dsl，请求满足配置条件才算匹配成功。
 
-## header
+### header
 
 ```json
 {
@@ -95,7 +97,7 @@ description: >
 - `value`，表示 header 对应 key 的 value。
 - `regex`，bool 类型，如果为 true，表示 value 支持按照正则表达式的方式进行匹配。
 
-## variable
+### variable
 
 ```json
 {
@@ -131,12 +133,38 @@ description: >
   "response_headers_to_remove":[]
 }
 ```
-满足`match`之后的策略。
+满足`match`之后的路由策略。
 - `cluster_name`，表示请求将路由到的 upstream cluster。
 - `cluster_variable`，表示请求将路由到的变量指定的 upstream cluster，可动态设置变量路由到不同的后端。
 - `metadata_match`，[metadata](../../custom#metadata)，如果配置了该字段，表示该路由会基于该 metadata 去匹配 upstream cluster 的 subset 。
 - `timeout`，[Duration String](../../custom#duration-string)，表示默认情况下请求转发的超时时间。如果请求中明确指定了超时时间，那么这个配置会被忽略。
 - `retry_policy`，重试配置，表示如果请求在遇到了特定的错误时采取的重试策略，默认没有配置的情况下，表示没有重试。
+
+## redirect
+
+```json
+{
+	"response_code":"",
+	"path_redirect":"",
+	"host_redirect":"",
+	"scheme_redirect":""
+}
+```
+满足 match 条件之后，对请求进行跳转。
+- `response_code`，跳转的 HTTP code，默认为 `301`。
+- `path_redirect`，修改跳转的 `path`。
+- `host_redirect`，修改跳转的 `host`。
+- `scheme_redirect`，修改跳转的 `scheme`。
+
+## direct_response
+
+```json
+{
+  "status":"",
+  "body":""
+}
+```
+直接回复响应， `status`是状态码，`body`是内容。
 
 ## retry_policy
 
@@ -152,30 +180,6 @@ description: >
 - `retry_timeout`，[Duration String](../../custom#duration-string)，表示每次重试的超时时间。当 `retry_timeout` 大于 route 配置的 timeout 或者请求明确指定的 timeout 时，属于无效配置。
 - `num_retries`，表示最大的重试次数。
 
-## redirect
-
-```json
-{
-	"response_code":"",
-	"path_redirect":{},
-	"host_redirect":{},
-	"scheme_redirect":{}
-}
-```
-满足 match 条件之后，对请求进行跳转。
-- `response_code`，跳转的 HTTP code，默认为 `301`。
-- `path_redirect`，修改跳转的 `path`。
-- `host_redirect`，修改跳转的 `host`。
-- `scheme_redirect`，修改跳转的 `scheme`。
-
-## direct_response
-
-```json
-{
-  "status":{},
-  "body":{}
-}
-```
 
 
 ## 例子
