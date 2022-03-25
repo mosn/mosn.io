@@ -125,9 +125,10 @@ description: >
   "prefix_rewrite":"",
   "regex_rewrite":"",
   "host_rewrite":"",
-  "request_headers_to_add":"",
-  "request_headers_to_remove":"",
-  "response_headers_to_remove":""
+  "request_headers_to_add":[],
+  "request_headers_to_remove":[],
+  "response_headers_to_add":[],
+  "response_headers_to_remove":[]
 }
 ```
 满足`match`之后的策略。
