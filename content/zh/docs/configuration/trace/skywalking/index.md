@@ -77,3 +77,6 @@ TLS 客户端证书。
 ### server_name_override
 
 服务名称。
+
+### 配置示例
+更多细节可以参考[《MOSN 支持使用 SkyWalking 进行分布式追踪》](https://mosn.io/blog/posts/skywalking-support/) 。这篇文档提供了配置示例和演示视频。

@@ -127,8 +127,8 @@ defaultRotateTime = 24 * 60 * 60
 | :-------------------------- | :------------------------------------------------ |
 | "", "stderr", "/dev/stderr" | os.Stderr                                         |
 | "stdout", "/dev/stdout"     | os.Stdout                                         |
-| "syslog"                    | [gsyslog](github.com/hashicorp/go-syslog)本地对象 |
-| 其他                        | [gsyslog](github.com/hashicorp/go-syslog)远程对象 |
+| "syslog"                    | [gsyslog](https://github.com/hashicorp/go-syslog)本地对象 |
+| 其他                        | [gsyslog](https://github.com/hashicorp/go-syslog)远程对象 |
 
 创建好 log 对象之后，通过 `loggers` 保存起来，避免创建多个对象，`loggers` 是一个 [sync.Map](https://blog.csdn.net/ChamPly/article/details/77622328)对象，是 `golang1.9` 之后加入的一个新的线程安全的 `map`。
 
@@ -186,7 +186,7 @@ buf.WriteTo(l)
 buffer.PutIoBuffer(buf)
 ```
 
-当收到第一次写数据的时候不是立刻写入数据到 `log` 对象，而是在等待 20 次读取信息，一起写入到对 `log` 象中，在大量写日志的时候不会导致调用太频繁。如频繁写入文件、频繁调用写日志接口，相反，这会增加内存分配，最好的其实是使用 `writev`，但是 `go runtime` 的 `io` 库没有这个实现。可以采用 [plugin 机制](https://mosn.ioblog/code/mosn-plugin/) 来接管日志的打印，减少 `io` 卡顿对 `go runtime` 的调度影响
+当收到第一次写数据的时候不是立刻写入数据到 `log` 对象，而是在等待 20 次读取信息，一起写入到对 `log` 象中，在大量写日志的时候不会导致调用太频繁。如频繁写入文件、频繁调用写日志接口，相反，这会增加内存分配，最好的其实是使用 `writev`，但是 `go runtime` 的 `io` 库没有这个实现。可以采用 [plugin 机制](https://mosn.io/blog/code/mosn-plugin/) 来接管日志的打印，减少 `io` 卡顿对 `go runtime` 的调度影响
 
 \*_当一次循环处理完之后，会调用 `runtime.Gosched()` 主动让出当前协程的 `cpu` 资源_
 

@@ -132,6 +132,11 @@ The MOSN users.
           <img width="222px"  src="/images/community/tuya.png">
         </a>
       </td>
+      <td align="center" valign="middle">
+        <a href="https://www.meicai.cn/" trget="_blank">
+	  <img width="222px"  src="/images/community/meicai.png">
+	</a>
+      </td>
     </tr>
   </tbody>
 </table>
@@ -176,9 +181,14 @@ The MOSN community actively embraces the open source ecosystem and has establish
           <img width="222px"  src="/images/community/sofastack.png">
         </a>
       </td>
-      </tr>
-    </tbody>
-  </table>
+      <td align="center" valign="middle">
+        <a href="http://seata.io/en-us/" target="_blank">
+	  <img width="222px"  src="/images/community/seata.png">
+	</a>
+      </td>
+    </tr>
+  </tbody>
+</table>
 </div>
 
 ## Committers
@@ -197,6 +207,7 @@ The MOSN Community Certified Committer is as follows.
 | Qian Deng   | [dengqian](https://github.com/dengqian)         | Alibaba Cloud |
 | Runhao Huang| [glyasai](https://github.com/glyasai)           | goodrain      |
 | Zechao Zheng| [CodingSinger](https://github.com/CodingSinger) | ByteDance     |
+| Jianhao Fu  | [AlphaBaby](https://github.com/alpha-baby)      | JD.com        |
 
 Committer is an individual with MOSN repository write access to the following criteria.
 
@@ -204,13 +215,8 @@ Committer is an individual with MOSN repository write access to the following cr
 - Participate in the maintenance of issue lists and discussion of important features.
 - Active participation in code reviews and community meetings.
 
-## Roadmap
-
-MOSN with Istio roadmap.
-
-![MOSN with Istio roadmap](mosn-with-istio-roadmap.png)
-
-More information about MOSN roadmap, see the [Google Sheet](https://docs.google.com/spreadsheets/d/1fALompY9nKZNImOuxQw23xtMD-5rCBrXWziJZkj76bo/edit#gid=0).
+## Meetup
+https://github.com/mosn/meetup
 
 ## Tutorials
 
@@ -218,4 +224,5 @@ See MOSN [tutorials](/en/docs/tutorial/).
 
 ## Communication
 
-Communicate with MOSN developers on [Slack](https://join.slack.com/t/istio/shared_invite/zt-dhww29on-SvP1~DBvtrk3UdjjbO0SGQ) workspace.
+Communicate with MOSN developers on DingTalk, scan the the QR code below
+<img alt="MOSN Users Communication Group" src="https://github.com/mosn/mosn.io/blob/master/assets/img/dingtalk.jpg?raw=true"  width="128px" />
