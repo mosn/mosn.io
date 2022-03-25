@@ -3,6 +3,7 @@ title: "MOSN 变量机制"
 linkTitle: "MOSN 变量机制"
 date: 2022-03-25
 weight: 2
+author: "[叶永杰](https://github.com/antJack)"
 aliases: "/zh/docs/dev/variable"
 description: >
   本页介绍了 MOSN 的变量机制。
