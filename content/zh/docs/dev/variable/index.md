@@ -11,6 +11,7 @@ description: >
 
 
 # 一、前言
+
 MOSN 为开发者提供了灵活的变量机制，用户通过变量机制能够实现以下目的：
 
 - 获取请求上下文的相关信息
@@ -19,6 +20,7 @@ MOSN 为开发者提供了灵活的变量机制，用户通过变量机制能够
 
 
 # 二、Quick Start
+
 假设我们现在正在开发一个 `simpleFilter`，该 Filter 处理 Http 请求，且需要实现以下功能：
 
 - 判断请求的 `Method`，只接受`Post`请求 
@@ -50,6 +52,7 @@ func (f *simpleFilter) OnReceive(ctx context.Context, headers api.HeaderMap, buf
 
 
 # 三、现有变量
+
 上文的例子展示了如何通过变量机制获取请求的 `Method`信息。除此之外，MOSN 还提供了大量变量，用于提供请求的上下文信息。
 
 下面的表格中，`变量名`一列方便开发者在编写代码的过程中获取变量内容；`字符串值`一列则方便在配置文件中获取变量值 (例如配置 `access_log`时使用 `%bytes_received%` 获取变量内容)。
@@ -61,12 +64,11 @@ func (f *simpleFilter) OnReceive(ctx context.Context, headers api.HeaderMap, buf
 
 
 ###  3.1 通用变量
+
 | 变量名 | 字符串值 | 含义 | 备注 |
 | --- | --- | --- | --- |
-| VarStartTime | "start_time" | 请求开始时间 | 格式："2006/01/02 15:04:05.000"。
-指七层 stream 开始创建的时间。 |
-| VarRequestReceivedDuration | "request_received_duration" | 接收 downstream 请求的耗时，从请求开始，到开始向 upstream 转发请求为止的耗时 | 
- |
+| VarStartTime | "start_time" | 请求开始时间，七层 stream 开始创建的时间 | 格式："2006/01/02 15:04:05.000"。|  |
+| VarRequestReceivedDuration | "request_received_duration" | 接收 downstream 请求的耗时，从请求开始，到开始向 upstream 转发请求为止的耗时 |  |
 | VarResponseReceivedDuration | "response_received_duration" | 接收 upstream 响应的耗时，从请求开始，到收到 upstream 响应为止的耗时 |  |
 | VarRequestFinishedDuration | "request_finished_duration" | 请求耗时，从请求开始，到请求结束为止的耗时 |  |
 | VarBytesSent | "bytes_sent" | 发出的字节数 |  |
@@ -107,6 +109,7 @@ func (f *simpleFilter) OnReceive(ctx context.Context, headers api.HeaderMap, buf
 
 
 ### 3.2 Http1 协议变量
+
 | 变量名 | 字符串值 | 含义 | 备注 |
 | --- | --- | --- | --- |
 | VarHttpRequestScheme | "Http1_request_scheme" | 请求 Scheme |  |
@@ -123,6 +126,7 @@ func (f *simpleFilter) OnReceive(ctx context.Context, headers api.HeaderMap, buf
 
 
 ### 3.3 Http2 协议变量
+
 | 变量名 | 字符串值 | 含义 | 备注 |
 | --- | --- | --- | --- |
 | VarHttp2RequestScheme | "Http2_request_scheme" | 请求 Scheme |  |
@@ -141,6 +145,7 @@ func (f *simpleFilter) OnReceive(ctx context.Context, headers api.HeaderMap, buf
 
 
 ### 3.4 其它变量
+
 MOSN 还包含一些特殊模块的变量，对于这些变量，基本原则是：如果你不知道要用这些变量，那就不要用
 
 | 变量名 | 字符串值 | 含义 | 备注 |
@@ -174,10 +179,10 @@ MOSN 提供的变量机制即是解决上述问题的推荐方案。使用变量
 - 性能优异：读写自定义变量的时间复杂度均为 `O(1)`
 - 无侵入性：不侵入用户原始请求、不侵入其它 Filter
 
-MOSN 变量框架提供一下 API 来操作变量：
+MOSN 变量框架提供以下 API 来操作变量：
 本节所有 API 均位于 [mosn.io/mosn/pkg/variable](https://github.com/mosn/mosn/tree/master/pkg/variable) 包
 
-### 4.1 注册
+### 4.1 注册变量
 
 ```go
 // 注册新变量
@@ -192,9 +197,10 @@ func RegisterPrefix(prefix string, variable Variable) error
 func Check(name string) (Variable, error)
 ```
 
-### 4.2 创建
+### 4.2 创建变量
 
 Variable 类型的变量通过以下 API 创建：
+
 ```go
 // 新建 string 类型变量
 func NewStringVariable(name string, data interface{}, getter StringGetterFunc, setter StringSetterFunc, flags uint32) Variable
@@ -228,8 +234,10 @@ variable.NewVariable("Hello_Variable_2", nil, valueGetter, nil, 0)
 
 其中 `requestMethodGetter`便是从 Http 请求的底层结构体获取 Method 值。
 
-### 4.3 使用
+### 4.3 使用变量
+
 一旦注册好变量，便可通过以下 API 来读写变量：
+
 ```go
 // 获取 string 类型变量值
 func GetString(ctx context.Context, name string) (string, error)
@@ -245,8 +253,11 @@ func Set(ctx context.Context, name string, value interface{}) error
 ```
 
 # 五、通过变量机制与 MOSN 路由框架进行交互
+
 变量机制除了上文所展现的 “数据搬运工” 的身份外，还具备影响 MOSN 核心路由框架的能力。MOSN 核心路由框架本身会在路由过程中读取某些变量来进行路由决策，因此，开发者可以直接通过变量机制来影响 MOSN 路由的结果。MOSN 变量机制支持以下能力：
+
 ### 5.1 通过变量修改路由元信息
+
 | 变量名 | 含义 | 详细解释 |
 | --- | --- | --- |
 | VarProxyTryTimeout | 每次 upstream 请求的超时时间 | 用于设置每个 upstream 请求的超时时间 (单个正常和重试请求的超时)  |
@@ -254,8 +265,8 @@ func Set(ctx context.Context, name string, value interface{}) error
 | VarProxyDisableRetry | 是否不允许请求重试 | upstream 请求失败时，是否允许重试 |
 | VarRouterMeta | 路由 meta | 该变量设置的 metadata 后续会被用于 MOSN 路由时选择与之匹配的 Host。典型应用场景是 [header_to_metadata](https://github.com/mosn/mosn/tree/master/pkg/filter/stream/headertometadata) 这个 Filter，它将请求 Header 中的数据作为 metadata 塞入变量中，用于后续的 MOSN 路由，使用者便可直接通过 Header 值来控制路由结果。 |
 
-
 ### 5.2 通过变量指定路由集群
+
 用户可以在 mosn.json 配置中指定用于匹配路由集群的变量名，例如：
 ```
 {
@@ -272,12 +283,16 @@ func Set(ctx context.Context, name string, value interface{}) error
 	}]
 }
 ```
+
 在上述配置下，MOSN 在路由时会获取变量 `VAR_NAME`的值，并将请求路由到该变量值对应的 Cluster 上：用户可以在路由前 (`BeforeRoute`) 的 Filter 中，通过以下代码让请求被路由到 `dst_cluster`这个集群上：
+
 > variable.SetString(ctx, VAR_NAME, "dst_cluster")
 
 
 ### 5.3 通过变量影响路由匹配结果
+
 用于可以在 mosn.json 配置中指定用于匹配路由的变量名，例如：
+
 ```json
 {
 	"routers": [{
@@ -298,8 +313,9 @@ func Set(ctx context.Context, name string, value interface{}) error
 	}]
 }
 ```
+
 在上述配置下，MOSN 在路由时，会将具有变量 `VAR_NAME`且变量值为 `VAR_VALUE`的请求转发到 `dst_cluster`这个集群上
 
 # 六、总结
-综上，变量机制是 MOSN 提供高可扩展性的重要一环，本文对 MOSN 中的变量机制进行了详细介绍，由浅及深，从介绍现有变量开始，到增加自定义变量，再到使用变量与 MOSN 核心路由框架进行交互，供用户一窥变量机制的全貌。
 
+综上，变量机制是 MOSN 提供高可扩展性的重要一环，本文对 MOSN 中的变量机制进行了详细介绍，由浅及深，从介绍现有变量开始，到增加自定义变量，再到使用变量与 MOSN 核心路由框架进行交互，供用户一窥变量机制的全貌。
