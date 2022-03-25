@@ -2,7 +2,7 @@
 title: "Quick start"
 linkTitle: "Quick start"
 weight: 1
-date: 2020-01-20
+date: 2022-03-25
 description: >
   This topic shows you how to quickly set up the development environment for building, testing, packaging, and running the sample code.
 ---
@@ -15,7 +15,6 @@ This topic is intended to help developers who are new to MOSN projects quickly s
 + If you want to run MOSN with docker, [install docker](https://docs.docker.com/install/) first.
 + If you are using a local machine, set up a Unix-like environment.
 + Install the compilation environment of Go.
-+ Install dep. For details, see the [official installation document of deb](https://golang.github.io/dep/docs/installation.html).
 
 ## Obtain the code
 
@@ -49,6 +48,23 @@ Import `$GOPATH/src/mosn.io/mosn` into your preferred Go IDE (Goland is recommen
 
 In the project's root directory, compile the binary file of MOSN by running the following commands, depending on your machine type and the environment in which you want to execute the binary file.
 
+### Istio version switch
+
+MOSN support xDS v2 and xDS v3, which are represented by Istio 1.5.2 and Istio 1.10.6 respectively. It can be switched between different versions according to needs.
+The default version is 1.10.6.
+
+Switch to Istio 1.5.2 (xDS v2)
+
+```bash
+make istio-1.5.2
+```
+
+Switch to Istio 1.10.6 (xDS v3)
+
+```bash
+make istio-1.10.6
+```
+
 ### Compilation with a docker image
 
 ```bash
@@ -63,37 +79,7 @@ Run the following command to compile a local executable binary file.
 make build-local
 ```
 
-Cross-compile a Linux 64-bit executable binary file on a non-Linux machine.
-
-```bash
-make build-linux64
-```
-
-Cross-compile a Linux 32-bit executable binary file on a non-Linux machine.
-
-```bash
-make build-linux32
-```
-
 Find the compiled binary file in `build/bundles/${version}/binary`.
-
-## Create an RPM package
-
-Run the following command in the project's root directory to create an RPM package.
-
-```bash
-make rpm
-```
-
-Find the package in `build/bundles/${version}/rpm`.
-
-## Create a docker image
-
-Run the following command to create a docker image.
-
-```bash
-make image
-```
 
 ## Run tests
 
@@ -107,6 +93,7 @@ Run the following command in the project's root directory to start the integrati
 
 ```bash
 make integrate
+make integrate-new
 ```
 
 ## Start MOSN from the configuration file
