@@ -265,7 +265,7 @@ description: >
 ]
 ```
 
-### 匹配动作 - 修改path
+### 匹配行为 - 修改path
 下例把请求的 `path` 修改为 `/abc`
 ```
 "routers": [
@@ -281,7 +281,7 @@ description: >
 ]
 ```
 
-### 匹配动作 - 添加删除 header
+### 匹配行为 - 添加删除 header
 下例在转发给后端之前，新增`test:ok` ，删除`hello`.
 ```
 "routers": [
@@ -307,8 +307,8 @@ description: >
 ```
 
 
-### 匹配动作 - redirect
-除了转发到 cluster 之外，也支持 redirect 的匹配动作。
+### 匹配行为 - redirect
+除了转发到 cluster 之外，也支持 redirect 的匹配动作。  
 下例将 `301` 跳转，`Location: http://test/b`
 ```
 "routers": [
@@ -326,7 +326,7 @@ description: >
 ]
 ```
 
-### 匹配动作 - 直接响应
+### 匹配行为 - 直接响应
 满足匹配条件直接响应请求。
 ```
 "routers": [
@@ -343,4 +343,5 @@ description: >
 ```
 
 ## 高级技巧
-https://mosn.io/blog/posts/how-use-dynamic-metadata/
+[MOSN 路由框架详解](https://mosn.io/blog/posts/how-use-dynamic-metadata/)
+
