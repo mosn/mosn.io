@@ -9,7 +9,6 @@ description: >
 
 This topic is intended to help developers who are new to MOSN projects quickly set up a development environment for building, testing, packaging, and running the sample code.
 
-**Note**: MOSN is developed based on Go 1.12.7 and relies on dep for dependency management.
 
 ## Prepare the running environment
 
