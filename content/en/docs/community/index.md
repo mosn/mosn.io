@@ -224,4 +224,5 @@ See MOSN [tutorials](/en/docs/tutorial/).
 
 ## Communication
 
-Communicate with MOSN developers on [Slack](https://join.slack.com/t/istio/shared_invite/zt-dhww29on-SvP1~DBvtrk3UdjjbO0SGQ) workspace.
+Communicate with MOSN developers on DingTalk, scan the the QR code below
+<img alt="MOSN Users Communication Group" src="https://github.com/mosn/mosn.io/blob/master/assets/img/dingtalk.jpg?raw=true"  width="128px" />
