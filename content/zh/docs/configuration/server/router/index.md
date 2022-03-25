@@ -1,7 +1,7 @@
 ---
 title: "Router 配置"
 linkTitle: "Router 配置"
-date: 2020-03-13
+date: 2022-03-25
 weight: 2
 aliases: "/zh/docs/server/router"
 description: >
@@ -125,7 +125,7 @@ description: >
   "timeout":"",
   "retry_policy":{},
   "prefix_rewrite":"",
-  "regex_rewrite":"",
+  "regex_rewrite":{},
   "host_rewrite":"",
   "request_headers_to_add":[],
   "request_headers_to_remove":[],
@@ -139,6 +139,9 @@ description: >
 - `metadata_match`，[metadata](../../custom#metadata)，如果配置了该字段，表示该路由会基于该 metadata 去匹配 upstream cluster 的 subset 。
 - `timeout`，[Duration String](../../custom#duration-string)，表示默认情况下请求转发的超时时间。如果请求中明确指定了超时时间，那么这个配置会被忽略。
 - `retry_policy`，重试配置，表示如果请求在遇到了特定的错误时采取的重试策略，默认没有配置的情况下，表示没有重试。
+- `prefix_rewrite` `regex_rewrite` `host_rewrite`，修改请求的 `path` 和 `host`。
+- `request_headers_to_add` `request_headers_to_remove`，表示增加或者删除请求的 header。
+- `response_headers_to_add` `response_headers_to_remove`，表示增加或者删除响应的 header。
 
 ## redirect
 
