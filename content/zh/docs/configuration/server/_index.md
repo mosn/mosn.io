@@ -16,15 +16,22 @@ description:
 
 ```josn
 {
+  "mosn_server_name":"",
   "default_log_path":"",
   "default_log_level":"",
   "global_log_roller":"",
+  "use_netpoll_mode":"",
   "graceful_timeout":"",
+  "optimize_local_write":"",
   "processor":"",
   "listeners":[],
   "routers":[]
 }
 ```
+
+## mosn_server_name
+
+字符串类型，用于设置当前 server 的标识。
 
 ## default_log_path
 
@@ -59,10 +66,18 @@ description:
 "global_log_roller":"time=1"
 ```
 
+## use_netpoll_mode
+
+- bool 类型，设置为 true 则表示开启 MOSN 的网络处理采用 netpoll 模型，默认值为 false。
+
 ## graceful_timeout
 
 - [Duration String ](../custom#duration-string)的字符串配置，表示 MOSN 在进行平滑升级时，等待连接关闭的最大时间。
 - 如果没有配置，默认为 30s。
+
+## optimize_local_write
+
+- bool 类型，设置为 true 则表示当连接的目标地址是 Localhost 时，将使用 goroutine 进行异步写入，这样可以获得更好的性能，但降低了写入时间的准确性，默认值为 false。
 
 ### processor
 
