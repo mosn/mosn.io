@@ -44,6 +44,8 @@ description: >
 {
   "match":{},
   "route":{},
+  "redirect":{},
+  "direct_response":{},
   "per_filter_config":{}
 }
 ```
@@ -61,7 +63,9 @@ description: >
   "prefix":"",
   "path":"",
   "regex":"",
-  "headers": []
+  "headers": [],
+  "variables": [],
+  "dsl_expressions": []
 }
 ```
 
@@ -70,8 +74,12 @@ description: >
   - `path`，表示路由会匹配精确的 path，该配置的优先级高于 regex。如果 path被配置，那么请求首先要满足 path 与 path 配置相符合。
   - `regex`，表示路由会按照正则匹配的方式匹配 path。如果 regex 被配置，那么请求首先要满足 path 与 regex 配置相符合。
   - 路径匹配配置同时存在时，只有高优先级的配置会生效。
-- Heaer 匹配
+- Header 匹配
   - headers，表示一组请求需要匹配的 header。请求需要满足配置中所有的 Header 配置条件才算匹配成功。
+- Variable 匹配
+  - variables，表示一组请求需要匹配的 variable，请求需要满足配置中所有的 variable 配置条件才算匹配成功。
+- DSL 匹配
+  - dsl_expressions，表示一组请求需要匹配的 dsl，请求满足配置条件才算匹配成功。
 
 ## header
 
@@ -87,18 +95,44 @@ description: >
 - `value`，表示 header 对应 key 的 value。
 - `regex`，bool 类型，如果为 true，表示 value 支持按照正则表达式的方式进行匹配。
 
+## variable
+
+```json
+{
+  "name":"",
+  "value":"",
+  "regex":"",
+  "model":""
+}
+```
+
+- `name`，表示 variable 的 key。
+- `value`，表示 variable 对应 key 的 value。
+- `regex`，表示按照正则表达式的方式进行匹配。
+- `model`，可配置 "and" 和 “or”。
+
+
+
 ## route
 
 ```
 {
   "cluster_name":"",
+  "cluster_variable":"",
   "metadata_match":"",
   "timeout":"",
-  "retry_policy":{}
+  "retry_policy":{},
+  "prefix_rewrite":"",
+  "regex_rewrite":"",
+  "host_rewrite":"",
+  "request_headers_to_add":"",
+  "request_headers_to_remove":"",
+  "response_headers_to_remove":""
 }
 ```
-
+满足`match`之后的策略。
 - `cluster_name`，表示请求将路由到的 upstream cluster。
+- `cluster_variable`，表示请求将路由到的变量指定的 upstream cluster，可动态设置变量路由到不同的后端。
 - `metadata_match`，[metadata](../../custom#metadata)，如果配置了该字段，表示该路由会基于该 metadata 去匹配 upstream cluster 的 subset 。
 - `timeout`，[Duration String](../../custom#duration-string)，表示默认情况下请求转发的超时时间。如果请求中明确指定了超时时间，那么这个配置会被忽略。
 - `retry_policy`，重试配置，表示如果请求在遇到了特定的错误时采取的重试策略，默认没有配置的情况下，表示没有重试。
@@ -116,3 +150,31 @@ description: >
 - `retry_on`，bool 类型，表示是否开启重试。
 - `retry_timeout`，[Duration String](../../custom#duration-string)，表示每次重试的超时时间。当 `retry_timeout` 大于 route 配置的 timeout 或者请求明确指定的 timeout 时，属于无效配置。
 - `num_retries`，表示最大的重试次数。
+
+## redirect
+
+```json
+{
+	"response_code":"",
+	"path_redirect":{},
+	"host_redirect":{},
+	"scheme_redirect":{}
+}
+```
+满足 match 条件之后，对请求进行跳转。
+- `response_code`，跳转的 HTTP code，默认为 `301`。
+- `path_redirect`，修改跳转的 `path`。
+- `host_redirect`，修改跳转的 `host`。
+- `scheme_redirect`，修改跳转的 `scheme`。
+
+## direct_response
+
+```json
+{
+  "status":{},
+  "body":{}
+}
+```
+
+
+## 例子
