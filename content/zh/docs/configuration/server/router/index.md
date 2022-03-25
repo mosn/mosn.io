@@ -197,8 +197,22 @@ description: >
     }
 ]
 ```
+### 匹配规则 - 路径
+请求 `/index.html` 转发到名字为 `backend` 的 cluster 集群。
+```
+"routers": [
+    {
+        "match":{
+            "path":"/index.html"
+        },
+        "route": {
+           "cluster_name": "backend"
+        }
+    }
+]
+```
 
-### 正则匹配规则
+### 匹配规则 - 正则
 数字开头的请求转发到名字为 `backend` 的 cluster 集群。
 ```
 "routers": [
@@ -213,7 +227,7 @@ description: >
 ]
 ```
 
-### header匹配规则
+### 匹配规则 - header
 包含 `a:b` header的请求转发到名字为 `backend` 的 cluster 集群。
 ```
 "routers": [
@@ -232,7 +246,7 @@ description: >
 ]
 ```
 
-### 变量匹配规则
+### 匹配规则 - 变量
 可以通过 filter 设置新的变量，以及 MOSN 内置的变量，进行路由转发规则。
 如下例子就是变量 `x-mosn-path`（ MOSN 内置变量，表示请求的 `path`） 等于 `/b` 满足匹配。
 ```
@@ -251,9 +265,37 @@ description: >
 ]
 ```
 
-### redirect 匹配动作
-除了转发到 cluster 之外，也支持 redirect 的转发动作。
+### 匹配动作 - redirect
+除了转发到 cluster 之外，也支持 redirect 的匹配动作。
+下例将 `301` 跳转，`Location: http://test/b`
+```
+"routers": [
+    {
+        "match":{
+           "prefix": "/"
+        },
+       "redirect":{
+           "response_code":301,
+           "path_redirect":"/b",
+           "host_redirect":"test",
+           "scheme_redirect":"http"
+        }
+    }
+]
 ```
 
-
+### 匹配动作 - 直接响应
+满足匹配条件直接响应请求。
+```
+"routers": [
+    {
+        "match":{
+           "prefix": "/"
+        },
+       "direct_response":{
+           "status":404,
+           "body":"no found"
+        }
+    }
+]
 ```
