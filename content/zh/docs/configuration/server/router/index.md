@@ -265,8 +265,6 @@ description: >
 ]
 ```
 
-### 匹配动作 - 
-
 ### 匹配动作 - 修改path
 下例把请求的 `path` 修改为 `/abc`
 ```
@@ -343,3 +341,6 @@ description: >
     }
 ]
 ```
+
+## 高级技巧
+https://mosn.io/blog/posts/how-use-dynamic-metadata/
