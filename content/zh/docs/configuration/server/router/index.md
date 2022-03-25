@@ -183,3 +183,77 @@ description: >
 
 
 ## 例子
+### 默认匹配规则
+所有请求转发到名字为 `backend` 的 cluster 集群。
+```
+"routers": [
+    {
+        "match":{
+            "prefix":"/"
+        },
+        "route": {
+           "cluster_name": "backend"
+        }
+    }
+]
+```
+
+### 正则匹配规则
+数字开头的请求转发到名字为 `backend` 的 cluster 集群。
+```
+"routers": [
+    {
+        "match":{
+            "regex":"^/\\d+"
+        },
+        "route": {
+           "cluster_name": "backend"
+        }
+    }
+]
+```
+
+### header匹配规则
+包含 `a:b` header的请求转发到名字为 `backend` 的 cluster 集群。
+```
+"routers": [
+    {
+        "match":{
+            "headers": [{
+               "name":"a",
+               "value":"b",
+	       "regex":false
+            }]
+        },
+        "route": {
+           "cluster_name": "backend"
+        }
+    }
+]
+```
+
+### 变量匹配规则
+可以通过 filter 设置新的变量，以及 MOSN 内置的变量，进行路由转发规则。
+如下例子就是变量 `x-mosn-path`（ MOSN 内置变量，表示请求的 `path`） 等于 `/b` 满足匹配。
+```
+"routers": [
+    {
+        "match":{
+            "variables": [{
+               "name":"x-mosn-path",
+               "value":"/b"
+            }]
+        },
+        "route": {
+           "cluster_name": "backend"
+        }
+    }
+]
+```
+
+### redirect 匹配动作
+除了转发到 cluster 之外，也支持 redirect 的转发动作。
+```
+
+
+```
