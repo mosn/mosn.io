@@ -265,6 +265,52 @@ description: >
 ]
 ```
 
+### 匹配动作 - 
+
+### 匹配动作 - 修改path
+下例把请求的 `path` 修改为 `/abc`
+```
+"routers": [
+    {
+        "match":{
+           "prefix": "/"
+        },
+       "route":{
+           "cluster_name": "backend",
+           "prefix_rewrite": "/abc"
+        }
+    }
+]
+```
+
+### 匹配动作 - 添加删除 header
+下例在转发给后端之前，新增`test:ok` ，删除`hello`.
+```
+"routers": [
+    {
+        "match":{
+           "prefix": "/"
+        },
+       "route":{
+           "cluster_name": "backend",
+           "request_headers_to_add": [
+               {
+                   "header": {
+                       "key": "test",
+                       "value": "ok"
+                   }
+               }
+           ],
+           "request_headers_to_remove":["hello"]
+        }
+    }
+]
+
+```
+
+
+
+
 ### 匹配动作 - redirect
 除了转发到 cluster 之外，也支持 redirect 的匹配动作。
 下例将 `301` 跳转，`Location: http://test/b`
