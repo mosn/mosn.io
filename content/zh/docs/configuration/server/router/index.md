@@ -250,8 +250,8 @@ description: >
 ```
 
 ### 匹配规则 - 变量
-可以通过 filter 设置新的变量，以及 MOSN 内置的变量，进行路由转发规则。
-如下例子就是变量 `x-mosn-path`（ MOSN 内置变量，表示请求的 `path`） 等于 `/b` 满足匹配。
+可以通过 filter 设置新的变量，以及 MOSN 内置的变量，进行路由转发规则。  
+如下例子变量 `x-mosn-path`（ MOSN 内置变量，表示请求的 `path`） 等于 `/b` 满足匹配。
 ```
 "routers": [
     {
