@@ -8,7 +8,7 @@ description: >
 ---
 
 {{% pageinfo color="primary" %}}
-MOSN v1.0.0 succeeded in the BookInfo test for Istio 1.10.6. For more information about the support from the latest version of Istio, see [MOSN Istio WG](https://github.com/mosn/community/blob/master/wg-istio.md).
+MOSN v1.0.0 succeeded in the Bookinfo test for Istio 1.10.6. For more information about the support from the latest version of Istio, see [MOSN Istio WG](https://github.com/mosn/community/blob/master/wg-istio.md).
 {{% /pageinfo %}}
 
 This topic covers the following content:
@@ -30,7 +30,7 @@ The following figure shows the operating principle of MOSN in Istio.
 
 The operating system described in this topic is MacOS, and the Istio version is 1.10.6. If you are using anither OS, there may be some differences.
 If only the MOSN code changes, you can also use the MOSN-only update method to build the proxyv2 image.
-Usually, you do not need to build a proxyv2 image, use the image provided by us is ok. `docker pull mosnio/proxyv2:v1.0.0`.
+Usually, you do not need to build a proxyv2 image, use the image provided by us is ok. `mosnio/proxyv2:${MOSN VERSION}-${ISTIO VERSION}`, for example, `docker pull mosnio/proxyv2:v1.0.0`.
 
 Build proxyv2 image with source code. (On MacOS and Istio 1.10.6)
 ==========
@@ -163,13 +163,13 @@ istiod-65c9767c55-vjppv                 1/1     Running   0          109s
 
 If all pods in the `istio-system` namespace are running, the deployment succeeds.
 
-## BookInfo test
+## Bookinfo test
 
-MOSN v1.0.0 succeeded in the BookInfo test for Istio 1.10.6. You can alsoe use [MOSN with Istio](https://katacoda.com/mosn/courses/istio/mosn-with-istio) to run the BookInfo test.
+MOSN v1.0.0 succeeded in the Bookinfo test for Istio 1.10.6. You can alsoe use [MOSN with Istio](https://katacoda.com/mosn/courses/istio/mosn-with-istio) to run the Bookinfo test.
 More test cases see Istio [Example]((https://istio.io/latest/docs/examples).
 If you have any questions, please contact us  [issue](https://github.com/mosn/mosn/issues), code contributions are welcome too.
 
-### BookInfo introduction
+### Bookinfo introduction
 
 The application displays information about a book, similar to a single catalog entry of an online book store. Displayed on the page is a description of the book, book details (ISBN, number of pages, and so on), and a few book reviews.
 The Bookinfo application is broken into four separate microservices:
@@ -192,7 +192,7 @@ istioctl kube-inject -f samples/bookinfo/platform/kube/bookinfo.yaml > bookinfo.
 sed -i '' "s/\/usr\/local\/bin\/envoy/\/usr\/local\/bin\/mosn/g" ./bookinfo.yaml
 ```
 
-Deploy BookInfo app:
+Deploy Bookinfo app:
 
 ```bash
 $ kubectl apply -f bookinfo.yaml
@@ -222,7 +222,7 @@ reviews-v2-54d95c5444-5jtxp       2/2     Running   0          97s
 reviews-v3-dffc77d75-jd8cr        2/2     Running   0          97s
 ```
 
-Check BookInfo is working properly
+Check Bookinfo is working properly
 
 ```bash
 kubectl exec -it $(kubectl get pod -l app=ratings -o jsonpath='{.items[0].metadata.name}') -c ratings -- curl productpage:9080/productpage | grep -o "<title>.*</title>"
@@ -317,14 +317,14 @@ Page v1 will be displayed if you log in as other users.
 ![v1](v1.png)
 
 
-### Uninstall BookInfo
+### Uninstall Bookinfo
 
 
 ```bash
 $ sh samples/bookinfo/platform/kube/cleanup.sh
 ```
 
-Make sure BookInfo is uninstalled
+Make sure Bookinfo is uninstalled
 
 ```bash
 $ kubectl get virtualservices   #-- there should be no virtual services

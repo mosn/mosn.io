@@ -9,7 +9,7 @@ description: >
 ---
 
 {{% pageinfo color="primary" %}}
-MOSN 从 v1.0.0 版本开始 已通过 Istio 1.10.6 的 `BookInfo` 测试，关于最新版 Istio 的支持情况可关注 [MOSN Istio WG](https://github.com/mosn/community/blob/master/wg-istio.md)。
+MOSN 从 v1.0.0 版本开始 已通过 Istio 1.10.6 的 `Bookinfo` 测试，关于最新版 Istio 的支持情况可关注 [MOSN Istio WG](https://github.com/mosn/community/blob/master/wg-istio.md)。
 {{% /pageinfo %}}
 
 本文介绍的内容将包括 :
@@ -17,7 +17,7 @@ MOSN 从 v1.0.0 版本开始 已通过 Istio 1.10.6 的 `BookInfo` 测试，关�
 - MOSN 与 Istio 的关系
 - MOSN 与 Istio 的 proxyv2 镜像 build 方法
 - 部署 Istio 与 MOSN
-- BookInfo 实验
+- Bookinfo 实验
 
 ## MOSN 与 Istio 的关系
 
@@ -29,9 +29,9 @@ MOSN 从 v1.0.0 版本开始 已通过 Istio 1.10.6 的 `BookInfo` 测试，关�
 
 ## MOSN 与 Istio 的 proxyv2 镜像 build 方法
 
-本文的完整构建镜像方法均是基于 MacOS 和 Istio 1.10.6 版本进行的构建，在其他操作系统 /Istio 版本上可能存在部分细节差异，需要进行调整。
+本文的完整构建镜像方法均是基于 MacOS 和 Istio 1.10.6 版本进行的构建，在其他操作系统 Istio 版本上可能存在部分细节差异，需要进行调整。
 除了完整构建方式外，如果仅有 MOSN 代码发生变化，还可以使用仅更新 MOSN 的方式构建镜像。
-通常情况下，您不需要额外构建镜像，可直接用我们提供的镜像 `docker pull mosnio/proxyv2:v1.0.0`
+通常情况下，您不需要额外构建镜像，可直接用我们提供的镜像 `mosnio/proxyv2:${MOSN-VERSION}-${ISTIO_VERSION}`，如`docker pull mosnio/proxyv2:1.0.0-1.10.6`
 
 完整的镜像构建（基于 MacOS 和 Istio 1.10.6）
 ==========
@@ -167,15 +167,15 @@ istiod-65c9767c55-vjppv                 1/1     Running   0          109s
 如果 pod 显示所有容器 READY，并且 STATUS 为 Running，则表示 Istio 安装成功
 
 
-## BookInfo 实验
+## Bookinfo 实验
 
-MOSN 已经通过 Istio 1.10.6 的 `BookInfo` 测试，可以通过 [MOSN with Istio](https://katacoda.com/mosn/courses/istio/mosn-with-istio) 的教程来进行 Bookinfo 示例的演示操作，另外在该教程中您也可以找到更多关于使用 MOSN 和 Istio 的说明。
+MOSN 已经通过 Istio 1.10.6 的 `Bookinfo` 测试，可以通过 [MOSN with Istio](https://katacoda.com/mosn/courses/istio/mosn-with-istio) 的教程来进行 Bookinfo 示例的演示操作，另外在该教程中您也可以找到更多关于使用 MOSN 和 Istio 的说明。
 更多的使用场景可以参考 Istio 官方 [Example](https://istio.io/latest/docs/examples/)。
 MOSN 目前并没有支持 Istio 的所有场景，如果您在运行实验过程中有遇到不支持的情况，请给我们提出 [issue](https://github.com/mosn/mosn/issues)，欢迎贡献代码。
 
-### BookInfo 介绍
+### Bookinfo 介绍
 
-`BookInfo` 是一个类似豆瓣的图书应用，它包含四个基础服务：
+`Bookinfo` 是一个类似豆瓣的图书应用，它包含四个基础服务：
 
 -  Product Page：主页，由 python 开发，展示所有图书信息，它会调用 Reviews 和 Details 服务
 -  Reviews：评论，由 java 开发，展示图书评论，会调用 Ratings 服务
@@ -184,9 +184,9 @@ MOSN 目前并没有支持 Istio 的所有场景，如果您在运行实验过�
 
 <div align=center><img src="bookinfo.png" width = "550" height = "400" alt="bookinfo" /></div>
 
-#### 部署 `BookInfo` 应用并注入 MOSN
+#### 部署 `Bookinfo` 应用并注入 MOSN
 
-> 详细过程可以参考 [BookInfo doc](https://istio.io/docs/examples/bookinfo/)
+> 详细过程可以参考 [Bookinfo doc](https://istio.io/docs/examples/bookinfo/)
 
 通过 kube-inject 的方式实现 Sidecar 注入：
 
@@ -233,7 +233,7 @@ reviews-v3-dffc77d75-jd8cr        2/2     Running   0          97s
 kubectl exec -it $(kubectl get pod -l app=ratings -o jsonpath='{.items[0].metadata.name}') -c ratings -- curl productpage:9080/productpage | grep -o "<title>.*</title>"
 ```
 
-#### 访问 BookInfo 服务
+#### 访问 Bookinfo 服务
 
 开启 gateway 模式。
 
@@ -261,7 +261,7 @@ $ curl -o /dev/null -s -w "%{http_code}\n"  http://$GATEWAY_URL/productpage
 
 **观察页面情况**
 
-访问 `http://$GATEWAY_URL/productpage` （注意： `$GATEWAY_URL` 需要替换成你设置的地址），正常的话通过刷新会看到如下所示 `BookInfo` 的界面，其中 Book Reviews 有三个版本，刷新后依次会看到（可以查看 samples/bookinfo/platform/kube/bookinfo.yaml 中的配置发现为什么是这三个版本）版本一的界面。
+访问 `http://$GATEWAY_URL/productpage` （注意： `$GATEWAY_URL` 需要替换成你设置的地址），正常的话通过刷新会看到如下所示 `Bookinfo` 的界面，其中 Book Reviews 有三个版本，刷新后依次会看到（可以查看 samples/bookinfo/platform/kube/bookinfo.yaml 中的配置发现为什么是这三个版本）版本一的界面。
 
 ![版本一](v1.png)
 
@@ -275,7 +275,7 @@ $ curl -o /dev/null -s -w "%{http_code}\n"  http://$GATEWAY_URL/productpage
 
 #### 验证 MOSN 按 version 路由能力
 
-首先为 `BookInfo` 的 service 创建一系列的 destination rules。
+首先为 `Bookinfo` 的 service 创建一系列的 destination rules。
 
 ```bash
 $ kubectl apply -f samples/bookinfo/networking/destination-rule-all.yaml
@@ -303,7 +303,7 @@ $ kubectl apply -f samples/bookinfo/networking/virtual-service-reviews-50-v3.yam
 
 #### 验证 MOSN 按照特定 header 路由能力
 
-`BookInfo` 系统右上角有一个登陆的入口，登陆以后请求会带上 end-user 这个自定义，值是 user name，Mosn 支持根据这个 header 的值来做路由。比如，我们尝试将 jason 这个用户路由到 v2 版本，其他的路由到 v1 版本（用户名和密码均是：jason，为什么是这个用户可以查看对应的 yaml 文件）。
+`Bookinfo` 系统右上角有一个登陆的入口，登陆以后请求会带上 end-user 这个自定义，值是 user name，Mosn 支持根据这个 header 的值来做路由。比如，我们尝试将 jason 这个用户路由到 v2 版本，其他的路由到 v1 版本（用户名和密码均是：jason，为什么是这个用户可以查看对应的 yaml 文件）。
 
 ```bash
 $ kubectl apply -f samples/bookinfo/networking/virtual-service-reviews-test-v2.yaml
@@ -320,7 +320,7 @@ $ kubectl apply -f samples/bookinfo/networking/virtual-service-reviews-test-v2.y
 ![版本一](v1.png)
 
 
-### 卸载 BookInfo
+### 卸载 Bookinfo
 
 可以使用下面的命令来完成应用的删除和清理工作：
 
@@ -330,7 +330,7 @@ $ kubectl apply -f samples/bookinfo/networking/virtual-service-reviews-test-v2.y
 $ sh samples/bookinfo/platform/kube/cleanup.sh
 ```
 
-确认 `BookInfo` 应用已经关停：
+确认 `Bookinfo` 应用已经关停：
 
 ```bash
 $ kubectl get virtualservices   #-- there should be no virtual services
