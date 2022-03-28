@@ -30,7 +30,7 @@ The following figure shows the operating principle of MOSN in Istio.
 
 The operating system described in this topic is MacOS, and the Istio version is 1.10.6. If you are using anither OS, there may be some differences.
 If only the MOSN code changes, you can also use the MOSN-only update method to build the proxyv2 image.
-Usually, you do not need to build a proxyv2 image, use the image provided by us is ok. `mosnio/proxyv2:${MOSN VERSION}-${ISTIO VERSION}`, for example, `docker pull mosnio/proxyv2:v1.0.0`.
+Usually, you do not need to build a proxyv2 image, use the image provided by us is ok. `mosnio/proxyv2:${MOSN VERSION}-${ISTIO VERSION}`, for example, `docker pull mosnio/proxyv2:v1.0.0-1.10.6`.
 
 Build proxyv2 image with source code. (On MacOS and Istio 1.10.6)
 ==========
