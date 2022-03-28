@@ -19,7 +19,7 @@ MOSN 为开发者提供了灵活的变量机制，用户通过变量机制能够
 - 影响 MOSN 路由框架的运行结果
 
 
-# 二、Quick Start
+# 二、快速开始
 
 假设我们现在正在开发一个 `simpleFilter`，该 Filter 处理 Http 请求，且需要实现以下功能：
 
@@ -250,6 +250,11 @@ func Get(ctx context.Context, name string) (interface{}, error)
 
 // 设置 interface{} 类型变量值
 func Set(ctx context.Context, name string, value interface{}) error
+
+// 创建 VariableContext
+// 需要注意的是，使用变量机制时，ctx 必须是以下函数创建的 VariableContext
+// MOSN 框架中的 ctx 已经默认是 VariableContext，无需额外调用该函数。但在单测场景，需要使用该函数创建 VariableContext，否则无法正常使用变量
+func NewVariableContext(ctx context.Context) context.Context
 ```
 
 # 五、通过变量机制与 MOSN 路由框架进行交互
