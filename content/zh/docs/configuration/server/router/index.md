@@ -124,6 +124,7 @@ description: >
   "metadata_match":"",
   "timeout":"",
   "retry_policy":{},
+  "hash_policy":{},
   "prefix_rewrite":"",
   "regex_rewrite":{},
   "host_rewrite":"",
@@ -139,6 +140,7 @@ description: >
 - `metadata_match`，[metadata](../../custom#metadata)，如果配置了该字段，表示该路由会基于该 metadata 去匹配 upstream cluster 的 subset 。
 - `timeout`，[Duration String](../../custom#duration-string)，表示默认情况下请求转发的超时时间。如果请求中明确指定了超时时间，那么这个配置会被忽略。
 - `retry_policy`，重试配置，表示如果请求在遇到了特定的错误时采取的重试策略，默认没有配置的情况下，表示没有重试。
+- `hash_policy`，一致性Hash负载均衡算法使用的hash key。
 - `prefix_rewrite` `regex_rewrite` `host_rewrite`，修改请求的 `path` 和 `host`。
 - `request_headers_to_add` `request_headers_to_remove`，表示增加或者删除请求的 header。
 - `response_headers_to_add` `response_headers_to_remove`，表示增加或者删除响应的 header。
@@ -182,7 +184,6 @@ description: >
 - `retry_on`，bool 类型，表示是否开启重试。
 - `retry_timeout`，[Duration String](../../custom#duration-string)，表示每次重试的超时时间。当 `retry_timeout` 大于 route 配置的 timeout 或者请求明确指定的 timeout 时，属于无效配置。
 - `num_retries`，表示最大的重试次数。
-
 
 
 ## 例子
