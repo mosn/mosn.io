@@ -1,22 +1,21 @@
 ---
 title: "Use MOSN as an Istio data plane"
 linkTitle: "Istio integration"
-date: 2020-01-20
+date: 2022-03-25
 weight: 2
 description: >
   This topic shows you how to build a Service Mesh development environment with MOSN under the Istio framework, and verify the basic routing and load balancing capabilities of MOSN.
 ---
 
 {{% pageinfo color="primary" %}}
-MOSN succeeded in the Bookinfo test for Istio 1.1.4. For more information about the support from the latest version of Istio, see [Issue #933](https://github.com/mosn/mosn/issues/933). 
-`Note: After the MOSN 0.14.0 or later can supports xDS, And tested pass all the sample of bookinfo in istio 1.5.2, here is an [MOSN with Istio](https://katacoda.com/mosn/courses/istio/mosn-with-istio) tutorial.`
+MOSN v1.0.0 succeeded in the Bookinfo test for Istio 1.10.6. For more information about the support from the latest version of Istio, see [MOSN Istio WG](https://github.com/mosn/community/blob/master/wg-istio.md).
 {{% /pageinfo %}}
 
 This topic covers the following content:
 
 - Relationship between MOSN and Istio
-- Preparations
-- Istio deployment with source code
+- Instructions on how to build the Istio proxyv2 image with MOSN
+- Istio deployment with MOSN
 - Bookinfo test
 
 ## Relationship between MOSN and Istio
@@ -27,191 +26,222 @@ The following figure shows the operating principle of MOSN in Istio.
 
 <div align=center><img src="mosn-with-service-mesh.png" width = "450" height = "400" alt="MOSN overview" /></div>
 
-## Preparations
+## Instructions on how to build the Istio proxyv2 image with MOSN
 
-The operating system described in this topic is macOS. You can install the software versions for your OS, too.
+The operating system described in this topic is MacOS, and the Istio version is 1.10.6. If you are using anither OS, there may be some differences.
+If only the MOSN code changes, you can also use the MOSN-only update method to build the proxyv2 image.
+Usually, you do not need to build a proxyv2 image, use the image provided by us is ok. `mosnio/proxyv2:${MOSN VERSION}-${ISTIO VERSION}`, for example, `docker pull mosnio/proxyv2:v1.0.0-1.10.6`.
 
-### Install hyperkit
+Build proxyv2 image with source code. (On MacOS and Istio 1.10.6)
+==========
+1. Download the istio source code, and checkout to the target version.
 
-Install [docker-for-mac](https://store.docker.com/editions/community/docker-ce-desktop-mac) and then [install drivers](https://github.com/kubernetes/minikube/blob/master/docs/drivers.md).
+```
+git clone git@github.com:istio/istio.git
+cd istio
+git checkout 1.10.6
+```
 
-#### Install docker
+2. Istio will load wasm by default. To simplify, we need to comment out this part of the code. see details in [istio-diff](./istio-diff.md)
 
-Download the software package or run the following command to install it:
+3. Build a MOSN binary. You can use the make command provided by MOSN project to build a binary on linux. As the same time, since we are using MacOS, we also need to compile a MacOS binary.
+
+4. Tar the binary compiled by the step 2, the file path should be `usr/local/bin`.
 
 ```bash
-$ brew cask install docker
+cd ${MOSN Project Path}
+mkdir -p usr/local/bin
+make build # build mosn binary on linux
+cp build/bundles/${MOSN VERSION}/binary/mosn usr/local/bin
+tar -zcvf mosn.tar.gz usr/local/bin/mosn
+cp mosn.tar.gz mosn-centos.tar.gz # copy a renamed tar.gz file
+
+make build-local # build mosn binary on macos
+cp build/bundles/${MOSN VERSION}/binary/mosn usr/local/bin
+tar -zcvf mosn-macos.tar.gz usr/local/bin/mosn
 ```
 
-#### Install drivers
+5. Upload the `mosn-macos.tar.gz` `mosn-centos.tar.gz` `mosn.tar.gz` to a store serivce that can be accessed, if you do not have one, you can use Go to build a simple service in your local system.
+
+```Go
+func main() {
+  address := "" // an address can be reached when proxyv2 image build. for example, 0.0.0.0:8080
+  filespath := "" // where the .tar.gz files stored.
+  http.ListenAndServe(address, http.FileServer(http.Dir(filespath)))
+}
+```
+
+6. Build proxyv2 images, with some ENV
 
 ```bash
-$ curl -LO https://storage.googleapis.com/minikube/releases/latest/docker-machine-driver-hyperkit \
-&& chmod +x docker-machine-driver-hyperkit \
-&& sudo mv docker-machine-driver-hyperkit /usr/local/bin/ \
-&& sudo chown root:wheel /usr/local/bin/docker-machine-driver-hyperkit \
-&& sudo chmod u+s /usr/local/bin/docker-machine-driver-hyperkit
+address=$1 # your download service address
+export ISTIO_ENVOY_VERSION=$2 # MOSN Version, can be any value.
+export ISTIO_ENVOY_RELEASE_URL=http://$address/mosn.tar.gz
+export ISTIO_ENVOY_CENTOS_RELEASE_URL=http://$address/mosn-centos.tar.gz
+export ISTIO_ENVOY_MACOS_RELEASE_URL=http://http://$address/mosn-macos.tar.gz
+export ISTIO_ENVOY_MACOS_RELEASE_NAME=mosn-$2 # can be any value
+export SIDECAR=mosn
+
+make clean # clean the cache
+make docker.proxyv2 \
+ SIDECAR=$SIDECAR \
+ ISTIO_ENVOY_VERSION=$ISTIO_ENVOY_VERSION \
+ ISTIO_ENVOY_RELEASE_URL=$ISTIO_ENVOY_RELEASE_URL \
+ ISTIO_ENVOY_CENTOS_RELEASE_URL=$ISTIO_ENVOY_CENTOS_RELEASE_URL \
+ ISTIO_ENVOY_MACOS_RELEASE_URL=$ISTIO_ENVOY_MACOS_RELEASE_URL \
+ ISTIO_ENVOY_MACOS_RELEASE_NAME=$ISTIO_ENVOY_MACOS_RELEASE_NAME
 ```
 
-### Install Minikube (or a commercial Kubernetes cluster)
+7. Retag the new image, and push it to your docker hub.
 
-We recommend that you use Minikube v0.28 or later versions. For more information, go to [https://github.com/kubernetes/minikube](https://github.com/kubernetes/minikube).
+
+Update MOSN binary in the proxyv2 image.
+==========
+
+1. Build the MOSN binary
 
 ```bash
-$ brew cask install minikube
+cd ${MOSN Project Path}
+make build # build mosn binary on linux
 ```
 
-### Start Minikube
+2. Write a DOCKERFILE, and build a new image
 
-The pilot requires a memory space of at least 2 GB. Therefore, you can allocate resources to Minikube by adding parameters upon startup. If you do not have sufficient resources on your machine, we recommend that you use the commercial Kubernetes cluster.
+```Dockerfile
+FROM mosnio/proxyv2:v1.0.0-1.10.6
+COPY build/bundles/${MOSN VERSION}/binary/mosn /usr/local/bin/mosn
+```
 
 ```bash
-$ minikube start --memory=8192 --cpus=4 --kubernetes-version=v1.15.0 --vm-driver=hyperkit
+docker build --no-cache --rm -t ${your image tag}
 ```
 
-Create an Istio namespace
+3. Push the new image to your docker hub.
 
-```
-$ kubectl create namespace istio-system
-```
+## Istio deployment with MOSN
 
-### Install the kubectl command-line tool
+### Install kubectl
 
-kubectl is a command line interface for executing commands against Kubernetes clusters. For details about the installation of kubectl, go to [https://kubernetes.io/docs/tasks/tools/install-kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl).
+kubectl is the Kubernetes command-line tool, allows you to run commands against Kubernetes clusters. How to install it, see details in [kubectl install](https://kubernetes.io/docs/tasks/tools/install-kubectl).
+
+### Install Kubernetes Platform
+
+How to prepare various Kubernetes platforms before installing Istio, see details in [Platform Setup](https://istio.io/latest/docs/setup/platform-setup/).
+We use `minikube` later.
+
+### Install Istio, use MOSN as sidecar
+
+1. Download istio release version, you can find it in [Istio release](https://github.com/istio/istio/releases/tag/1.10.6), or use bash command
 
 ```bash
-$ brew install kubernetes-cli
+VERSION=1.10.6 # istio version
+export ISTIO_VERSION=$VERSION && curl -L https://istio.io/downloadIstio | sh -
 ```
 
-### Install Helm
-
-Helm is a package management tool of Kubernetes. For details about the installation of Helm, go to [https://docs.helm.sh/using_helm/#installing-helm](https://docs.helm.sh/using_helm/#installing-helm).
+2. Checkout to the path, add the `istioctl` to `PATH` environment variable.
 
 ```bash
-$ brew install kubernetes-helm
+cd istio-$ISTIO_VERSION/
+export PATH=$PATH:$(pwd)/bin
 ```
 
-## Istio deployment with source code
-
-{{% pageinfo color="primary" %}}
-SOFAMesh is now directly developed based on Istio to contribute to the Istio community. Development through the fork method is not supported. It will be directly supported by Istio in the future. MOSN succeeded in the Bookinfo test for Istio 1.1.4. For more information about the support from the latest version of Istio, see [Issue #933](https://github.com/mosn/mosn/issues/933).
-{{% /pageinfo %}}
-
-### Download the SOFAMesh source code
+3. create istio namespace, set MOSN proxyv2 image as sidecar image
 
 ```bash
-$ git clone https://github.com/sofastack/sofa-mesh.git
+kubectl create namespace istio-system
+istioctl manifest apply --set .values.global.proxy.image=${MOSN IMAGE} --set meshConfig.defaultConfig.binaryPath="/usr/local/bin/mosn"
 ```
-
-### Install SOFAMesh with Helm
-
-**Run `helm template` to install SOFAMesh.**
-
-Switch to the directory that stores the Istio source code and then install the Istio CRD and other components with Helm.
+4. Verify the installation
 
 ```bash
-$ cd istio
-$ helm template install/kubernetes/helm/istio-init --name istio-init --namespace istio-system | kubectl apply -f -
-$ helm template install/kubernetes/helm/istio --name istio --namespace istio-system | kubectl apply -f -
-```
+kubectl get pod -n istio-system
 
-### Verify the installation
+NAME                                    READY   STATUS    RESTARTS   AGE
+istio-ingressgateway-6b7fb88874-rgmrj   1/1     Running   0          102s
+istiod-65c9767c55-vjppv                 1/1     Running   0          109s
+```
 
 If all pods in the `istio-system` namespace are running, the deployment succeeds.
-If you only need to run Bookinfo, running three pods, pilot, injector, and citadel, will suffice your need.
-
-```bash
-$ kubectl get pods -n istio-system
-NAME                                       READY    STATUS   RESTARTS    AGE
-istio-citadel-6579c78cd9-w57lr              1/1     Running   0          5m
-istio-egressgateway-7649f76df4-zs8kw        1/1     Running   0          5m
-istio-galley-c77876cb6-nhczq                1/1     Running   0          5m
-istio-ingressgateway-5c9c8565d9-d972t       1/1     Running   0          5m
-istio-pilot-7485f9fb4b-xsvtm                1/1     Running   0          5m
-istio-policy-5766bc84b9-p2wfj               1/1     Running   0          5m
-istio-sidecar-injector-7f5f586bc7-2sdx6     1/1     Running   0          5m
-istio-statsd-prom-bridge-7f44bb5ddb-stcf6   1/1     Running   0          5m
-istio-telemetry-55ff8c77f4-q8d8q            1/1     Running   0          5m
-prometheus-84bd4b9796-nq8lg                 1/1     Running   0          5m
-```
-
-### Uninstall
-
-Uninstall SOFAMesh.
-
-```bash
-$ helm template install/kubernetes/helm/istio --name istio --namespace istio-system | kubectl delete -f -
-$ kubectl delete namespace istio-system
-```
 
 ## Bookinfo test
 
-Bookinfo is a book app. It provides four basic services:
+MOSN v1.0.0 succeeded in the Bookinfo test for Istio 1.10.6. You can alsoe use [MOSN with Istio](https://katacoda.com/mosn/courses/istio/mosn-with-istio) to run the Bookinfo test.
+More test cases see Istio [Example]((https://istio.io/latest/docs/examples).
+If you have any questions, please contact us  [issue](https://github.com/mosn/mosn/issues), code contributions are welcome too.
 
-- Product Page: The product page is developed in python. It displays all book information and calls the Reviews and Details services.
-- Reviews: The review service is developed in java. It displays book reviews and calls the Ratings service.
-- Ratings: The rating service is developed in nodejs.
-- Details: The book details is developed in ruby.
+### Bookinfo introduction
+
+The application displays information about a book, similar to a single catalog entry of an online book store. Displayed on the page is a description of the book, book details (ISBN, number of pages, and so on), and a few book reviews.
+The Bookinfo application is broken into four separate microservices:
+- productpage. The productpage microservice calls the details and reviews microservices to populate the page.
+- details. The details microservice contains book information.
+- reviews. The reviews microservice contains book reviews. It also calls the ratings microservice.
+- ratings. The ratings microservice contains book ranking information that accompanies a book review.
 
 <div align=center><img src="bookinfo.png" width = "550" height = "400" alt="bookinfo" /></div>
 
-### Deploy Bookinfo and inject MOSN
+#### Deploy Bookinfo and inject MOSN
 
 > For details, go to [https://istio.io/docs/examples/bookinfo/](https://istio.io/docs/examples/bookinfo/).
 
-Inject MOSN
+Use kube-inject way to inject MOSN
 
 ```bash
-$ kubectl label namespace default istio-injection=enabled
+istioctl kube-inject -f samples/bookinfo/platform/kube/bookinfo.yaml > bookinfo.yaml
+# sed -i '' is the MacOS command, if you are in linux, use sed -i instead.
+sed -i '' "s/\/usr\/local\/bin\/envoy/\/usr\/local\/bin\/mosn/g" ./bookinfo.yaml
 ```
 
-Deploy Bookinfo
+Deploy Bookinfo app:
 
 ```bash
-$ kubectl apply -f samples/bookinfo/platform/kube/bookinfo.yaml
+$ kubectl apply -f bookinfo.yaml
 ```
 
 Verify whether the deployment succeeds
 
 ```bash
 $ kubectl get services
-NAME                       CLUSTER-IP   EXTERNAL-IP   PORT(S)              AGE
-details                    10.0.0.31    <none>        9080/TCP             6m
-kubernetes                 10.0.0.1     <none>        443/TCP              7d
-productpage                10.0.0.120   <none>        9080/TCP             6m
-ratings                    10.0.0.15    <none>        9080/TCP             6m
-reviews                    10.0.0.170   <none>        9080/TCP             6m
+NAME          TYPE        CLUSTER-IP        EXTERNAL-IP   PORT(S)    AGE
+details       ClusterIP   192.168.248.118   <none>        9080/TCP   5m7s
+kubernetes    ClusterIP   192.168.0.1       <none>        443/TCP    25h
+productpage   ClusterIP   192.168.204.255   <none>        9080/TCP   5m6s
+ratings       ClusterIP   192.168.227.164   <none>        9080/TCP   5m7s
+reviews       ClusterIP   192.168.181.16    <none>        9080/TCP   5m6s
 ```
-
 Wait until all pods are running
 
 ```bash
 $ kubectl get pods
-NAME                                        READY     STATUS    RESTARTS   AGE
-details-v1-1520924117-48z17                 2/2       Running   0          6m
-productpage-v1-560495357-jk1lz              2/2       Running   0          6m
-ratings-v1-734492171-rnr5l                  2/2       Running   0          6m
-reviews-v1-874083890-f0qf0                  2/2       Running   0          6m
-reviews-v2-1343845940-b34q5                 2/2       Running   0          6m
-reviews-v3-1813607990-8ch52                 2/2       Running   0          6m
+NAME                              READY   STATUS    RESTARTS   AGE
+details-v1-77497b4899-67gfn       2/2     Running   0          98s
+productpage-v1-68d9cf459d-mv7rh   2/2     Running   0          97s
+ratings-v1-65f97fc6c5-npcrz       2/2     Running   0          98s
+reviews-v1-6bf4444fcc-9cfrw       2/2     Running   0          97s
+reviews-v2-54d95c5444-5jtxp       2/2     Running   0          97s
+reviews-v3-dffc77d75-jd8cr        2/2     Running   0          97s
 ```
 
-### Access Bookinfo services
+Check Bookinfo is working properly
+
+```bash
+kubectl exec -it $(kubectl get pod -l app=ratings -o jsonpath='{.items[0].metadata.name}') -c ratings -- curl productpage:9080/productpage | grep -o "<title>.*</title>"
+```
+
+#### Access Bookinfo services
 
 Enable the gateway mode.
 
 ```bash
 $ kubectl apply -f samples/bookinfo/networking/bookinfo-gateway.yaml
-$ kubectl get gateway        // Check whether the gateway is running.
+$ kubectl get gateway
 NAME               AGE
-bookinfo-gateway   24m
+bookinfo-gateway   6s
 ```
-
-Set GATEWAY_URL. For details, go to https://istio.io/docs/tasks/traffic-management/ingress/ingress-control/#determining-the-ingress-ip-and-ports.
+Set `GATEWAY_URL`. For details, go to [doc](https://istio.io/docs/tasks/traffic-management/ingress/ingress-control/#determining-the-ingress-ip-and-ports)
 
 ```bash
 $ export INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].nodePort}')
-$ export SECURE_INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="https")].nodePort}')
 $ export INGRESS_HOST=$(minikube ip)
 $ export GATEWAY_URL=$INGRESS_HOST:$INGRESS_PORT
 ```
@@ -219,7 +249,7 @@ $ export GATEWAY_URL=$INGRESS_HOST:$INGRESS_PORT
 Check whether the gateway takes effect.
 
 ```bash
-$ curl -o /dev/null -s -w "%{http_code}\n"  http://$GATEWAY_URL/productpage   // 200 indicates a success. 
+$ curl -o /dev/null -s -w "%{http_code}\n"  http://$GATEWAY_URL/productpage
 200
 ```
 
@@ -286,3 +316,31 @@ Page v1 will be displayed if you log in as other users.
 
 ![v1](v1.png)
 
+
+### Uninstall Bookinfo
+
+
+```bash
+$ sh samples/bookinfo/platform/kube/cleanup.sh
+```
+
+Make sure Bookinfo is uninstalled
+
+```bash
+$ kubectl get virtualservices   #-- there should be no virtual services
+$ kubectl get destinationrules  #-- there should be no destination rules
+$ kubectl get gateway           #-- there should be no gateway
+$ kubectl get pods              #-- the Bookinfo pods should be deleted
+```
+
+## Uninstall Istio
+
+```bash
+$ istioctl manifest generate | kubectl delete -f -
+```
+
+Make sure Istio is uninstalled
+
+```bash
+$ kubectl get namespace istio-system
+```
