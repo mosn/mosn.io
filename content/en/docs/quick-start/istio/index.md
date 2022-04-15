@@ -108,7 +108,7 @@ make build # build mosn binary on linux
 2. Write a DOCKERFILE, and build a new image
 
 ```Dockerfile
-FROM mosnio/proxyv2:v1.0.0
+FROM mosnio/proxyv2:v1.0.0-1.10.6
 COPY build/bundles/${MOSN VERSION}/binary/mosn /usr/local/bin/mosn
 ```
 

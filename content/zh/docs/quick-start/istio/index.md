@@ -109,7 +109,7 @@ make build # build mosn binary on linux
 2、直接基于现有 MOSN 的 proxyv2 镜像更新二进制
 
 ```Dockerfile
-FROM mosnio/proxyv2:v1.0.0
+FROM mosnio/proxyv2:v1.0.0-1.10.6
 COPY build/bundles/${MOSN VERSION}/binary/mosn /usr/local/bin/mosn
 ```
 
