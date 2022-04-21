@@ -1,7 +1,7 @@
 ---
 title: "Router 配置"
 linkTitle: "Router 配置"
-date: 2022-03-25
+date: 2020-03-13
 weight: 2
 aliases: "/zh/docs/server/router"
 description: >
@@ -124,9 +124,8 @@ description: >
   "metadata_match":"",
   "timeout":"",
   "retry_policy":{},
-  "hash_policy":{},
   "prefix_rewrite":"",
-  "regex_rewrite":{},
+  "regex_rewrite":"",
   "host_rewrite":"",
   "request_headers_to_add":[],
   "request_headers_to_remove":[],
@@ -140,10 +139,6 @@ description: >
 - `metadata_match`，[metadata](../../custom#metadata)，如果配置了该字段，表示该路由会基于该 metadata 去匹配 upstream cluster 的 subset 。
 - `timeout`，[Duration String](../../custom#duration-string)，表示默认情况下请求转发的超时时间。如果请求中明确指定了超时时间，那么这个配置会被忽略。
 - `retry_policy`，重试配置，表示如果请求在遇到了特定的错误时采取的重试策略，默认没有配置的情况下，表示没有重试。
-- `hash_policy`，一致性Hash负载均衡算法使用的hash key。
-- `prefix_rewrite` `regex_rewrite` `host_rewrite`，修改请求的 `path` 和 `host`。
-- `request_headers_to_add` `request_headers_to_remove`，表示增加或者删除请求的 header。
-- `response_headers_to_add` `response_headers_to_remove`，表示增加或者删除响应的 header。
 
 ## redirect
 
@@ -184,6 +179,7 @@ description: >
 - `retry_on`，bool 类型，表示是否开启重试。
 - `retry_timeout`，[Duration String](../../custom#duration-string)，表示每次重试的超时时间。当 `retry_timeout` 大于 route 配置的 timeout 或者请求明确指定的 timeout 时，属于无效配置。
 - `num_retries`，表示最大的重试次数。
+
 
 
 ## 例子
@@ -251,8 +247,8 @@ description: >
 ```
 
 ### 匹配规则 - 变量
-可以通过 filter 设置新的变量，以及 MOSN 内置的变量，进行路由转发规则。  
-如下例子变量 `x-mosn-path`（ MOSN 内置变量，表示请求的 `path`） 等于 `/b` 满足匹配。
+可以通过 filter 设置新的变量，以及 MOSN 内置的变量，进行路由转发规则。
+如下例子就是变量 `x-mosn-path`（ MOSN 内置变量，表示请求的 `path`） 等于 `/b` 满足匹配。
 ```
 "routers": [
     {
@@ -269,7 +265,9 @@ description: >
 ]
 ```
 
-### 匹配行为 - 修改path
+### 匹配动作 - 
+
+### 匹配动作 - 修改path
 下例把请求的 `path` 修改为 `/abc`
 ```
 "routers": [
@@ -285,7 +283,7 @@ description: >
 ]
 ```
 
-### 匹配行为 - 添加删除 header
+### 匹配动作 - 添加删除 header
 下例在转发给后端之前，新增`test:ok` ，删除`hello`.
 ```
 "routers": [
@@ -311,8 +309,8 @@ description: >
 ```
 
 
-### 匹配行为 - redirect
-除了转发到 cluster 之外，也支持 redirect 的匹配动作。  
+### 匹配动作 - redirect
+除了转发到 cluster 之外，也支持 redirect 的匹配动作。
 下例将 `301` 跳转，`Location: http://test/b`
 ```
 "routers": [
@@ -330,7 +328,7 @@ description: >
 ]
 ```
 
-### 匹配行为 - 直接响应
+### 匹配动作 - 直接响应
 满足匹配条件直接响应请求。
 ```
 "routers": [
@@ -345,7 +343,3 @@ description: >
     }
 ]
 ```
-
-## 高级技巧
-[MOSN 路由框架详解](https://mosn.io/blog/posts/how-use-dynamic-metadata/)
-

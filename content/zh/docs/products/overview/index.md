@@ -1,6 +1,6 @@
 ---
 title: "MOSN 简介"
-linkTitle: "简介"
+linkTitle: "产品概述"
 weight: 1
 date: 2022-03-28
 aliases: "/zh/docs/overview"
@@ -12,9 +12,6 @@ MOSN（Modular Open Smart Network）是一款主要使用 Go 语言开发的云�
 MOSN 为服务提供多协议、模块化、智能化、安全的代理能力，融合了大量云原生通用组件，同时也可以集成 Envoy 作为网络库，具备高性能、易扩展的特点。
 MOSN 可以和 Istio 集成构建 Service Mesh，也可以作为独立的四、七层负载均衡，API Gateway、云原生 Ingress 等使用。
 
-## 快速开始
-
-请参考[快速开始](../quick-start)。
 
 ## 核心能力
 
@@ -65,7 +62,7 @@ MOSN 可以和 Istio 集成构建 Service Mesh，也可以作为独立的四、�
     + 支持自定义扩展配置
     + 支持自定义的四层、七层Filter扩展
 
-## 社区
+## 社区介绍
 
 MOSN 开源仍在高速发展中，有很多能力需要补全，欢迎所有人参与进来与我们一起共建。
 

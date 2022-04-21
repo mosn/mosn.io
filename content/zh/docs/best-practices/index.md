@@ -1,11 +1,11 @@
 ---
-title: "工程示例"
-linkTitle: "工程示例"
+title: "最佳实践"
+linkTitle: "最佳实践"
 date: 2020-01-20
 aliases: "/zh/docs/samples"
 weight: 4
 description: >
-  MOSN 代码中提供的示例工程。
+  MOSN 代码中提供的最佳实践（示例工程）。
 ---
 
 本文档中提供了 MOSN 的示例工程。
