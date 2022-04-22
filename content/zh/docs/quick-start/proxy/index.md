@@ -2,7 +2,7 @@
 title: "快速开始"
 linkTitle: "快速开始"
 weight: 1
-date: 2022-03-25
+date: 2020-01-20
 aliases: "/zh/docs/quick-start/proxy"
 description: >
   快速搭建开发环境，完成编译，测试，镜像制作和示例配置的运行。
@@ -14,7 +14,7 @@ description: >
 
 + 如果您使用容器运行 MOSN，请先 [安装 docker](https://docs.docker.com/install/)
 + 如果您使用本地机器，请使用类 Unix 环境
-+ 安装 Go 的编译环境
++ 安装 Go 的编译环境 
 
 ## 获取代码
 
@@ -24,9 +24,7 @@ MOSN 项目的代码托管在 [Github](https://github.com/mosn/mosn)，获取方
 git clone git@github.com:mosn/mosn.git
 ```
 
-最终 MOSN 的源代码代码路径为 `$GOPATH/src/mosn.io/mosn`
-
-## 导入 IDE
+## 导入IDE
 
 使用您喜爱的 Go IDE 导入 mosn 项目，推荐 Goland。
 
@@ -34,21 +32,7 @@ git clone git@github.com:mosn/mosn.git
 
 在项目根目录下，根据自己机器的类型以及欲执行二进制的环境，选择以下命令编译 MOSN 的二进制文件。
 
-### 切换 Istio 支持版本
-
-MOSN 目前支持xDS v2 与 xDS v3，分别以Istio 1.5.2 和 Istio 1.10.6 为代表，可以根据需求在不同的版本支持之间切换。默认使用的是1.10.6版本。
-
-切换到1.5.2 版本（xDS v2）
-
-```bash
-make istio-1.5.2 
-```
-
-切换到1.10.6版本(xDS v3)
-
-```bash
-make istio-1.10.6
-```
+完成后可以在 `build/bundles/${version}/binary` 目录下找到编译好的二进制文件。
 
 ### 使用 docker 镜像编译
 
@@ -58,13 +42,9 @@ make build // 编译出 linux 64bit 可运行二进制文件
 
 ### 本地编译
 
-使用下面的命令编译本地可运行二进制文件。
-
 ```bash
-make build-local
+make build-local // 编译 当前本地系统 可运行二进制文件
 ```
-
-完成后可以在 `build/bundles/${version}/binary` 目录下找到编译好的二进制文件。
 
 ## 运行测试
 
