@@ -1,7 +1,7 @@
 ---
 title: "开始"
 linkTitle: "开始"
-weight: 2
+weight: 4
 aliases: "/zh/docs/quick-start/"
 date: 2020-01-20
 description: >

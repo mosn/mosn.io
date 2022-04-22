@@ -1,6 +1,7 @@
 ---
 title: "最佳实践"
 linkTitle: "最佳实践"
+weight: 3
 date: 2020-01-20
 aliases: "/zh/docs/best-practices"
 description: >
