@@ -2,7 +2,7 @@
 title: "版本发布 介绍"
 linkTitle: "版本发布 介绍"
 date: 2020-09-28
-aliases: "/zh/docs/user-guide/app-release/release"
+aliases: "/zh/docs/products/repor/release"
 description: >
   本页介绍了 MOSN 的 版本发布步骤。
 ---
