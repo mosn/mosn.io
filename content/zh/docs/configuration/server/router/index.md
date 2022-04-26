@@ -73,7 +73,7 @@ description: >
 
 - 路径（path）匹配
   - `prefix`，表示路由会匹配 path 的前缀，该配置的优先级高于 path 和 regex。 如果 prefix 被配置，那么请求首先要满足 path 的前缀与 prefix 配置相符合。
-  - `path`，表示路由会匹配精确的 path，该配置的优先级高于 regex。如果 path被配置，那么请求首先要满足 path 与 path 配置相符合。
+  - `path`，表示路由会匹配精确的 path，该配置的优先级高于 regex。如果 path被配置，那么请求首先要满足 prefix 与 path 配置相符合。
   - `regex`，表示路由会按照正则匹配的方式匹配 path。如果 regex 被配置，那么请求首先要满足 path 与 regex 配置相符合。
   - 路径匹配配置同时存在时，只有高优先级的配置会生效。
 - Header 匹配
