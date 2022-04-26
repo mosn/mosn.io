@@ -1,6 +1,6 @@
 ---
-title: "版本发布 介绍"
-linkTitle: "版本发布 介绍"
+title: "版本发布介绍"
+linkTitle: "版本发布介绍"
 date: 2020-09-28
 aliases: "/zh/docs/products/repor/release"
 description: >
