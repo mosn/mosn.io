@@ -4,7 +4,7 @@ linkTitle: "核心概念"
 date: 2019-01-20
 description: >
   MOSN 的核心概念解析。
-weight: 1
+weight: 3
 aliases: "/zh/docs/products/architecture/core-concept"
 ---
 
