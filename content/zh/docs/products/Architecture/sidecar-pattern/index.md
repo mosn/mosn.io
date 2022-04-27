@@ -3,7 +3,7 @@ title: "Sidecar 模式"
 date: 2019-01-20
 linkTitle: "Sidecar 模式"
 aliases: "/zh/docs/products/architecture/sidecar-pattern"
-weight: 2
+weight: 10
 description: >
   Sidecar 模式是 Service Mesh 中习惯采用的模式。
 ---
