@@ -3,7 +3,7 @@ title: "流量劫持"
 linkTitle: "流量劫持"
 date: 2020-01-20
 weight: 3
-aliases: "/zh/docs/concept/traffic-hijack"
+aliases: "/zh/docs/products/architecture/traffic-hijack"
 description: >
   MOSN 作为 Sidecar 使用时的流量劫持方案。
 ---

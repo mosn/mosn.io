@@ -3,7 +3,7 @@ title: "MOSN 平滑升级原理解析"
 linkTitle: "MOSN 平滑升级原理解析"
 date: 2020-01-20
 weight: 5
-aliases: "/zh/docs/concept/smooth-upgrade"
+aliases: "/zh/docs/products/architecture/smooth-upgrade"
 description: >
   如何在升级 Sidecar（MOSN）的时候而不影响业务，对于存量的长连接如何迁移，本文将为你介绍 MOSN 的解决之道。
 ---

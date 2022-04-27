@@ -5,5 +5,6 @@ date: 2017-01-04
 description: >
   MOSN 的架构和原理解析。
 weight: 3
-aliases: "/zh/docs/concept"
+aliases: "/zh/docs/products/architecture"
 ---
+
