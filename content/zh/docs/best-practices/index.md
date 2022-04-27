@@ -2,8 +2,8 @@
 title: "最佳实践"
 linkTitle: "最佳实践"
 weight: 3
-date: 2020-01-20
 aliases: "/zh/docs/best-practices"
+date: 2020-01-20
 description: >
   MOSN 代码中提供的最佳实践（示例工程）。
 ---
