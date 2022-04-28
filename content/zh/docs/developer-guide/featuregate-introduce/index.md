@@ -2,7 +2,7 @@
 title: "Featuregate 介绍"
 linkTitle: "Featuregate 介绍"
 date: 2020-03-13
-weight: 2
+weight: 7
 aliases: "/zh/docs/developer/featuregate-introduce"
 description: >
   本页介绍了 MOSN 的 featuregate。

@@ -1,7 +1,7 @@
 ---
 title: "MOSN 变量机制"
 linkTitle: "MOSN 变量机制"
-weight: 15
+weight: 2
 date: 2022-03-25
 author: "[叶永杰](https://github.com/antJack)"
 aliases: "/zh/docs/developer-guide/variable"
