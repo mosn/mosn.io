@@ -3,7 +3,7 @@ title: "SkyWalking 配置"
 linkTitle: "SkyWalking 配置"
 date: 2020-04-08
 weight: 1
-aliases: "/zh/docs/configuration/trace/skywalking"
+aliases: "/zh/docs/configuration-overview/trace/skywalking"
 description: 
   MOSN SkyWalking trace 配置说明。
 ---
