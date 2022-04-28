@@ -5,7 +5,7 @@ date: 2019-01-20
 description: >
   MOSN 的核心概念解析。
 weight: 3
-aliases: "/zh/docs/core-concept"
+aliases: "/zh/docs/products/core-concept"
 ---
 
 MOSN 主要划分为如下模块，包括了网络代理具备的基础能力，也包含了 [xDS](https://www.servicemesher.com/blog/envoy-xds-protocol/) 等云原生能力。
