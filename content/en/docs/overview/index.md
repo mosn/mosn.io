@@ -2,7 +2,7 @@
 title: "MOSN overview"
 linkTitle: "Overview"
 weight: 1
-date: 2020-01-20
+date: 2022-03-28
 description: >
   The basic description of MOSN.
 ---
@@ -16,39 +16,54 @@ For details, see [Quick start](../quick-start).
 ## Core capabilities
 
 - Istio integration
-   - Integrates Istio 1.0 and V4 API to run in full dynamic resource configuration mode
+   - Integrates Istio 1.10 to run in full dynamic resource configuration mode
 - Core forwarding
    - Supports a self-contained server
    - Supports the TCP proxy
-   - Supports the TProxy mode
+   - Supports the UDP proxy
+   - Supports transparent traffic hijack mode
 - Multi-protocol
    - Supports HTTP/1.1 and HTTP/2
-   - Supports SOFARPC
-   - Supports Dubbo
-   - Supports Tars
+   - Supports protocol extension based on XProtocol framework
+   - Supports protocol automatic identification
+   - Supports gRPC
 - Core routing
    - Supports virtual host-based routing
-   - Supports headers/URL/prefix-based routing
+   - Supports headers/URL/prefix/variable/dsl routing
+   - Supports redirect/direct response/traffic mirror routing
    - Supports host metadata-based subset routing
-   - Supports retries
+   - Supports weighted routing.
+   - Supports retries and timeout configuration
+   - Supports request and response headers to add/remove
 - Back-end management & load balancing
    - Supports connection pools
+   - Supports persistent connection's heart beat handling
    - Supports circuit breaker
    - Supports active back-end health check
-   - Supports load balancing policies such as random and RR
+   - Supports load balancing policies: random/rr/wrr/edf
    - Supports host metadata-based subset load balancing policies
+   - Supports different cluster types: original dst/dns/simple
+   - Supports cluster type extension
 - Observability
-   - Observes network data
-   - Observes protocol data
+   - Support trace module extension
+   - Integrates jaeger/skywalking
+   - Support metrics with prometheus style
+   - Support configurable access log
+   - Support admin API extension
+   - Integrates [Holmes](https://github.com/mosn/holmes) to automatic trigger pprof
 - TLS
-   - Supports HTTP/1.1 on TLS
-   - Supports HTTP/2.0 on TLS
-   - Supports SOFARPC on TLS
+   - Support multiple certificates matches, and TLS inspector mode.
+   - Support SDS for certificate get and update
+   - Support extensible certificate get, update and verify
+   - Support CGo-based cipher suites: SM3/SM4
 - Process management
-   - Supports smooth reload
    - Supports hot upgrades
+   - Supports graceful shutdown
 - Extension capabilities
-   - Supports custom private protocols
+   - Supports go-plugin based extension
+   - Supports process based extension
+   - Supports WASM based extension
+   - Supports custom extensions configuration
    - Supports custom extensions at the TCP I/O layer and protocol layer
 
 ## MOSN Community

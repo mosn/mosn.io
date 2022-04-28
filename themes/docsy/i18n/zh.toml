@@ -20,6 +20,9 @@ other = "归档于"
 [footer_all_rights_reserved]
 other = "保留所有权利"
 
+[footer_scan_qr_code]
+other = "欢迎钉钉扫码"
+
 [footer_privacy_policy]
 other = "隐私"
 
