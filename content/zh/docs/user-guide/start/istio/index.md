@@ -2,11 +2,10 @@
 title: "MOSN 作为 Istio 的数据平面"
 linkTitle: "集成 Istio"
 date: 2022-03-25
-aliases: "/zh/docs/quick-startistio"
+aliases: "/zh/docs/istio"
 weight: 2
 description: >
   本文将介绍如何使用 MOSN 在 Istio 框架下搭建 Service Mesh 的开发环境，并验证 MOSN 的一些基础路由能力、负载均衡能力等。
-
 ---
 
 {{% pageinfo color="primary" %}}
