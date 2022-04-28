@@ -221,7 +221,7 @@ https://github.com/mosn/meetup
 
 ## 教程
 
-MOSN 提供线上教程，见[教程页面](/docs/tutorial/)。
+MOSN 提供线上教程，见[教程页面](/docs/user-guide/start/tutorial/)。
 
 ## 加入社区
 
