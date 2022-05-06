@@ -6,4 +6,4 @@ Powered by [hugo](https://gohugo.io) with [docsy theme](https://github.com/googl
 
 ## Notice
 
-This webiste is built under hugo version v0.55.5-A83256B9C/extended. There may be unknown errors when compiling on other versions.
+This website is built under hugo version v0.55.5-A83256B9C/extended. There may be unknown errors when compiling on other versions.
