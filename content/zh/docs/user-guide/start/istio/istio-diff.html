@@ -1,6 +1,5 @@
-bin/init.sh
-
-```diff
+<p>bin/init.sh</p>
+<p><code>diff
 -WASM_RELEASE_DIR=${ISTIO_ENVOY_LINUX_RELEASE_DIR}
 -for plugin in stats metadata_exchange
 -do
@@ -16,12 +15,9 @@ bin/init.sh
 +#  download_wasm_if_necessary "${FILTER_WASM_URL}" "${WASM_RELEASE_DIR}"/"${plugin//_/-}"-filter.wasm
 +#  FILTER_WASM_URL="${ISTIO_ENVOY_BASE_URL}/${plugin}-${ISTIO_ENVOY_VERSION}.compiled.wasm"
 +#  download_wasm_if_necessary "${FILTER_WASM_URL}" "${WASM_RELEASE_DIR}"/"${plugin//_/-}"-filter.compiled.wasm
-+#done
-```
-
-bin/update_proxy.sh
-
-```diff
++#done</code></p>
+<p>bin/update_proxy.sh</p>
+<p><code>diff
 -WASM_URL=${ISTIO_ENVOY_BASE_URL}/${plugin}-${ISTIO_ENVOY_VERSION}.wasm
 -printf "Verifying %s is available\n" "$WASM_URL"
 -until curl --output /dev/null --silent --head --fail "$WASM_URL"; do
@@ -33,12 +29,9 @@ bin/update_proxy.sh
 +#until curl --output /dev/null --silent --head --fail "$WASM_URL"; do
 +#    printf '.'
 +#    sleep $SLEEP_TIME
-+#done
-```
-
-pilot/docker/Dockerfile.proxyv2
-
-```diff
++#done</code></p>
+<p>pilot/docker/Dockerfile.proxyv2</p>
+<p><code>diff
 -COPY stats-filter.wasm /etc/istio/extensions/stats-filter.wasm
 -COPY stats-filter.compiled.wasm /etc/istio/extensions/stats-filter.compiled.wasm
 -COPY metadata-exchange-filter.wasm /etc/istio/extensions/metadata-exchange-filter.wasm
@@ -46,12 +39,9 @@ pilot/docker/Dockerfile.proxyv2
 +#COPY stats-filter.wasm /etc/istio/extensions/stats-filter.wasm
 +#COPY stats-filter.compiled.wasm /etc/istio/extensions/stats-filter.compiled.wasm
 +#COPY metadata-exchange-filter.wasm /etc/istio/extensions/metadata-exchange-filter.wasm
-+#COPY metadata-exchange-filter.compiled.wasm /etc/istio/extensions/metadata-exchange-filter.compiled.wasm
-```
-
-tools/istio-docker.mk
-
-```diff
++#COPY metadata-exchange-filter.compiled.wasm /etc/istio/extensions/metadata-exchange-filter.compiled.wasm</code></p>
+<p>tools/istio-docker.mk</p>
+<p>```diff
  # rule for wasm extensions.
 -$(ISTIO_ENVOY_LINUX_RELEASE_DIR)/stats-filter.wasm: init
 -$(ISTIO_ENVOY_LINUX_RELEASE_DIR)/stats-filter.compiled.wasm: init
@@ -60,9 +50,8 @@ tools/istio-docker.mk
 +#$(ISTIO_ENVOY_LINUX_RELEASE_DIR)/stats-filter.wasm: init
 +#$(ISTIO_ENVOY_LINUX_RELEASE_DIR)/stats-filter.compiled.wasm: init
 +#$(ISTIO_ENVOY_LINUX_RELEASE_DIR)/metadata-exchange-filter.wasm: init
-+#$(ISTIO_ENVOY_LINUX_RELEASE_DIR)/metadata-exchange-filter.compiled.wasm: init
-
--docker.proxyv2: $(ISTIO_ENVOY_LINUX_RELEASE_DIR)/stats-filter.wasm
++#$(ISTIO_ENVOY_LINUX_RELEASE_DIR)/metadata-exchange-filter.compiled.wasm: init</p>
+<p>-docker.proxyv2: $(ISTIO_ENVOY_LINUX_RELEASE_DIR)/stats-filter.wasm
 -docker.proxyv2: $(ISTIO_ENVOY_LINUX_RELEASE_DIR)/stats-filter.compiled.wasm
 -docker.proxyv2: $(ISTIO_ENVOY_LINUX_RELEASE_DIR)/metadata-exchange-filter.wasm
 -docker.proxyv2: $(ISTIO_ENVOY_LINUX_RELEASE_DIR)/metadata-exchange-filter.compiled.wasm
@@ -70,11 +59,8 @@ tools/istio-docker.mk
 +#docker.proxyv2: $(ISTIO_ENVOY_LINUX_RELEASE_DIR)/stats-filter.compiled.wasm
 +#docker.proxyv2: $(ISTIO_ENVOY_LINUX_RELEASE_DIR)/metadata-exchange-filter.wasm
 +#docker.proxyv2: $(ISTIO_ENVOY_LINUX_RELEASE_DIR)/metadata-exchange-filter.compiled.wasm
-```
-
-pkg/config/constants/constants.go
-
-```diff
+```</p>
+<p>pkg/config/constants/constants.go</p>
+<p><code>diff
 -       BinaryPathFilename = "/usr/local/bin/envoy"
-+       BinaryPathFilename = "/usr/local/bin/mosn"
-```
++       BinaryPathFilename = "/usr/local/bin/mosn"</code></p>
