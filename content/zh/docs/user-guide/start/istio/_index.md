@@ -2,11 +2,10 @@
 title: "MOSN 作为 Istio 的数据平面"
 linkTitle: "集成 Istio"
 date: 2022-03-25
-aliases: "/zh/docs/quick-startistio"
+aliases: "/zh/docs/istio"
 weight: 2
 description: >
   本文将介绍如何使用 MOSN 在 Istio 框架下搭建 Service Mesh 的开发环境，并验证 MOSN 的一些基础路由能力、负载均衡能力等。
-
 ---
 
 {{% pageinfo color="primary" %}}
@@ -44,7 +43,7 @@ cd istio
 git checkout 1.10.6
 ```
 
-2、由于目前 Istio 默认会加载 wasm，我们需要将相关逻辑注释掉，再重新编译镜像，避免一些不必要的错误。详细的改动可见 [istio-diff](./istio-diff.md)
+2、由于目前 Istio 默认会加载 wasm，我们需要将相关逻辑注释掉，再重新编译镜像，避免一些不必要的错误。详细的改动可见 [istio-diff](./istio-diff)
 
 3、编译 MOSN 二进制，MOSN 提供了镜像编译的方式可直接编译 linux 的二进制；同时由于在 MacOS 上构建的过程中，Istio 还会下载一个 MacOS 版本，因此还需要编译一个 MacOS 的二进制
 

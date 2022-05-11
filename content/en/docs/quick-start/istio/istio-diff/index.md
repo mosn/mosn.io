@@ -1,3 +1,8 @@
+---
+date: 2022-03-25
+weight: 2
+---
+
 bin/init.sh
 
 ```diff
