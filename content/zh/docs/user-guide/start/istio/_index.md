@@ -37,6 +37,8 @@ MOSN 从 v1.0.0 版本开始 已通过 Istio 1.10.6 的 `Bookinfo` 测试，关�
 ==========
 1、下载完整的 istio 源代码，并且切换到对应的版本
 
+注意：Istio 1.10.6 不支持 M1 芯片 ,若采用会报错。 [Istio ]([(https://github.com/istio/istio/issues/32841)])。
+
 ```
 git clone git@github.com:istio/istio.git
 cd istio
@@ -152,6 +154,8 @@ export PATH=$PATH:$(pwd)/bin
 ```bash
 kubectl create namespace istio-system
 istioctl manifest apply --set .values.global.proxy.image=${MOSN IMAGE} --set meshConfig.defaultConfig.binaryPath="/usr/local/bin/mosn"
+例：
+istioctl manifest apply --set .values.global.proxy.image= mosnio/proxyv2:v1.0.0-1.10.6 --set meshConfig.defaultConfig.binaryPath="/usr/local/bin/mosn"
 ```
 
 4、验证 Istio 相关 POD 服务是否部署成功
