@@ -122,37 +122,119 @@ MOSN 启动时的配置可以同时包含静态模式与动态模式，以混合
 
 ```json
 {
- "dynamic_resources": {
-   "ads_config": {
-      "api_type": "GRPC",
-      "grpc_services": [
-          {
-            "envoy_grpc": {"cluster_name": "xds-grpc"}
-          }
-        ]
-      }
+  "servers": [
+    {
+      "default_log_path": "stdout",
+      "default_log_level": "DEBUG"
     }
-  },
+  ],
   "static_resources": {
     "clusters": [
       {
-        "name": "xds-grpc",
-        "type": "STRICT_DNS",
-        "connect_timeout": "10s",
-        "lb_policy": "ROUND_ROBIN",
-        "hosts": [
-          {
-            "socket_address": {"address": "pilot", "port_value": 15010}
-          }
-        ],
-        "upstream_connection_options": {
-          "tcp_keepalive": {
-            "keepalive_time": 300
-          }
+        "connect_timeout": "1s",
+        "load_assignment": {
+          "cluster_name": "xds_cluster",
+          "endpoints": [
+            {
+              "lb_endpoints": [
+                {
+                  "endpoint": {
+                    "address": {
+                      "socket_address": {
+                        "address": "127.0.0.1",
+                        "port_value": 9002
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          ]
         },
-        "http2_protocol_options": { }
+        "http2_protocol_options": {},
+        "name": "xds_cluster"
       }
     ]
+  },
+  "dynamic_resources": {
+    "ads_config": {
+      "api_type": "GRPC",
+      "transport_api_version": "V3",
+      "grpc_services": [
+        {
+          "envoy_grpc": {
+            "cluster_name": "xds_cluster"
+          }
+        }
+      ],
+      "set_node_on_first_message_only": true
+    },
+    "cds_config": {
+      "resource_api_version": "V3",
+      "api_config_source": {
+        "api_type": "GRPC",
+        "transport_api_version": "V3",
+        "grpc_services": [
+          {
+            "envoy_grpc": {
+              "cluster_name": "xds_cluster"
+            }
+          }
+        ],
+        "set_node_on_first_message_only": true
+      }
+    },
+    "lds_config": {
+      "resource_api_version": "V3",
+      "api_config_source": {
+        "api_type": "GRPC",
+        "transport_api_version": "V3",
+        "grpc_services": [
+          {
+            "envoy_grpc": {
+              "cluster_name": "xds_cluster"
+            }
+          }
+        ],
+        "set_node_on_first_message_only": true
+      }
+    }
+  },
+  "node": {
+    "cluster": "test-cluster",
+    "id": "test-id"
+  },
+  "layered_runtime": {
+    "layers": [
+      {
+        "name": "runtime-0",
+        "rtds_layer": {
+          "rtds_config": {
+            "resource_api_version": "V3",
+            "api_config_source": {
+              "transport_api_version": "V3",
+              "api_type": "GRPC",
+              "grpc_services": {
+                "envoy_grpc": {
+                  "cluster_name": "xds_cluster"
+                }
+              }
+            }
+          },
+          "name": "runtime-0"
+        }
+      }
+    ]
+  },
+  "admin": {
+    "access_log_path": "/dev/null",
+    "address": {
+      "socket_address": {
+        "address": "127.0.0.1",
+        "port_value": 9003
+      }
+    }
   }
 }
+
 ```
