@@ -16,9 +16,7 @@ description: >
 ### 二、整理 Release notes
 
 + 基于 Github 的 PullRequest 记录，整理本次发布的内容与上一个版本之间的差异，需要注意仅统计目标分支是 master 且正常合并的 PullRequest
-+ 首先记录原始的信息，统一记录在 [MOSN Release notes 整理文档](https://docs.google.com/document/d/15wu2Ug4nN38A_odKv3ubmfu1OxmxqlUUFnvN4mbKtIc/edit?usp=sharing)
-  + 文档打开需要权限
-+ 整理完原始信息以后，进行提炼和总结
++ 首先整理完原始信息以后，进行提炼和总结
   + 通常情况下，一个 PullRequest 对应一个改动记录
   + 存在部分特殊情况是一个 PullRequest 包含多个改动的情况，可以请 PullRequest 提供者提供详细信息
   + 也可能存在多个 PullRequest 是针对同一个改动的情况（如新功能，分开提 PullRequest，或者在同一个版本迭代中不断优化）
