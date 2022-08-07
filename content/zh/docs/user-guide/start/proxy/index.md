@@ -102,7 +102,7 @@ make integrate-framework
 运行下面的命令，将使用一个 [示例配置文件](https://github.com/mosn/mosn/blob/master/configs/mosn_config.json) 启动 MOSN。
 
 ```bash
-./build/bundles/${version}/binary start -c configs/mosn_config.json
+./build/bundles/${version}/binary/mosn start -c configs/mosn_config.json
 ```
 
 ### MOSN 配置说明
