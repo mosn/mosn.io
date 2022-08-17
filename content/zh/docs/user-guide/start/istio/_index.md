@@ -84,7 +84,39 @@ cd istio-$ISTIO_VERSION/
 export PATH=$PATH:$(pwd)/bin
 ```
 
-3、创建 istio 命名空间，并且设置 MOSN proxyv2 镜像为数据面镜像
+3、执行默认安装 ```istioctl install```
+```bash
+ istioctl install
+
+This will install the Istio 1.14.1 default profile with ["Istio core" "Istiod" "Ingress gateways"] components into the cluster. Proceed? (y/N) y
+✔ Istio core installed                                                                                                                                                                                                                                                        
+✔ Istiod installed                                                                                                                                                                                                                                                            
+✔ Ingress gateways installed                                                                                                                                                                                                                                                  
+✔ Installation complete
+Making this installation the default for injection and validation.
+
+Thank you for installing Istio 1.14.  Please take a few minutes to tell us about your install/upgrade experience!  https://forms.gle/yEtCbt45FZ3VoDT5A
+
+```
+安装成功，可以通过 ```minikube kubectl -- get pods -A```  查看pods 情况
+```bash
+ minikube kubectl -- get pods -A 
+
+NAMESPACE      NAME                                    READY   STATUS    RESTARTS      AGE
+istio-system   istio-ingressgateway-6b7fb88874-rgmrj   1/1     Running   0             2m44s
+istio-system   istiod-65c9767c55-vjppv                 1/1     Running   0             3m12s
+
+kube-system    coredns-64897985d-vw7b8                 1/1     Running   2 (16h ago)   7d20h
+kube-system    etcd-minikube                           1/1     Running   2 (16h ago)   7d20h
+kube-system    kube-apiserver-minikube                 1/1     Running   2 (16h ago)   7d20h
+kube-system    kube-controller-manager-minikube        1/1     Running   2 (16h ago)   7d20h
+kube-system    kube-proxy-cmjcq                        1/1     Running   2 (16h ago)   7d20h
+kube-system    kube-scheduler-minikube                 1/1     Running   2 (16h ago)   7d20h
+kube-system    storage-provisioner                     1/1     Running   5 (16h ago)   7d20h 
+
+```
+
+4、创建 istio 命名空间，并且设置 MOSN proxyv2 镜像为数据面镜像
 
 下载 Mosn proxyv2的镜像，并设置其为istio的proxy镜像。`docker pull mosnio/proxyv2:v1.0.0-1.10.6` ,也可以通过手动去创建proxy镜像 （[MOSN 与 Istio 的 proxyv2 镜像 build 方法介绍](../images)）
 ```bash
@@ -95,7 +127,7 @@ istioctl manifest apply --set .values.global.proxy.image=${MOSN IMAGE} --set mes
 istioctl manifest apply --set .values.global.proxy.image= mosnio/proxyv2:v1.0.0-1.10.6 --set meshConfig.defaultConfig.binaryPath="/usr/local/bin/mosn"
 ```
 
-4、验证 Istio 相关 POD 服务是否部署成功
+5、验证 Istio 相关 POD 服务是否部署成功
 
 ```bash
 kubectl get pod -n istio-system
