@@ -85,6 +85,7 @@ export PATH=$PATH:$(pwd)/bin
 ```
 
 3、执行默认安装 ```istioctl install```
+
 ```bash
  istioctl install
 
@@ -99,6 +100,7 @@ Thank you for installing Istio 1.14.  Please take a few minutes to tell us about
 
 ```
 安装成功，可以通过 ```minikube kubectl -- get pods -A```  查看pods 情况
+
 ```bash
  minikube kubectl -- get pods -A 
 
@@ -113,8 +115,8 @@ kube-system    kube-controller-manager-minikube        1/1     Running   2 (16h 
 kube-system    kube-proxy-cmjcq                        1/1     Running   2 (16h ago)   7d20h
 kube-system    kube-scheduler-minikube                 1/1     Running   2 (16h ago)   7d20h
 kube-system    storage-provisioner                     1/1     Running   5 (16h ago)   7d20h 
-
 ```
+注意：当你失败时，可以通过 ```minikube ssh``` 进入虚机所构建的集群内部，并通过 ```docker pull ${失败的镜像} ``` 来获取失败镜像
 
 4、创建 istio 命名空间，并且设置 MOSN proxyv2 镜像为数据面镜像
 
