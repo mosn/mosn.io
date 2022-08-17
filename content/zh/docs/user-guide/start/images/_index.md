@@ -9,7 +9,7 @@ description : >
 ---
 
 本文的完整构建镜像方法均是基于 MacOS 和 Istio 1.10.6 版本进行的构建，在其他操作系统 Istio 版本上可能存在部分细节差异，需要进行调整。
-除了完整构建方式外，如果仅有 MOSN 代码发生变化，还可以使用「仅更新 MOSN 的方式」构建镜像。
+除了完整构建方式外，如果仅有 MOSN 代码发生变化，还可以使用「单独更新 MOSN 版本」的方式构建镜像。
 **通常情况下，您不需要额外构建镜像，可直接用我们提供的镜像 `mosnio/proxyv2:${MOSN-VERSION}-${ISTIO_VERSION}`，如`docker pull mosnio/proxyv2:v1.0.0-1.10.6`**
 
 完整的镜像构建（基于 MacOS 和 Istio 1.10.6）
