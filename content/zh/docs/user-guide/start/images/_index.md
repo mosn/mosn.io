@@ -5,6 +5,7 @@ date: 2022-03-25
 aliases: "/zh/docs/istio"
 weight: 3
 description : >
+    本文主要讲述 MOSN 与 Istio 的 proxyv2 镜像 build 方法，并且如何仅更新 MOSN 的方式
 ---
 
 本文的完整构建镜像方法均是基于 MacOS 和 Istio 1.10.6 版本进行的构建，在其他操作系统 Istio 版本上可能存在部分细节差异，需要进行调整。
