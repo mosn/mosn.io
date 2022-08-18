@@ -102,9 +102,9 @@ Thank you for installing Istio 1.14.  Please take a few minutes to tell us about
 4、创建 istio 命名空间，并且设置 MOSN proxyv2 镜像为数据面镜像
 
 下载 MOSN proxyv2 的镜像，并设置其为 Istio 的 proxy 镜像。
-```--set .values.global.proxy.image=${MOSN IMAGE}```
+`--set .values.global.proxy.image=${MOSN IMAGE}`
 也可以通过手动去创建 proxy 镜像 （[MOSN 与 Istio 的 proxyv2 镜像 build 方法介绍](../images)）。
-以下将使用我们提供的镜像版本 ```mosnio/proxyv2:v1.0.0-1.10.6```
+以下将使用我们提供的镜像版本 `mosnio/proxyv2:v1.0.0-1.10.6`
 
 ```bash
 $ kubectl create namespace istio-system
