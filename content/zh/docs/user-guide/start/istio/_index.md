@@ -107,16 +107,7 @@ Thank you for installing Istio 1.14.  Please take a few minutes to tell us about
 NAMESPACE      NAME                                    READY   STATUS    RESTARTS      AGE
 istio-system   istio-ingressgateway-6b7fb88874-rgmrj   1/1     Running   0             2m44s
 istio-system   istiod-65c9767c55-vjppv                 1/1     Running   0             3m12s
-
-kube-system    coredns-64897985d-vw7b8                 1/1     Running   2 (16h ago)   7d20h
-kube-system    etcd-minikube                           1/1     Running   2 (16h ago)   7d20h
-kube-system    kube-apiserver-minikube                 1/1     Running   2 (16h ago)   7d20h
-kube-system    kube-controller-manager-minikube        1/1     Running   2 (16h ago)   7d20h
-kube-system    kube-proxy-cmjcq                        1/1     Running   2 (16h ago)   7d20h
-kube-system    kube-scheduler-minikube                 1/1     Running   2 (16h ago)   7d20h
-kube-system    storage-provisioner                     1/1     Running   5 (16h ago)   7d20h 
 ```
-注意：当你失败时，可以通过 ```minikube ssh``` 进入虚机所构建的集群内部，并通过 ```docker pull ${失败的镜像} ``` 来获取失败镜像
 
 4、创建 istio 命名空间，并且设置 MOSN proxyv2 镜像为数据面镜像
 
@@ -128,6 +119,9 @@ istioctl manifest apply --set .values.global.proxy.image=${MOSN IMAGE} --set mes
 例:
 istioctl manifest apply --set .values.global.proxy.image= mosnio/proxyv2:v1.0.0-1.10.6 --set meshConfig.defaultConfig.binaryPath="/usr/local/bin/mosn"
 ```
+
+注意：当你失败时，可以通过 ```minikube ssh``` 进入虚机所构建的集群内部，并通过 ```docker pull mosnio/proxyv2:v1.0.0-1.10.6 ``` 来获取镜像
+
 
 5、验证 Istio 相关 POD 服务是否部署成功
 
