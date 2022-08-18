@@ -9,14 +9,16 @@ description : >
 ---
 
 本文的完整构建镜像方法均是基于 MacOS 和 Istio 1.10.6 版本进行的构建，在其他操作系统 Istio 版本上可能存在部分细节差异，需要进行调整。
-除了完整构建方式外，如果仅有 MOSN 代码发生变化，还可以使用「单独更新 MOSN 版本」的方式构建镜像。
+除了完整构建方式外，如果仅有 MOSN 代码发生变化，还可以使用 单独更新 MOSN 版本 的方式构建镜像。
+
 **通常情况下，您不需要额外构建镜像，可直接用我们提供的镜像 `mosnio/proxyv2:${MOSN-VERSION}-${ISTIO_VERSION}`，如`docker pull mosnio/proxyv2:v1.0.0-1.10.6`**
 
 完整的镜像构建（基于 MacOS 和 Istio 1.10.6）
 ==========
+
 1、下载完整的 istio 源代码，并且切换到对应的版本
 
-```
+```bash
 git clone git@github.com:istio/istio.git
 cd istio
 git checkout 1.10.6
@@ -26,7 +28,7 @@ git checkout 1.10.6
 
 3、编译 MOSN 二进制，MOSN 提供了镜像编译的方式可直接编译 linux 的二进制；同时由于在 MacOS 上构建的过程中，Istio 还会下载一个 MacOS 版本，因此还需要编译一个 MacOS 的二进制
 
-4、将编译好的二进制，使用 tar 方式进行打包，并且打包路径需要是`usr/local/bin`
+4、将编译好的二进制，使用 tar 方式进行打包，并且打包路径需要是 `usr/local/bin`
 
 ```bash
 cd ${MOSN Project Path}
@@ -75,7 +77,7 @@ make docker.proxyv2 \
 7、编译完成以后，可以将镜像打上新的 Tag 并且上传（如个人测试 dockerhub 的地址），确保 istio 使用时可访问即可
 
 
-「单独更新 MOSN 版本」
+单独更新 MOSN 版本
 ==========
 
 

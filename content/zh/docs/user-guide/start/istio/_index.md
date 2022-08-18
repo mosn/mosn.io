@@ -44,20 +44,20 @@ kubectl 是用于针对 Kubernetes 集群运行命令的命令行接口，安装
 1、根据本机环境选择下载地址 [Minikube 官网](https://minikube.sigs.k8s.io/docs/start/),下面用的系统是`macOS x86`系统。
 
 ```bash
-curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-darwin-amd64
-sudo install minikube-darwin-amd64 /usr/local/bin/minikube
+$ curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-darwin-amd64
+$ sudo install minikube-darwin-amd64 /usr/local/bin/minikube
 ```
 
-2、`minikube start 
-   --memory=7851 
-   --cpus=4 
-   --image-mirror-country='cn'` // 注意内存必须大于4GB，且镜像为`cn`(国内)
+2、启动 minikube
+```bash
+$ minikube start --memory=7851 --cpus=4 --image-mirror-country='cn'
+```
+注意：内存必须大于4GB，且镜像为`cn`(国内)
 
 3、安装成功后，查看Pod情况
 
 ```bash
- minikube kubectl -- get pods -A 
-
+$ minikube kubectl -- get pods -A 
 NAMESPACE      NAME                                    READY   STATUS    RESTARTS      AGE
 kube-system    coredns-64897985d-vw7b8                 1/1     Running   2 (16h ago)   7d20h
 kube-system    etcd-minikube                           1/1     Running   2 (16h ago)   7d20h
@@ -73,21 +73,21 @@ kube-system    storage-provisioner                     1/1     Running   5 (16h 
 1、下载对应的 Istio Release 版本，可以在 [Istio release](https://github.com/istio/istio/releases/tag/1.10.6) 页面下载与您操作系统匹配的压缩文件，或者使用官方提供的下载方式
 
 ```bash
-VERSION=1.10.6 # istio version
-export ISTIO_VERSION=$VERSION && curl -L https://istio.io/downloadIstio | sh -
+ VERSION=1.10.6 # istio version
+ export ISTIO_VERSION=$VERSION && curl -L https://istio.io/downloadIstio | sh -
 ```
 
-2、下载完成以后（或者解压完成），切换到对应的目录，同时可以设置对应的`istioctl`命令行工具到环境变量，方便配置自定义 Istio 控制平面和数据平面配置参数。
+2、下载完成以后（或者解压完成），切换到对应的目录，同时可以设置对应的 `istioctl` 命令行工具到环境变量，方便配置自定义 Istio 控制平面和数据平面配置参数。
 
 ```bash
-cd istio-$ISTIO_VERSION/
-export PATH=$PATH:$(pwd)/bin
+$ cd istio-$ISTIO_VERSION/
+$ export PATH=$PATH:$(pwd)/bin
 ```
 
 3、执行默认安装 ```istioctl install```
 
 ```bash
- istioctl install
+$ istioctl install
 
 This will install the Istio 1.14.1 default profile with ["Istio core" "Istiod" "Ingress gateways"] components into the cluster. Proceed? (y/N) y
 ✔ Istio core installed                                                                                                                                                                                                                                                        
@@ -97,27 +97,17 @@ This will install the Istio 1.14.1 default profile with ["Istio core" "Istiod" "
 Making this installation the default for injection and validation.
 
 Thank you for installing Istio 1.14.  Please take a few minutes to tell us about your install/upgrade experience!  https://forms.gle/yEtCbt45FZ3VoDT5A
-
-```
-安装成功，可以通过 ```minikube kubectl -- get pods -A```  查看pods 情况
-
-```bash
- minikube kubectl -- get pods -A 
-
-NAMESPACE      NAME                                    READY   STATUS    RESTARTS      AGE
-istio-system   istio-ingressgateway-6b7fb88874-rgmrj   1/1     Running   0             2m44s
-istio-system   istiod-65c9767c55-vjppv                 1/1     Running   0             3m12s
 ```
 
 4、创建 istio 命名空间，并且设置 MOSN proxyv2 镜像为数据面镜像
 
-下载 Mosn proxyv2的镜像，并设置其为istio的proxy镜像。`docker pull mosnio/proxyv2:v1.0.0-1.10.6` ,也可以通过手动去创建proxy镜像 （[MOSN 与 Istio 的 proxyv2 镜像 build 方法介绍](../images)）
-```bash
-kubectl create namespace istio-system
-istioctl manifest apply --set .values.global.proxy.image=${MOSN IMAGE} --set meshConfig.defaultConfig.binaryPath="/usr/local/bin/mosn"
+下载 MOSN proxyv2 的镜像，并设置其为 Istio 的 proxy 镜像。也可以通过手动去创建 proxy 镜像 （[MOSN 与 Istio 的 proxyv2 镜像 build 方法介绍](../images)）
 
+```bash
+$ kubectl create namespace istio-system
+$ istioctl manifest apply --set .values.global.proxy.image=${MOSN IMAGE} --set meshConfig.defaultConfig.binaryPath="/usr/local/bin/mosn"
 例:
-istioctl manifest apply --set .values.global.proxy.image= mosnio/proxyv2:v1.0.0-1.10.6 --set meshConfig.defaultConfig.binaryPath="/usr/local/bin/mosn"
+$ istioctl manifest apply --set .values.global.proxy.image= mosnio/proxyv2:v1.0.0-1.10.6 --set meshConfig.defaultConfig.binaryPath="/usr/local/bin/mosn"
 ```
 
 注意：当你失败时，可以通过 ```minikube ssh``` 进入虚机所构建的集群内部，并通过 ```docker pull mosnio/proxyv2:v1.0.0-1.10.6 ``` 来获取镜像
@@ -126,8 +116,7 @@ istioctl manifest apply --set .values.global.proxy.image= mosnio/proxyv2:v1.0.0-
 5、验证 Istio 相关 POD 服务是否部署成功
 
 ```bash
-kubectl get pod -n istio-system
-
+$ kubectl get pod -n istio-system
 NAME                                    READY   STATUS    RESTARTS   AGE
 istio-ingressgateway-6b7fb88874-rgmrj   1/1     Running   0          102s
 istiod-65c9767c55-vjppv                 1/1     Running   0          109s
