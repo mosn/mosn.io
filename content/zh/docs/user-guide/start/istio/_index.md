@@ -15,7 +15,6 @@ MOSN 从 v1.0.0 版本开始 已通过 Istio 1.10.6 的 `Bookinfo` 测试，关�
 本文介绍的内容将包括 :
 
 - MOSN 与 Istio 的关系
-- MOSN 与 Istio 的 proxyv2 镜像 build 方法
 - 部署 Istio 与 MOSN
 - Bookinfo 实验
 
@@ -27,100 +26,9 @@ MOSN 从 v1.0.0 版本开始 已通过 Istio 1.10.6 的 `Bookinfo` 测试，关�
 
 <div align=center><img src="mosn-with-service-mesh.svg" width = "450" height = "400" alt="MOSN 介绍" /></div>
 
-## MOSN 与 Istio 的 proxyv2 镜像 build 方法
-
-本文的完整构建镜像方法均是基于 MacOS 和 Istio 1.10.6 版本进行的构建，在其他操作系统 Istio 版本上可能存在部分细节差异，需要进行调整。
-除了完整构建方式外，如果仅有 MOSN 代码发生变化，还可以使用仅更新 MOSN 的方式构建镜像。
-通常情况下，您不需要额外构建镜像，可直接用我们提供的镜像 `mosnio/proxyv2:${MOSN-VERSION}-${ISTIO_VERSION}`，如`docker pull mosnio/proxyv2:v1.0.0-1.10.6`
-
-完整的镜像构建（基于 MacOS 和 Istio 1.10.6）
-==========
-1、下载完整的 istio 源代码，并且切换到对应的版本
-
-```
-git clone git@github.com:istio/istio.git
-cd istio
-git checkout 1.10.6
-```
-
-2、由于目前 Istio 默认会加载 wasm，我们需要将相关逻辑注释掉，再重新编译镜像，避免一些不必要的错误。详细的改动可见 [istio-diff](./istio-diff)
-
-3、编译 MOSN 二进制，MOSN 提供了镜像编译的方式可直接编译 linux 的二进制；同时由于在 MacOS 上构建的过程中，Istio 还会下载一个 MacOS 版本，因此还需要编译一个 MacOS 的二进制
-
-4、将编译好的二进制，使用 tar 方式进行打包，并且打包路径需要是`usr/local/bin`
-
-```bash
-cd ${MOSN Project Path}
-mkdir -p usr/local/bin
-make build # build mosn binary on linux
-cp build/bundles/${MOSN VERSION}/binary/mosn usr/local/bin
-tar -zcvf mosn.tar.gz usr/local/bin/mosn
-cp mosn.tar.gz mosn-centos.tar.gz # copy a renamed tar.gz file
-
-make build-local # build mosn binary on macos
-cp build/bundles/${MOSN VERSION}/binary/mosn usr/local/bin
-tar -zcvf mosn-macos.tar.gz usr/local/bin/mosn
-```
-
-5、将生成的`mosn-macos.tar.gz` `mosn-centos.tar.gz` `mosn.tar.gz` 上传到一个编译环境可访问的存储服务中，可用 Go 语言简单快速在本地环境搭建一个
-
-```Go
-func main() {
-  address := "" // an address can be reached when proxyv2 image build. for example, 0.0.0.0:8080
-  filespath := "" // where the .tar.gz files stored.
-  http.ListenAndServe(address, http.FileServer(http.Dir(filespath)))
-}
-```
-
-6、指定参数，开始编译 proxyv2 镜像
-
-```bash
-address=$1 # your download service address
-export ISTIO_ENVOY_VERSION=$2 # MOSN Version, can be any value.
-export ISTIO_ENVOY_RELEASE_URL=http://$address/mosn.tar.gz
-export ISTIO_ENVOY_CENTOS_RELEASE_URL=http://$address/mosn-centos.tar.gz
-export ISTIO_ENVOY_MACOS_RELEASE_URL=http://$address/mosn-macos.tar.gz
-export ISTIO_ENVOY_MACOS_RELEASE_NAME=mosn-$2 # can be any value
-export SIDECAR=mosn
-
-make clean # clean the cache
-make docker.proxyv2 \
- SIDECAR=$SIDECAR \
- ISTIO_ENVOY_VERSION=$ISTIO_ENVOY_VERSION \
- ISTIO_ENVOY_RELEASE_URL=$ISTIO_ENVOY_RELEASE_URL \
- ISTIO_ENVOY_CENTOS_RELEASE_URL=$ISTIO_ENVOY_CENTOS_RELEASE_URL \
- ISTIO_ENVOY_MACOS_RELEASE_URL=$ISTIO_ENVOY_MACOS_RELEASE_URL \
- ISTIO_ENVOY_MACOS_RELEASE_NAME=$ISTIO_ENVOY_MACOS_RELEASE_NAME
-```
-
-7、编译完成以后，可以将镜像打上新的 Tag 并且上传（如个人测试 dockerhub 的地址），确保 istio 使用时可访问即可
-
-
-单独更新 MOSN 版本
-==========
-
-
-1、重新编译 MOSN 二进制
-
-```bash
-cd ${MOSN Project Path}
-make build # build mosn binary on linux
-```
-2、直接基于现有 MOSN 的 proxyv2 镜像更新二进制
-
-```Dockerfile
-FROM mosnio/proxyv2:v1.0.0-1.10.6
-COPY build/bundles/${MOSN VERSION}/binary/mosn /usr/local/bin/mosn
-```
-
-```bash
-docker build --no-cache --rm -t ${your image tag}
-```
-
-3、将新镜像上传，确保 istio 使用时可访问即可
-
 
 ## 部署 Istio 与 MOSN
+注意：Istio 1.10.6 不支持在 arm64 上运行 Kubernetes 的集群 。 [Istio Issues]([(https://github.com/istio/istio/issues/32841)])
 
 ### 安装 kubectl 命令行工具
 
@@ -131,34 +39,85 @@ kubectl 是用于针对 Kubernetes 集群运行命令的命令行接口，安装
 安装 Istio，首先需要根据实际需求选择安装平台，可参考 Istio 官方文档推荐的方式 [Platform Setup](https://istio.io/latest/docs/setup/platform-setup/)。
 后文中，我们假定选择的是`minikube`的安装方式，方便进行介绍。
 
+安装minikube 流程：
+
+1、根据本机环境选择下载地址 [Minikube 官网](https://minikube.sigs.k8s.io/docs/start/),下面用的系统是`macOS x86`系统。
+
+```bash
+$ curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-darwin-amd64
+$ sudo install minikube-darwin-amd64 /usr/local/bin/minikube
+```
+
+2、启动 minikube
+```bash
+$ minikube start --memory=7851 --cpus=4 --image-mirror-country='cn'
+```
+注意：内存必须大于4GB，且镜像为`cn`(国内)
+
+3、安装成功后，查看Pod情况
+
+```bash
+$ minikube kubectl -- get pods -A 
+NAMESPACE      NAME                                    READY   STATUS    RESTARTS      AGE
+kube-system    coredns-64897985d-vw7b8                 1/1     Running   2 (16h ago)   7d20h
+kube-system    etcd-minikube                           1/1     Running   2 (16h ago)   7d20h
+kube-system    kube-apiserver-minikube                 1/1     Running   2 (16h ago)   7d20h
+kube-system    kube-controller-manager-minikube        1/1     Running   2 (16h ago)   7d20h
+kube-system    kube-proxy-cmjcq                        1/1     Running   2 (16h ago)   7d20h
+kube-system    kube-scheduler-minikube                 1/1     Running   2 (16h ago)   7d20h
+kube-system    storage-provisioner                     1/1     Running   5 (16h ago)   7d20h 
+```
+
 ### 安装 Istio，使用 MOSN 作为数据面
 
 1、下载对应的 Istio Release 版本，可以在 [Istio release](https://github.com/istio/istio/releases/tag/1.10.6) 页面下载与您操作系统匹配的压缩文件，或者使用官方提供的下载方式
 
 ```bash
-VERSION=1.10.6 # istio version
-export ISTIO_VERSION=$VERSION && curl -L https://istio.io/downloadIstio | sh -
+ VERSION=1.10.6 # istio version
+ export ISTIO_VERSION=$VERSION && curl -L https://istio.io/downloadIstio | sh -
 ```
 
-2、下载完成以后（或者解压完成），切换到对应的目录，同时可以设置对应的`istioctl`命令行工具到环境变量，方便配置自定义 Istio 控制平面和数据平面配置参数。
+2、下载完成以后（或者解压完成），切换到对应的目录，同时可以设置对应的 `istioctl` 命令行工具到环境变量，方便配置自定义 Istio 控制平面和数据平面配置参数。
 
 ```bash
-cd istio-$ISTIO_VERSION/
-export PATH=$PATH:$(pwd)/bin
+$ cd istio-$ISTIO_VERSION/
+$ export PATH=$PATH:$(pwd)/bin
 ```
 
-3、创建 istio 命名空间，并且设置 MOSN proxyv2 镜像为数据面镜像
+3、执行默认安装 ```istioctl install```
 
 ```bash
-kubectl create namespace istio-system
-istioctl manifest apply --set .values.global.proxy.image=${MOSN IMAGE} --set meshConfig.defaultConfig.binaryPath="/usr/local/bin/mosn"
+$ istioctl install
+
+This will install the Istio 1.14.1 default profile with ["Istio core" "Istiod" "Ingress gateways"] components into the cluster. Proceed? (y/N) y
+✔ Istio core installed                                                                                                                                                                                                                                                        
+✔ Istiod installed                                                                                                                                                                                                                                                            
+✔ Ingress gateways installed                                                                                                                                                                                                                                                  
+✔ Installation complete
+Making this installation the default for injection and validation.
+
+Thank you for installing Istio 1.14.  Please take a few minutes to tell us about your install/upgrade experience!  https://forms.gle/yEtCbt45FZ3VoDT5A
 ```
 
-4、验证 Istio 相关 POD 服务是否部署成功
+4、创建 istio 命名空间，并且设置 MOSN proxyv2 镜像为数据面镜像
+
+下载 MOSN proxyv2 的镜像，并设置其为 Istio 的 proxy 镜像。
+`--set .values.global.proxy.image=${MOSN IMAGE}`
+也可以通过手动去创建 proxy 镜像 （[MOSN 与 Istio 的 proxyv2 镜像 build 方法介绍](../images)）。
+以下将使用我们提供的镜像版本 `mosnio/proxyv2:v1.0.0-1.10.6`
 
 ```bash
-kubectl get pod -n istio-system
+$ kubectl create namespace istio-system
+$ istioctl manifest apply --set .values.global.proxy.image= mosnio/proxyv2:v1.0.0-1.10.6 --set meshConfig.defaultConfig.binaryPath="/usr/local/bin/mosn"
+```
 
+注意：当你失败时，可以通过 ```minikube ssh``` 进入虚机所构建的集群内部，并通过 ```docker pull mosnio/proxyv2:v1.0.0-1.10.6 ``` 来获取镜像
+
+
+5、验证 Istio 相关 POD 服务是否部署成功
+
+```bash
+$ kubectl get pod -n istio-system
 NAME                                    READY   STATUS    RESTARTS   AGE
 istio-ingressgateway-6b7fb88874-rgmrj   1/1     Running   0          102s
 istiod-65c9767c55-vjppv                 1/1     Running   0          109s
