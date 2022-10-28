@@ -47,7 +47,7 @@ bool 类型，表示 Listener 是否会占用 address 配置的地址，通常�
 
 ## use_original_dst
 
-标记使用的透明代理类型，目前支持 `redirect` 和 `tproxy` 两种类型。(v1.1.0 之前为 bool 类型，标记是否开启 redirect 模式的透明代理)
+标记使用的透明代理类型，目前支持 `redirect` 和 `tproxy` 两种类型。(v1.2.0 之前为 bool 类型，标记是否开启 redirect 模式的透明代理)
 
 ## access_logs
 
