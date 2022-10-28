@@ -21,6 +21,7 @@ description: >
   "bind_port":"",
   "use_original_dst":"",
   "access_logs":[],
+  "listener_filters":[],
   "filter_chains":[],
   "stream_filters":[],
   "inspector":"",
@@ -46,15 +47,19 @@ bool 类型，表示 Listener 是否会占用 address 配置的地址，通常�
 
 ## use_original_dst
 
-bool 类型，用于透明代理。
+标记使用的透明代理类型，目前支持 `redirect` 和 `tproxy` 两种类型。(v1.1.0 之前为 bool 类型，标记是否开启 redirect 模式的透明代理)
 
 ## access_logs
 
 一组 `access_log` 配置。
 
+## listener_filters
+
+一组 [ListenerFilter](./listener_filter) 配置，目前 MOSN 仅支持一个 `listener_filter`。
+
 ## filter_chains
 
-一组 [FilterChain](./filter-chain) 配置，但是目前 MOSN 仅支持一个 `filter_chain`。
+一组 [FilterChain](./filter-chain) 配置，目前 MOSN 仅支持一个 `filter_chain`。
 
 ## stream_filters
 

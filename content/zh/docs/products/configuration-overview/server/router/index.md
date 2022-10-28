@@ -177,14 +177,15 @@ description: >
 {
   "retry_on":"",
   "retry_timeout":"",
-  "num_retries":""
+  "num_retries":"",
+  "status_codes":[]
 }
 ```
 
 - `retry_on`，bool 类型，表示是否开启重试。
 - `retry_timeout`，[Duration String](../../custom#duration-string)，表示每次重试的超时时间。当 `retry_timeout` 大于 route 配置的 timeout 或者请求明确指定的 timeout 时，属于无效配置。
 - `num_retries`，表示最大的重试次数。
-
+- `status_codes`，重试状态码，配置后不在列表中的状态码将不会触发重试。
 
 ## 例子
 ### 默认匹配规则
