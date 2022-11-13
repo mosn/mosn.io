@@ -44,7 +44,7 @@ kubectl 是用于针对 Kubernetes 集群运行命令的命令行接口，安装
 1、根据本机环境选择下载地址 [Minikube 官网](https://minikube.sigs.k8s.io/docs/start/),下面用的系统是`macOS x86`系统。
 
 ```bash
-$ curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-darwin-amd64
+$ curl -LO https://storage.googleapis.com/minikube/releases/v1.22.0/minikube-darwin-amd64
 $ sudo install minikube-darwin-amd64 /usr/local/bin/minikube
 ```
 
@@ -96,7 +96,7 @@ This will install the Istio 1.14.1 default profile with ["Istio core" "Istiod" "
 ✔ Installation complete
 Making this installation the default for injection and validation.
 
-Thank you for installing Istio 1.14.  Please take a few minutes to tell us about your install/upgrade experience!  https://forms.gle/yEtCbt45FZ3VoDT5A
+Thank you for installing Istio 1.10.  Please take a few minutes to tell us about your install/upgrade experience!  https://forms.gle/KjkrDnMPByq7akrYA
 ```
 
 4、创建 istio 命名空间，并且设置 MOSN proxyv2 镜像为数据面镜像
@@ -108,7 +108,7 @@ Thank you for installing Istio 1.14.  Please take a few minutes to tell us about
 
 ```bash
 $ kubectl create namespace istio-system
-$ istioctl manifest apply --set .values.global.proxy.image= mosnio/proxyv2:v1.0.0-1.10.6 --set meshConfig.defaultConfig.binaryPath="/usr/local/bin/mosn"
+$ istioctl manifest apply --set .values.global.proxy.image=mosnio/proxyv2:v1.0.0-1.10.6 --set meshConfig.defaultConfig.binaryPath="/usr/local/bin/mosn"
 ```
 
 注意：当你失败时，可以通过 ```minikube ssh``` 进入虚机所构建的集群内部，并通过 ```docker pull mosnio/proxyv2:v1.0.0-1.10.6 ``` 来获取镜像
@@ -203,24 +203,23 @@ NAME               AGE
 bookinfo-gateway   6s
 ```
 
-设置 `GATEWAY_URL` 参考[文档](https://istio.io/docs/tasks/traffic-management/ingress/ingress-control/#determining-the-ingress-ip-and-ports)
+在后台运行ingress 网关，通过1234端口转发到80端口。参考[文档](https://istio.io/docs/tasks/traffic-management/ingress/ingress-control/#determining-the-ingress-ip-and-ports)
+
 
 ```bash
-$ export INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].nodePort}')
-$ export INGRESS_HOST=$(minikube ip)
-$ export GATEWAY_URL=$INGRESS_HOST:$INGRESS_PORT
+kubectl port-forward -n istio-system --address 0.0.0.0 service/istio-ingressgateway 1234:80 >/dev/null 2>&1 &
 ```
 
 验证 gateway 是否生效，输出 `200` 表示成功。
 
 ```bash
-$ curl -o /dev/null -s -w "%{http_code}\n"  http://$GATEWAY_URL/productpage
+$ curl -o /dev/null -s -w "%{http_code}\n"  http://127.0.0.1:1234/productpage
 200
 ```
 
 **观察页面情况**
 
-访问 `http://$GATEWAY_URL/productpage` （注意： `$GATEWAY_URL` 需要替换成你设置的地址），正常的话通过刷新会看到如下所示 `Bookinfo` 的界面，其中 Book Reviews 有三个版本，刷新后依次会看到（可以查看 samples/bookinfo/platform/kube/bookinfo.yaml 中的配置发现为什么是这三个版本）版本一的界面。
+访问 `http://$GATEWAY_URL/productpage` （注意： `$GATEWAY_URL` 需要替换成你设置的地址，如：127.0.0.1:1234），正常的话通过刷新会看到如下所示 `Bookinfo` 的界面，其中 Book Reviews 有三个版本，刷新后依次会看到（可以查看 samples/bookinfo/platform/kube/bookinfo.yaml 中的配置发现为什么是这三个版本）版本一的界面。
 
 ![版本一](v1.png)
 
@@ -278,6 +277,43 @@ $ kubectl apply -f samples/bookinfo/networking/virtual-service-reviews-test-v2.y
 
 ![版本一](v1.png)
 
+#### 验证 MOSN 的故障注入功能
+初始状态准备
+运行以下命令来初始化 Bookinfo 应用程序版本路由信息：
+```bash
+kubectl apply -f samples/bookinfo/networking/virtual-service-all-v1.yaml
+kubectl apply -f samples/bookinfo/networking/virtual-service-reviews-test-v2.yaml
+```
+
+经过上面的配置后，其请求链路如下所示：
+
+**productpage → reviews:v2 → ratings (针对 jason 用户) productpage → reviews:v1 (其他用户)**
+
+###### 注入延时故障
+执行下面的命令将会为用户 jason 在 reviews:v2 和 ratings 服务之间注入一个 7 秒的延迟：
+
+```bash
+kubectl apply -f samples/bookinfo/networking/virtual-service-ratings-test-delay.yaml
+```
+
+访问 `http://$GATEWAY_URL/productpage` 
+
+此时发现使用 jason 这个用户登录访问会有延时， Reviews 部分显示了错误消息：
+
+**Error fetching product reviews! Sorry, product reviews are currently unavailable for this book.**
+
+###### 注入 abort 故障
+执行下面的命令将会为用户 jason 访问 ratings 微服务时引入一个 HTTP abort：
+
+```bash
+kubectl apply -f samples/bookinfo/networking/virtual-service-ratings-test-abort.yaml
+```
+
+访问 `http://$GATEWAY_URL/productpage` 
+
+此时发现使用 jason 这个用户登录访问时， 此时 Book Reviews 中会显示如下错误消息：
+
+**Ratings service is currently unavailable**
 
 ### 卸载 Bookinfo
 
@@ -286,7 +322,7 @@ $ kubectl apply -f samples/bookinfo/networking/virtual-service-reviews-test-v2.y
 删除路由规则，并销毁应用的 Pod。
 
 ```bash
-$ sh samples/bookinfo/platform/kube/cleanup.sh
+$ samples/bookinfo/platform/kube/cleanup.sh <<EOF Y; EOF
 ```
 
 确认 `Bookinfo` 应用已经关停：
