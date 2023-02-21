@@ -122,8 +122,8 @@ MOSN 社区定期召开社区会议。
         </a>
       </td>
       <td width="222px" align="center" valign="middle">
-        <a href="https://www.zhipin.com" target="_blank">
-          <img width="200px"  src="/images/community/linkedcare.png">
+        <a href="https://www.meicai.cn/" trget="_blank">
+          <img width="200"  src="/images/community/meicai.png">
         </a>
       </td>
       <td width="222px" align="center" valign="middle">
