@@ -42,17 +42,17 @@ MOSN 社区定期召开社区会议。
     <tr>
       <td align="center"  valign="middle">
         <a href="https://www.antfin.com" target="_blank">
-          <img width="222px"  src="/images/community/ant.png">
+          <img width="200px"  src="/images/community/ant.png">
         </a>
       </td>
       <td align="center"  valign="middle">
         <a href="https://www.aliyun.com" target="_blank">
-          <img width="222px"  src="/images/community/aliyun.png">
+          <img width="200px"  src="/images/community/aliyun.png">
         </a>
       </td>
       <td align="center"  valign="middle">
         <a href="https://www.aliyun.com" target="_blank">
-          <img width="222px"  src="/images/community/jingdong.png">
+          <img width="200px"  src="/images/community/jingdong.png">
         </a>
       </td>
     </tr>
@@ -72,22 +72,22 @@ MOSN 社区定期召开社区会议。
     <tr>
       <td align="center"  valign="middle">
         <a href="https://www.tenxcloud.com" target="_blank">
-          <img width="222px"  src="/images/community/qunar.jpeg">
+          <img width="200px"  src="/images/community/qunar.jpeg">
         </a>
       </td>
       <td align="center"  valign="middle">
         <a href="https://www.tenxcloud.com" target="_blank">
-          <img width="222px"  src="/images/community/shunfeng.jpeg">
+          <img width="200px"  src="/images/community/shunfeng.jpeg">
         </a>
       </td>
       <td align="center"  valign="middle">
         <a href="https://www.tenxcloud.com" target="_blank">
-          <img width="222px"  src="/images/community/58.png">
+          <img width="200px"  src="/images/community/58.png">
         </a>
       </td>
       <td align="center"  valign="middle">
         <a href="https://www.tenxcloud.com" target="_blank">
-          <img width="222px"  src="/images/community/futu.png">
+          <img width="200px"  src="/images/community/futu.png">
         </a>
       </td>
     </tr>
@@ -95,22 +95,22 @@ MOSN 社区定期召开社区会议。
     <tr>
       <td align="center" valign="middle">
         <a href="https://www.iqiyi.com" target="_blank">
-          <img width="222px"  src="/images/community/iqiyi.png">
+          <img width="200px"  src="/images/community/iqiyi.png">
         </a>
       </td>
       <td align="center" valign="middle">
         <a href="https://www.zhipin.com" target="_blank">
-          <img width="222px"  src="/images/community/bosszhipin.png">
+          <img width="200px"  src="/images/community/bosszhipin.png">
         </a>
       </td>
       <td align="center" valign="middle">
         <a href="https://www.dmall.com" target="_blank">
-          <img width="222px"  src="/images/community/duodian.png">
+          <img width="200px"  src="/images/community/duodian.png">
         </a>
       </td>
       <td align="center" valign="middle">
         <a href="https://www.kanzhun.com" target="_blank">
-          <img width="222px"  src="/images/community/kanzhun.png">
+          <img width="200px"  src="/images/community/kanzhun.png">
         </a>
       </td>
     </tr>
@@ -118,22 +118,22 @@ MOSN 社区定期召开社区会议。
     <tr>
       <td align="center"  valign="middle">
         <a href="https://www.tenxcloud.com" target="_blank">
-          <img width="222px"  src="/images/community/tenxcloud.png">
+          <img width="200px"  src="/images/community/tenxcloud.png">
         </a>
       </td>
       <td align="center" valign="middle">
         <a href="https://www.zhipin.com" target="_blank">
-          <img width="222px"  src="/images/community/linkedcare.png">
+          <img width="200px"  src="/images/community/linkedcare.png">
         </a>
       </td>
       <td align="center" valign="middle">
         <a href="https://www.xiaobaoonline.com/" target="_blank">
-          <img width="222px"  src="/images/community/xiaobao.png">
+          <img width="200px"  src="/images/community/xiaobao.png">
         </a>
       </td>
       <td align="center" valign="middle">
         <a href="https://www.wm-motor.com/" target="_blank">
-          <img width="222px"  src="/images/community/weima.png">
+          <img width="200px"  src="/images/community/weima.png">
         </a>
       </td>
     </tr>
@@ -141,22 +141,22 @@ MOSN 社区定期召开社区会议。
     <tr>
       <td align="center" valign="middle">
         <a href="https://www.tuya.com" target="_blank">
-          <img width="222px"  src="/images/community/tuya.png">
+          <img width="200px"  src="/images/community/tuya.png">
         </a>
       </td>
       <td align="center" valign="middle">
         <a href="https://www.gaiaworks.cn" target="_blank">
-          <img width="222px"  src="/images/community/gaiya.png">
+          <img width="200px"  src="/images/community/gaiya.png">
         </a>
       </td>
       <td align="center" valign="middle">
         <a href="https://www.tydic.com" target="_blank">
-          <img width="222px"  src="/images/community/tianyuandike.png">
+          <img width="200px"  src="/images/community/tianyuandike.png">
         </a>
       </td>
       <td align="center" valign="middle">
         <a href="https://www.terminus.io" target="_blank">
-          <img width="222px"  src="/images/community/terminus.png">
+          <img width="200px"  src="/images/community/terminus.png">
         </a>
       </td>
     </tr>
@@ -177,17 +177,17 @@ MOSN 社区定期召开社区会议。
     <tr>
       <td align="center"  valign="middle">
         <a href="https://www.antfin.com" target="_blank">
-          <img width="222px"  src="/images/community/gongshang.png">
+          <img width="200px"  src="/images/community/gongshang.png">
         </a>
       </td>
       <td align="center"  valign="middle">
         <a href="https://www.aliyun.com" target="_blank">
-          <img width="222px"  src="/images/community/zhognxin.png">
+          <img width="200px"  src="/images/community/zhognxin.png">
         </a>
       </td>
       <td align="center"  valign="middle">
         <a href="https://www.aliyun.com" target="_blank">
-          <img width="222px"  src="/images/community/huaxia.png">
+          <img width="200px"  src="/images/community/huaxia.png">
         </a>
       </td>
     </tr>
@@ -207,22 +207,22 @@ MOSN 社区积极拥抱开源生态，与以下开源社区建立了良好的合
     <tr>
       <td align="center" valign="middle">
         <a href="https://istio.io/" target="_blank">
-          <img width="222px"  src="/images/community/istio.png">
+          <img width="200px"  src="/images/community/istio.png">
         </a>
       </td>
       <td align="center"  valign="middle">
         <a href="https://skywalking.apache.org/" target="_blank">
-          <img width="222px"  src="/images/community/skywalking.png">
+          <img width="200px"  src="/images/community/skywalking.png">
         </a>
       </td>
       <td align="center" valign="middle">
         <a href="https://github.com/apache/dubbo-go" target="_blank">
-          <img width="222px"  src="/images/community/dubbo-go.png">
+          <img width="200px"  src="/images/community/dubbo-go.png">
         </a>
       </td>
       <td align="center" valign="middle">
         <a href="https://sentinelguard.io/" target="_blank">
-          <img width="222px"  src="/images/community/sentinel.png">
+          <img width="200px"  src="/images/community/sentinel.png">
         </a>
       </td>
     </tr>
@@ -230,12 +230,12 @@ MOSN 社区积极拥抱开源生态，与以下开源社区建立了良好的合
     <tr>
       <td align="center" valign="middle">
         <a href="https://www.sofastack.tech/" target="_blank">
-          <img width="222px"  src="/images/community/sofastack.png">
+          <img width="200px"  src="/images/community/sofastack.png">
         </a>
       </td>
       <td align="center" valign="middle">
         <a href="http://seata.io/zh-cn/" target="_blank">
-          <img width="222px"  src="/images/community/seata.png">
+          <img width="200px"  src="/images/community/seata.png">
         </a>
       </td>
     </tr>
