@@ -33,7 +33,7 @@ MOSN 社区定期召开社区会议。
 
 ## 合作伙伴
 
-合作伙伴参与 MOSN 合作开发，使 MOSN 变得更好。
+合作伙伴参与 MOSN 共建，使 MOSN 变得更好。
 
 <div class="communnity">
 <table>
@@ -50,21 +50,9 @@ MOSN 社区定期召开社区会议。
           <img width="222px"  src="/images/community/aliyun.png">
         </a>
       </td>
-      <td align="center" valign="middle">
-        <a href="https://www.zhipin.com" target="_blank">
-          <img width="222px"  src="/images/community/bosszhipin.png">
-        </a>
-      </td>
-      <td align="center" valign="middle">
-        <a href="https://www.dmall.com" target="_blank">
-          <img width="222px"  src="/images/community/duodian.png">
-        </a>
-      </td>
-      </tr><tr></tr>
-      <tr>
-      <td align="center" valign="middle">
-        <a href="https://www.kanzhun.com" target="_blank">
-          <img width="222px"  src="/images/community/kanzhun.png">
+      <td align="center"  valign="middle">
+        <a href="https://www.aliyun.com" target="_blank">
+          <img width="222px"  src="/images/community/jingdong.png">
         </a>
       </td>
     </tr>
@@ -75,12 +63,58 @@ MOSN 社区定期召开社区会议。
 
 ## 终端用户
 
-以下是 MOSN 的用户。
+以下是 MOSN 的用户（部分）：
 
 <div>
 <table>
   <tbody>
   <tr></tr>
+    <tr>
+      <td align="center"  valign="middle">
+        <a href="https://www.tenxcloud.com" target="_blank">
+          <img width="222px"  src="/images/community/qunar.jpeg">
+        </a>
+      </td>
+      <td align="center"  valign="middle">
+        <a href="https://www.tenxcloud.com" target="_blank">
+          <img width="222px"  src="/images/community/shunfeng.jpeg">
+        </a>
+      </td>
+      <td align="center"  valign="middle">
+        <a href="https://www.tenxcloud.com" target="_blank">
+          <img width="222px"  src="/images/community/58.png">
+        </a>
+      </td>
+      <td align="center"  valign="middle">
+        <a href="https://www.tenxcloud.com" target="_blank">
+          <img width="222px"  src="/images/community/futu.png">
+        </a>
+      </td>
+    </tr>
+    <tr></tr>
+    <tr>
+      <td align="center" valign="middle">
+        <a href="https://www.iqiyi.com" target="_blank">
+          <img width="222px"  src="/images/community/iqiyi.png">
+        </a>
+      </td>
+      <td align="center" valign="middle">
+        <a href="https://www.zhipin.com" target="_blank">
+          <img width="222px"  src="/images/community/bosszhipin.png">
+        </a>
+      </td>
+      <td align="center" valign="middle">
+        <a href="https://www.dmall.com" target="_blank">
+          <img width="222px"  src="/images/community/duodian.png">
+        </a>
+      </td>
+      <td align="center" valign="middle">
+        <a href="https://www.kanzhun.com" target="_blank">
+          <img width="222px"  src="/images/community/kanzhun.png">
+        </a>
+      </td>
+    </tr>
+    <tr></tr>
     <tr>
       <td align="center"  valign="middle">
         <a href="https://www.tenxcloud.com" target="_blank">
@@ -106,8 +140,8 @@ MOSN 社区定期召开社区会议。
     <tr></tr>
     <tr>
       <td align="center" valign="middle">
-        <a href="https://www.iqiyi.com" target="_blank">
-          <img width="222px"  src="/images/community/iqiyi.png">
+        <a href="https://www.tuya.com" target="_blank">
+          <img width="222px"  src="/images/community/tuya.png">
         </a>
       </td>
       <td align="center" valign="middle">
@@ -126,23 +160,41 @@ MOSN 社区定期召开社区会议。
         </a>
       </td>
     </tr>
-    <tr>
-      <td align="center" valign="middle">
-        <a href="https://www.tuya.com" target="_blank">
-          <img width="222px"  src="/images/community/tuya.png">
-        </a>
-      </td>
-      <td align="center" valign="middle">
-        <a href="https://www.meicai.cn/" trget="_blank">
-          <img width="222px"  src="/images/community/meicai.png">
-        </a>
-      </td>
-    </tr>
   </tbody>
 </table>
 </div>
 
 请在[此处](https://github.com/mosn/community/issues/8)登记并提供反馈来帮助 MOSN 做的更好。
+
+## 商业用户
+
+以下是 MOSN 的商业版用户（部分）：
+
+<div class="communnity">
+<table>
+  <tbody>
+  <tr></tr>
+    <tr>
+      <td align="center"  valign="middle">
+        <a href="https://www.antfin.com" target="_blank">
+          <img width="222px"  src="/images/community/gongshang.png">
+        </a>
+      </td>
+      <td align="center"  valign="middle">
+        <a href="https://www.aliyun.com" target="_blank">
+          <img width="222px"  src="/images/community/zhognxin.png">
+        </a>
+      </td>
+      <td align="center"  valign="middle">
+        <a href="https://www.aliyun.com" target="_blank">
+          <img width="222px"  src="/images/community/huaxia.png">
+        </a>
+      </td>
+    </tr>
+    <tr></tr>
+  </tbody>
+</table>
+</div>
 
 ## 开源生态
 
