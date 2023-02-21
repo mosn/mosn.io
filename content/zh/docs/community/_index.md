@@ -33,38 +33,26 @@ MOSN 社区定期召开社区会议。
 
 ## 合作伙伴
 
-合作伙伴参与 MOSN 合作开发，使 MOSN 变得更好。
+合作伙伴参与 MOSN 共建，使 MOSN 变得更好。
 
 <div class="communnity">
 <table>
   <tbody>
   <tr></tr>
     <tr>
-      <td align="center"  valign="middle">
+      <td width="222px" align="center"  valign="middle">
         <a href="https://www.antfin.com" target="_blank">
-          <img width="222px"  src="/images/community/ant.png">
+          <img width="200px"  src="/images/community/ant.png">
         </a>
       </td>
-      <td align="center"  valign="middle">
+      <td width="222px" align="center"  valign="middle">
         <a href="https://www.aliyun.com" target="_blank">
-          <img width="222px"  src="/images/community/aliyun.png">
+          <img width="200px"  src="/images/community/aliyun.png">
         </a>
       </td>
-      <td align="center" valign="middle">
-        <a href="https://www.zhipin.com" target="_blank">
-          <img width="222px"  src="/images/community/bosszhipin.png">
-        </a>
-      </td>
-      <td align="center" valign="middle">
-        <a href="https://www.dmall.com" target="_blank">
-          <img width="222px"  src="/images/community/duodian.png">
-        </a>
-      </td>
-      </tr><tr></tr>
-      <tr>
-      <td align="center" valign="middle">
-        <a href="https://www.kanzhun.com" target="_blank">
-          <img width="222px"  src="/images/community/kanzhun.png">
+      <td width="222px" align="center"  valign="middle">
+        <a href="https://www.jd.com" target="_blank">
+          <img width="200px"  src="/images/community/jingdong.png">
         </a>
       </td>
     </tr>
@@ -75,66 +63,100 @@ MOSN 社区定期召开社区会议。
 
 ## 终端用户
 
-以下是 MOSN 的用户。
+以下是 MOSN 的用户（部分）：
 
 <div>
 <table>
   <tbody>
   <tr></tr>
     <tr>
-      <td align="center"  valign="middle">
-        <a href="https://www.tenxcloud.com" target="_blank">
-          <img width="222px"  src="/images/community/tenxcloud.png">
+      <td width="222px" align="center"  valign="middle">
+        <a href="https://www.qunar.com" target="_blank">
+          <img width="200px"  src="/images/community/qunar.jpeg">
         </a>
       </td>
-      <td align="center" valign="middle">
-        <a href="https://www.zhipin.com" target="_blank">
-          <img width="222px"  src="/images/community/linkedcare.png">
+      <td width="222px" align="center"  valign="middle">
+        <a href="https://www.sf-tech.com.cn/" target="_blank">
+          <img width="200px"  src="/images/community/shunfeng.jpeg">
         </a>
       </td>
-      <td align="center" valign="middle">
-        <a href="https://www.xiaobaoonline.com/" target="_blank">
-          <img width="222px"  src="/images/community/xiaobao.png">
+      <td width="222px" align="center"  valign="middle">
+        <a href="https://www.58.com" target="_blank">
+          <img width="200px"  src="/images/community/58.png">
         </a>
       </td>
-      <td align="center" valign="middle">
-        <a href="https://www.wm-motor.com/" target="_blank">
-          <img width="222px"  src="/images/community/weima.png">
+      <td width="222px" align="center"  valign="middle">
+        <a href="https://www.futuholdings.com/" target="_blank">
+          <img width="200px"  src="/images/community/futu.png">
         </a>
       </td>
     </tr>
     <tr></tr>
     <tr>
-      <td align="center" valign="middle">
+      <td width="222px" align="center" valign="middle">
         <a href="https://www.iqiyi.com" target="_blank">
-          <img width="222px"  src="/images/community/iqiyi.png">
+          <img width="200px"  src="/images/community/iqiyi.png">
         </a>
       </td>
-      <td align="center" valign="middle">
-        <a href="https://www.gaiaworks.cn" target="_blank">
-          <img width="222px"  src="/images/community/gaiya.png">
+      <td width="222px" align="center" valign="middle">
+        <a href="https://www.zhipin.com" target="_blank">
+          <img width="200px"  src="/images/community/bosszhipin.png">
         </a>
       </td>
-      <td align="center" valign="middle">
-        <a href="https://www.tydic.com" target="_blank">
-          <img width="222px"  src="/images/community/tianyuandike.png">
+      <td width="222px" align="center" valign="middle">
+        <a href="https://www.dmall.com" target="_blank">
+          <img width="200px"  src="/images/community/duodian.png">
         </a>
       </td>
-      <td align="center" valign="middle">
-        <a href="https://www.terminus.io" target="_blank">
-          <img width="222px"  src="/images/community/terminus.png">
+      <td width="222px" align="center" valign="middle">
+        <a href="https://www.kanzhun.com" target="_blank">
+          <img width="200px"  src="/images/community/kanzhun.png">
         </a>
       </td>
     </tr>
+    <tr></tr>
     <tr>
-      <td align="center" valign="middle">
-        <a href="https://www.tuya.com" target="_blank">
-          <img width="222px"  src="/images/community/tuya.png">
+      <td width="222px" align="center"  valign="middle">
+        <a href="https://www.tenxcloud.com" target="_blank">
+          <img width="200px"  src="/images/community/tenxcloud.png">
         </a>
       </td>
-      <td align="center" valign="middle">
+      <td width="222px" align="center" valign="middle">
         <a href="https://www.meicai.cn/" trget="_blank">
-          <img width="222px"  src="/images/community/meicai.png">
+          <img width="200"  src="/images/community/meicai.png">
+        </a>
+      </td>
+      <td width="222px" align="center" valign="middle">
+        <a href="https://www.xiaobaoonline.com/" target="_blank">
+          <img width="200px"  src="/images/community/xiaobao.png">
+        </a>
+      </td>
+      <td width="222px" align="center" valign="middle">
+        <a href="https://www.wm-motor.com/" target="_blank">
+          <img width="200px"  src="/images/community/weima.png">
+        </a>
+      </td>
+    </tr>
+    <tr></tr>
+    <tr>
+      <td width="222px" align="center" valign="middle">
+        <a href="https://www.tuya.com" target="_blank">
+          <img width="200px"  src="/images/community/tuya.png">
+        </a>
+      </td>
+      <td width="222px" align="center" valign="middle">
+        <a href="https://www.gaiaworks.cn" target="_blank">
+          <img width="200px"  src="/images/community/gaiya.png">
+        </a>
+      </td>
+      <td width="222px" align="center" valign="middle">
+        <a href="https://www.tydic.com" target="_blank">
+          <img width="200px"  src="/images/community/tianyuandike.png">
+        </a>
+      </td>
+      <td width="222px" align="center" valign="middle">
+        <a href="https://www.terminus.io" target="_blank">
+          <img width="200px"  src="/images/community/terminus.png">
         </a>
       </td>
     </tr>
@@ -143,6 +165,36 @@ MOSN 社区定期召开社区会议。
 </div>
 
 请在[此处](https://github.com/mosn/community/issues/8)登记并提供反馈来帮助 MOSN 做的更好。
+
+## 商业用户
+
+以下是 MOSN 的商业版用户（部分）：
+
+<div class="communnity">
+<table>
+  <tbody>
+  <tr></tr>
+    <tr>
+      <td width="222px" align="center"  valign="middle">
+        <a href="https://www.icbc.com.cn/" target="_blank">
+          <img width="200px"  src="/images/community/gongshang.png">
+        </a>
+      </td>
+      <td width="222px" align="center"  valign="middle">
+        <a href="https://www.citicbank.com/" target="_blank">
+          <img width="200px"  src="/images/community/zhongxin.png">
+        </a>
+      </td>
+      <td width="222px" align="center"  valign="middle">
+        <a href="https://www.hxb.com.cn/" target="_blank">
+          <img width="200px"  src="/images/community/huaxia.png">
+        </a>
+      </td>
+    </tr>
+    <tr></tr>
+  </tbody>
+</table>
+</div>
 
 ## 开源生态
 
@@ -153,37 +205,37 @@ MOSN 社区积极拥抱开源生态，与以下开源社区建立了良好的合
   <tbody>
   <tr></tr>
     <tr>
-      <td align="center" valign="middle">
+      <td width="222px" align="center" valign="middle">
         <a href="https://istio.io/" target="_blank">
-          <img width="222px"  src="/images/community/istio.png">
+          <img width="200px"  src="/images/community/istio.png">
         </a>
       </td>
-      <td align="center"  valign="middle">
+      <td width="222px" align="center"  valign="middle">
         <a href="https://skywalking.apache.org/" target="_blank">
-          <img width="222px"  src="/images/community/skywalking.png">
+          <img width="200px"  src="/images/community/skywalking.png">
         </a>
       </td>
-      <td align="center" valign="middle">
+      <td width="222px" align="center" valign="middle">
         <a href="https://github.com/apache/dubbo-go" target="_blank">
-          <img width="222px"  src="/images/community/dubbo-go.png">
+          <img width="200px"  src="/images/community/dubbo-go.png">
         </a>
       </td>
-      <td align="center" valign="middle">
+      <td width="222px" align="center" valign="middle">
         <a href="https://sentinelguard.io/" target="_blank">
-          <img width="222px"  src="/images/community/sentinel.png">
+          <img width="200px"  src="/images/community/sentinel.png">
         </a>
       </td>
     </tr>
     <tr></tr>
     <tr>
-      <td align="center" valign="middle">
+      <td width="222px" align="center" valign="middle">
         <a href="https://www.sofastack.tech/" target="_blank">
-          <img width="222px"  src="/images/community/sofastack.png">
+          <img width="200px"  src="/images/community/sofastack.png">
         </a>
       </td>
-      <td align="center" valign="middle">
+      <td width="222px" align="center" valign="middle">
         <a href="http://seata.io/zh-cn/" target="_blank">
-          <img width="222px"  src="/images/community/seata.png">
+          <img width="200px"  src="/images/community/seata.png">
         </a>
       </td>
     </tr>
