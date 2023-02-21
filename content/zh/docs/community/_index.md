@@ -51,7 +51,7 @@ MOSN 社区定期召开社区会议。
         </a>
       </td>
       <td width="222px" align="center"  valign="middle">
-        <a href="https://www.aliyun.com" target="_blank">
+        <a href="https://www.jd.com" target="_blank">
           <img width="200px"  src="/images/community/jingdong.png">
         </a>
       </td>
@@ -71,22 +71,22 @@ MOSN 社区定期召开社区会议。
   <tr></tr>
     <tr>
       <td width="222px" align="center"  valign="middle">
-        <a href="https://www.tenxcloud.com" target="_blank">
+        <a href="https://www.qunar.com" target="_blank">
           <img width="200px"  src="/images/community/qunar.jpeg">
         </a>
       </td>
       <td width="222px" align="center"  valign="middle">
-        <a href="https://www.tenxcloud.com" target="_blank">
+        <a href="https://www.sf-tech.com.cn/" target="_blank">
           <img width="200px"  src="/images/community/shunfeng.jpeg">
         </a>
       </td>
       <td width="222px" align="center"  valign="middle">
-        <a href="https://www.tenxcloud.com" target="_blank">
+        <a href="https://www.58.com" target="_blank">
           <img width="200px"  src="/images/community/58.png">
         </a>
       </td>
       <td width="222px" align="center"  valign="middle">
-        <a href="https://www.tenxcloud.com" target="_blank">
+        <a href="https://www.futuholdings.com/" target="_blank">
           <img width="200px"  src="/images/community/futu.png">
         </a>
       </td>
@@ -176,17 +176,17 @@ MOSN 社区定期召开社区会议。
   <tr></tr>
     <tr>
       <td width="222px" align="center"  valign="middle">
-        <a href="https://www.antfin.com" target="_blank">
+        <a href="https://www.icbc.com.cn/" target="_blank">
           <img width="200px"  src="/images/community/gongshang.png">
         </a>
       </td>
       <td width="222px" align="center"  valign="middle">
-        <a href="https://www.aliyun.com" target="_blank">
-          <img width="200px"  src="/images/community/zhognxin.png">
+        <a href="https://www.citicbank.com/" target="_blank">
+          <img width="200px"  src="/images/community/zhongxin.png">
         </a>
       </td>
       <td width="222px" align="center"  valign="middle">
-        <a href="https://www.aliyun.com" target="_blank">
+        <a href="https://www.hxb.com.cn/" target="_blank">
           <img width="200px"  src="/images/community/huaxia.png">
         </a>
       </td>
