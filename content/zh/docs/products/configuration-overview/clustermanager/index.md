@@ -15,12 +15,14 @@ MOSN 中通过 `cluster_manager` 来管理转发的集群地址，通常与 [Rou
 ```josn
 "cluster_manager":{
   "tls_context":"",
+  "cluster_pool_enable": "",
   "clusters_configs":"",
   "clusters":[]
 }
 ```
 
 - `tls_context`，可选配置，用于描述 Cluster 全局共享的 TLS 配置，该配置项需要结合 clusters 配置中的 cluster_manager_tls 配置项一起使用，TLS 详细配置见 [tls_context 文档](https://mosn.io/docs/configuration/custom/#tls_context)。
+- `cluster_pool_enable`，可选配置，bool 类型，用于控制所有Cluster是否使用独占的连接池，为 true 则使用Cluster独占连接池，默认值为 false。
 - `clusters_configs`，可选配置，字符串类型，用于设置 Cluster 列表从 clusters_configs 指定的文件中解析。
 - `clusters`，用于描述每个 Cluster 所采用的负载均衡算法、类型等细节信息。
 
@@ -52,7 +54,8 @@ MOSN 中通过 `cluster_manager` 来管理转发的集群地址，通常与 [Rou
   "dns_lookup_family":"",
   "dns_resolvers":"",
   "dns_resolver_file":"",
-  "dns_resolver_port":""
+  "dns_resolver_port":"",
+  "cluster_pool_enable":""
 }
 ```
 
@@ -91,6 +94,7 @@ MOSN 中通过 `cluster_manager` 来管理转发的集群地址，通常与 [Rou
 - `dns_resolvers`，[DnsResolverConfig](#DnsResolverConfig) 类型，在群集类型是 STRICT_DNS，此值用于指定群集的 DNS 解析相关配置。
 - `dns_resolver_file`，字符串类型，用于设置 DNS server 列表的文件路径，该值默认为使用 /etc/resolv.conf 配置的默认解析器，该配置项仅在 dns_resolvers 未配置时生效。
 - `dns_resolver_port`，字符串类型，用于设置 DNS server 地址的 port，默认值为 53，该配置项仅在 dns_resolvers 未配置时生效。
+- `cluster_pool_enable`，bool 类型，用于控制当前Cluster是否使用独占的连接池，为 true 则使用独占连接池，默认值为 false。
 
 ## Thresholds
 
