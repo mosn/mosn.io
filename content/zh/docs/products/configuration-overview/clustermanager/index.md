@@ -73,6 +73,7 @@ MOSN 中通过 `cluster_manager` 来管理转发的集群地址，通常与 [Rou
   - LB_LEAST_REQUEST，选择请求数最少的 host 转发。
   - LB_MAGLEV，一致性 hash 转发。
   - LB_REQUEST_ROUNDROBIN，同一个请求粒度的轮训转发。
+  - LB_LEAST_CONNECTION，选择连接数最少的 host 转发。
 - `max_request_per_conn`，uint32 类型，暂未实现。
 - `conn_buffer_limit_bytes`，uint32 类型，暂未实现。
 - `circuit_breakers`，CircuitBreakers 类型，既 [Thresholds](#Thresholds) 类型的数组，用于配置 Cluster 的熔断配置。
@@ -125,7 +126,8 @@ HealthCheckConfig
   "healthy_threshold":"",
   "unhealthy_threshold":"",
   "service_name":"",
-  "check_config":""
+  "check_config":"",
+  "event_log_path":"",
   "common_callbacks":""
 }
 ```
@@ -137,7 +139,8 @@ HealthCheckConfig
 - `healthy_threshold`，uint32 类型，主机在标记为健康之前所需的连续健康检查次数，默认值为 1。
 - `unhealthy_threshold`，uint32 类型，在主机被标记为不健康之前，需要进行连续不健康的健康检查次数，默认值为 1。
 - `service_name`，字符串类型，暂未支持。
-- `check_config`，map[string]interface{} 类型，用于健康检查的扩展配置，暂未使用。
+- `check_config`，map[string]interface{} 类型，用于健康检查的扩展配置，当前支持 "http_check_config"。
+- `event_log_path`, 字符串类型，健康检查日志路径。
 - `common_callbacks`，[]string 类型，用于设置对应 Cluster 健康检查时执行的 callback。
 
 

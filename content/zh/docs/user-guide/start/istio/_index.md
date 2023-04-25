@@ -28,7 +28,7 @@ MOSN 从 v1.0.0 版本开始 已通过 Istio 1.10.6 的 `Bookinfo` 测试，关�
 
 
 ## 部署 Istio 与 MOSN
-注意：Istio 1.10.6 不支持在 arm64 上运行 Kubernetes 的集群 。 [Istio Issues]([(https://github.com/istio/istio/issues/32841)])
+注意：Istio 1.10.6 不支持在 arm64 上运行 Kubernetes 的集群 。 [Istio Issues](https://github.com/istio/istio/issues/32841)
 
 ### 安装 kubectl 命令行工具
 
