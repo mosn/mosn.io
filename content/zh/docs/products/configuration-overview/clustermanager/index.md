@@ -74,6 +74,7 @@ MOSN 中通过 `cluster_manager` 来管理转发的集群地址，通常与 [Rou
   - LB_MAGLEV，一致性 hash 转发。
   - LB_REQUEST_ROUNDROBIN，同一个请求粒度的轮训转发。
   - LB_LEAST_CONNECTION，选择连接数最少的 host 转发。
+  - LB_PEAK_EWMA，基于延迟的负载均衡算法，通过记录主机的延迟，选择延迟较好并避免选择较差的主机
 - `max_request_per_conn`，uint32 类型，暂未实现。
 - `conn_buffer_limit_bytes`，uint32 类型，暂未实现。
 - `circuit_breakers`，CircuitBreakers 类型，既 [Thresholds](#Thresholds) 类型的数组，用于配置 Cluster 的熔断配置。
@@ -86,7 +87,7 @@ MOSN 中通过 `cluster_manager` 来管理转发的集群地址，通常与 [Rou
 - `hosts`，[][Host](#Host)  类型，用于配置 Cluster 中的机器列表。
 - `connect_timeout`，[Duration](../custom#duration-string) 类型，连接到该群集中主机的超时时长，默认值为 3 秒。
 - `idle_timeout`，[Duration](../custom#duration-string) 类型，用于设置 Cluster 中的连接空闲超时时间，若发生超时则会断开连接，中默认值为 0，表示不设置连接的空闲超时。
-- `lbconfig`，为负载均衡器提供的扩展配置，目前只有 LB_LEAST_REQUEST 类型的负载均衡器有使用。
+- `lbconfig`，[LbConfig](#lbconfig)类型，为负载均衡器提供的扩展配置，目前只有 LB_LEAST_REQUEST/LB_LEAST_CONNECTION/LB_PEAK_EWMA 类型的负载均衡器有使用。
 - `dns_refresh_rate`，[Duration](../custom#duration-string) 类型，在群集类型是 STRICT_DNS 时，用于设置 DNS 刷新频率，此值默认为 5 秒。
 - `respect_dns_ttl`，bool 类型，用于设置当 Cluster 类型为 STRICT_DNS 时，其域名对应的解析频率是否遵循 DNS 返回的 TTL。
 - `dns_lookup_family`，字符串类型，DNS IP 地址解析策略。 如果未指定此设置，则该值默认为 V4_ONLY。取值列表如下：
@@ -215,3 +216,15 @@ LBSubsetConfig 主要用于 Cluster 中更为灵活的请求路由，列如 ABTe
 - `ndots`，int 类型，用于设置 DNS 查询域名是否将 search 中的列表依次追加到待查询域名末尾，如果该值大于待查询域名中的 “.” 数量，则将待查询域名末尾拼依次接 search 中设置的后缀，默认值为 0。
 - `timeout`，int 类型，用于设置 DNS 更新超时时间，单位为秒。
 - `attempts`，int 类型，一次 DNS 请求中尝试查询的 DSN server 的次数。
+
+## LbConfig
+
+```json
+{
+  "choice_count": "",
+  "active_request_bias": ""
+}
+```
+
+- `choice_count`，uint32类型，用来设置随机算法的随机选择次数，当配置了`lbconfig`时必填，且必须大于0
+- `active_request_bias`，float64类型，用来设置负载均衡算法对`active_request`和`connection_active`指标的偏好
