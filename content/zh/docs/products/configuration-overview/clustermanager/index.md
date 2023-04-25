@@ -226,5 +226,5 @@ LBSubsetConfig 主要用于 Cluster 中更为灵活的请求路由，列如 ABTe
 }
 ```
 
-- `choice_count`，uint32类型，用来设置随机算法的随机选择次数
+- `choice_count`，uint32类型，用来设置随机算法的随机选择次数，当配置了`lbconfig`时必填，且必须大于0
 - `active_request_bias`，float64类型，用来设置负载均衡算法对`active_request`和`connection_active`指标的偏好
