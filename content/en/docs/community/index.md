@@ -230,6 +230,7 @@ The MOSN Community Certified Committer is as follows.
 | Runhao Huang| [glyasai](https://github.com/glyasai)           | goodrain      |
 | Zechao Zheng| [CodingSinger](https://github.com/CodingSinger) | ByteDance     |
 | Jianhao Fu  | [AlphaBaby](https://github.com/alpha-baby)      | JD.com        |
+| Zhuozhi Ji   | [jizhuozhi](https://github.com/jizhuozhi) | JDL           |
 
 Committer is an individual with MOSN repository write access to the following criteria.
 

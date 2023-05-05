@@ -260,6 +260,7 @@ MOSN 社区认证的 Committer 如下：
 | 黄润豪 | [glyasai](https://github.com/glyasai)           | 好雨科技  |
 | 郑泽超 | [CodingSinger](https://github.com/CodingSinger) | 字节跳动  |
 | 付建豪 | [AlphaBaby](https://github.com/alpha-baby)      | 京东      |
+| 纪卓志 | [jizhuozhi](https://github.com/jizhuozhi) | 京东物流    |
 
 Committer 是具有 MOSN 仓库写权限的个人，标准如下：
 
