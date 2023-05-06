@@ -217,19 +217,20 @@ The MOSN community actively embraces the open source ecosystem and has establish
 
 The MOSN Community Certified Committer is as follows.
 
-| Name        | GitHub                                          | 公司          |
-| ----------- | ----------------------------------------------- | ------------- |
-| Yang Tian   | [taoyuanyuan](https://github.com/taoyuanyuan)   | Ant Group     |
-| Fakang Wang | [wangfakang](https://github.com/wangfakang)     | Ant Group     |
-| Peng Bai    | [nejisama](https://github.com/nejisama)         | Ant Group     |
-| Chunhui Cao | [cch123](https://github.com/cch123)             | Ant Group     |
-| Fuze Sun    | [peacocktrain](https://github.com/peacocktrain) | zhipin.com    |
-| Peng Chen   | [champly](https://github.com/champly)           | dmall.com     |
-| Changyu Yao | [trainyao](https://github.com/trainyao)         | youmi.net     |
-| Qian Deng   | [dengqian](https://github.com/dengqian)         | Alibaba Cloud |
-| Runhao Huang| [glyasai](https://github.com/glyasai)           | goodrain      |
-| Zechao Zheng| [CodingSinger](https://github.com/CodingSinger) | ByteDance     |
-| Jianhao Fu  | [AlphaBaby](https://github.com/alpha-baby)      | JD.com        |
+| Name        | GitHub                                           | 公司          |
+| ----------- |--------------------------------------------------| ------------- |
+| Yang Tian   | [taoyuanyuan](https://github.com/taoyuanyuan)    | Ant Group     |
+| Fakang Wang | [wangfakang](https://github.com/wangfakang)      | Ant Group     |
+| Peng Bai    | [nejisama](https://github.com/nejisama)          | Ant Group     |
+| Chunhui Cao | [cch123](https://github.com/cch123)              | Ant Group     |
+| Fuze Sun    | [peacocktrain](https://github.com/peacocktrain)  | zhipin.com    |
+| Peng Chen   | [champly](https://github.com/champly)            | dmall.com     |
+| Changyu Yao | [trainyao](https://github.com/trainyao)          | youmi.net     |
+| Qian Deng   | [dengqian](https://github.com/dengqian)          | Alibaba Cloud |
+| Runhao Huang| [glyasai](https://github.com/glyasai)            | goodrain      |
+| Zechao Zheng| [CodingSinger](https://github.com/CodingSinger)  | ByteDance     |
+| Jianhao Fu  | [AlphaBaby](https://github.com/alpha-baby)       | JD.com        |
+| Zhuozhi Ji  | [jizhuozhi](https://github.com/jizhuozhi)        | JDL           |
 
 Committer is an individual with MOSN repository write access to the following criteria.
 
