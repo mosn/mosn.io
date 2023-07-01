@@ -85,7 +85,7 @@ func (f *filter) DecodeHeaders(header api.RequestHeaderMap, endStream bool) api.
 ```shell
 docker run --rm -v `pwd`:/go/src/go-filter -w /go/src/go-filter \
         -e GOPROXY=https://goproxy.cn \
-        golang:1.19 \
+        golang:1.19.8 \
         go build -v -o libgolang.so -buildmode=c-shared .
 ```
 
@@ -101,7 +101,7 @@ Go 编译还是很快的，只需要几秒钟，当前目录下，就会产生�
 docker run --rm -v `pwd`/envoy.yaml:/etc/envoy/envoy.yaml \
         -v `pwd`/libgolang.so:/etc/envoy/libgolang.so \
         -p 10000:10000 \
-        envoyproxy/envoy:contrib-dev \
+        envoyproxy/envoy:contrib-v1.26-latest \
         envoy -c /etc/envoy/envoy.yaml
 ```
 
