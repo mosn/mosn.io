@@ -9,11 +9,16 @@ description: >
 
 ## MOSN 版本发布步骤
 
-###  一、冻结代码
+### 一、冻结代码
 
 + 在准备一个版本发布期间，停止代码往 master 分支的合并
 
-### 二、整理 Release notes
+### 二、更新依赖
++ 发布 mosn/api，版本与即将发布的 mosn 相同
++ 更新 mosn/pkg 的 mosn/api 版本至最新，然后发布 mosn/pkg
++ 更新 mosn 的 api、pkg 至最新
+
+### 三、整理 Release notes
 
 + 基于 Github 的 PullRequest 记录，整理本次发布的内容与上一个版本之间的差异，需要注意仅统计目标分支是 master 且正常合并的 PullRequest
 + 首先整理完原始信息以后，进行提炼和总结
@@ -23,7 +28,7 @@ description: >
 + 提炼后的完整 Release notes 记录格式可以参考 [CHANGELOG](https://github.com/mosn/mosn/blob/master/CHANGELOG_ZH.md)
 + 提炼后的 Release notes 需要有英文版本的记录
 
-### 三、测试报告
+### 四、测试报告
 
 + 所有的改动点都需要有对应的测试记录，测试方式可以有多种，包括但不限于
   + 完整的单元测试覆盖，确保基本的功能场景正确，默认代码合并的时候会执行
@@ -33,7 +38,7 @@ description: >
 + 测试完成以后，产出测试报告，说明对应的功能点使用哪种测试方式测试与测试的结果
 
 
-### 四、版本发布
+### 五、版本发布
 
 + 版本发布 PullRequest
   + 修改`VERSION`
