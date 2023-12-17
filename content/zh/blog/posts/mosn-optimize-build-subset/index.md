@@ -4,7 +4,7 @@ linkTitle: "构建 subset 优化"
 date: 2022-05-12
 author: "[李旭东](https://github.com/dzdx)"
 description: "本文简述 Subset 的原理以及构建优化算法的前后对比"
-aliases: “/zh/blog/posts/mosn-optimize-build-subset"
+aliases: "/zh/blog/posts/mosn-optimize-build-subset"
 ---
 
 # 前言
