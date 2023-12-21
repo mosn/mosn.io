@@ -1,20 +1,20 @@
 ---
-title: Mosn 启动流程v1.6.0
-linkTitle: Mosn 启动流程v1.6.0
+title: MOSN 启动流程v1.6.0
+linkTitle: MOSN 启动流程v1.6.0
 date: 2023-12-17
 aliases: "/blog/posts/mosn-startup/v1.6.0"
 weigth: 2
 author: "[wp500](https://github.com/wang55www)"
-description: MOSN 源码解析基于 Mosn v1.6.0版本
+description: MOSN 源码解析基于v1.6.0版本
 ---
 
-本文基于Mosn V1.6.0版本的源码基础上进行整理。该版本对比之前V0.4.0版本启动逻辑有比较大的变化。其中比较明显的差异是该版本新增了StageManager结构，该结构对Mosn的生命周期进行封装并加以维护，使得Mosn从启动到停止过程中每个逻辑更易于维护和扩展。
+本文基于 MOSN V1.6.0版本的源码基础上进行整理。该版本对比之前 V0.4.0 版本启动逻辑有比较大的变化。其中比较明显的差异是该版本新增了 StageManager 结构，该结构对 MOSN 的生命周期进行封装并加以维护，使得 MOSN 从启动到停止过程中每个逻辑更易于维护和扩展。
 
-## Mosn启动入口
+## MOSN 启动入口
 
-mosn利用cli组件(github.com/urfave/cli)来实现命令行的控制。制动之后默认执行cmdStart命令，之后就进入下面的启动逻辑。
+MOSN 利用 cli 组件 （github.com/urfave/cli）来实现命令行的控制。制动之后默认执行 cmdStart 命令，之后就进入下面的启动逻辑。
 
-在control.go文件中 _cmdStart.Action_ 方法是整个Mosn启动的入口方法。首先调用 _NewMosn()_ 这个方法只是返回了一个空的Mosn对象，该对象代表着Mosn应用，该对象定义如下：
+在 control.go 文件中 _cmdStart.Action_ 方法是整个 MOSN 启动的入口方法。首先调用 _NewMosn()_ 这个方法只是返回了一个空的 _Mosn_ 对象，该对象代表着 _Mosn_ 应用，该对象定义如下：
 
 ```go
 type Mosn struct {
@@ -30,7 +30,7 @@ type Mosn struct {
 ```
 ## 场景管理器
 
-下面的逻辑中创建了一个叫StageManager(场景管理器)的对象，这个对象是用来管理Mosn的生命周期，后面的逻辑都是围绕着这个对象来编码的，定义如下：
+下面的逻辑中创建了一个叫 StageManager（场景管理器）的对象，这个对象是用来管理 MOSN 的生命周期，后面的逻辑都是围绕着这个对象来编码的，定义如下：
 
 ```go
 // stagemanagr/stage_manager.go
@@ -41,7 +41,7 @@ type StageManager struct {
 	exitCode                int
 	stopAction              StopAction
 	data                    Data  //保存了app不同生命周期阶段所使用的数据
-	app                     Application // Application interface app其实就是mosn
+	app                     Application // Application interface app其实就是MOSN
 	wg                      sync.WaitGroup
     //以下是不同生命周期对应的处理函数 -- start
 	paramsStages            []func(*cli.Context)  //参数准备阶段
@@ -73,31 +73,31 @@ type Data struct {
 
 ```
 
-上面代码增加了注释，可以看到stageManager的生命周期包含 参数准备、初始化、启动之前处理、启动、启动之后处理、停止之前处理、优雅停止、停止之后处理等几个阶段。每个阶段对应的是一个函数的数组，也就是说每个阶段的处理可以有多个处理函数。
+上面代码增加了注释，可以看到 stageManager 的生命周期包含 参数准备、初始化、启动之前处理、启动、启动之后处理、停止之前处理、优雅停止、停止之后处理等几个阶段。每个阶段对应的是一个函数的数组，也就是说每个阶段的处理可以有多个处理函数。
 
-这里可以好好的看一下stage_manager.go的源码，里面定义了11种场景的状态和2种额外的场景(stage_manager.go开始有大片的注释里把场景的含义描述的比较清楚)，那么当状态发生变化的时候，就会调用上文提到的场景管理器维护的回调函数。
+这里可以好好的看一下 stage_manager.go 的源码，里面定义了11种场景的状态和2种额外的场景 （stage_manager.go 原文件头部有大块的注释里把场景的含义描述的比较清楚），那么当状态发生变化的时候，就会调用上文提到的场景管理器维护的回调函数。
 
 ### Application
 
-同时还定义了一个Application的接口，是对一个应用进行抽象，其中之前说的Mosn对象就是Application的一个实现。Application被stageManager所管理，Application本身定义了生命周期(application不同的生命周期，会触发stage场景的切换)，周期包括：初始化，启动，停止。那么stageManager根据这些周期的变化，同时回调切换场景的函数。
+同时还定义了一个 Application 的接口，是对一个应用进行抽象，其中之前说的 _Mosn_ 对象就是 Application 的一个实现。 Application 被 stageManager 所管理，Application 本身定义了生命周期 （ application 不同的生命周期，会触发 stage 场景的切换），周期包括：初始化，启动，停止。那么 stageManager 根据这些周期的变化，同时回调切换场景的函数。
 
 ### 阶段小结
 
 到这里先不着急往下看启动逻辑，我们先总结一下目前掌握的内容及背后的设计思路，这样后面梳理逻辑会变得很轻松。
 ![关联关系图.png](objectRel.png)<br />
-如上图所示，Application应用（其实就是Mosn本身）包含若干方法：初始化、启动、停止。这些方法调用后让应用进入不同的生命周期，同时场景管理器(StageManager)维护的场景状态也对应发生改变，应用生命周期与场景二者是有关联关系的。
+如上图所示，Application 应用（其实就是 _Mosn_ 本身）包含若干方法：初始化、启动、停止。这些方法调用后让应用进入不同的生命周期，同时场景管理器 （StageManager）维护的场景状态也对应发生改变，应用生命周期与场景二者是有关联关系的。
 
-那么先不看源码只凭借猜测，到底是应用的生命周期发生变化后触发场景改变状态；还是先触发场景改变状态进而触发应用改变生命周期呢？我的猜测是这样，因为上文提到场景管理器(StageManager)用来管理应用的生命周期，StageManager结构体中也包含Application对象。那么很大的可能是先由场景管理来触发状态改变，再触发应用对应的方法来改变生命周期。
+那么先不看源码只凭借猜测，到底是应用的生命周期发生变化后触发场景改变状态；还是先触发场景改变状态进而触发应用改变生命周期呢？我的猜测是这样，因为上文提到场景管理器（StageManager）用来管理应用的生命周期，StageManager 结构体中也包含 Application 对象。那么很大的可能是先由场景管理来触发状态改变，再触发应用对应的方法来改变生命周期。
 
-其实因为场景的状态有11个粒度要比应用的生命周期粒度更细，从这点上来看也只可能场景状态(细粒度)切换同时调用应用的方法切换生命周期(粗粒度)，而反之行不通(粗粒度的一方无法识别什么时候调用细粒度一方)。
+其实因为场景的状态有11个粒度要比应用的生命周期粒度更细，从这点上来看也只可能场景状态（细粒度）切换同时调用应用的方法切换生命周期（粗粒度），而反之行不通（粗粒度的一方无法识别什么时候调用细粒度一方）。
 
-既然我猜测是StageManager场景来控制切换，那么肯定有对应的方法提供场景切换。这个时候我们再来看代码，发现确实存在这样的方法来证明我的猜测。下面是切换场景的方法：<br />![代码方法.png](methods.png)
+既然我猜测是 StageManager 场景来控制切换，那么肯定有对应的方法提供场景切换。这个时候我们再来看代码，发现确实存在这样的方法来证明我的猜测。下面是切换场景的方法：<br />![代码方法.png](methods.png)
 
 ## 详细分析
 
 ### 场景管理器的启动
 
-我们继续看一下stage_manager.go的 _Run()_ 方法，可以清楚的看到场景管理器的启动逻辑，就是调用了不同子阶段，每个阶段都会有切换状态的逻辑，在方法的最后逻辑可以看到，启动之后设置场景状态为Running。
+我们继续看一下 stage_manager.go 的 _Run()_ 方法，可以清楚的看到场景管理器的启动逻辑，就是调用了不同子阶段，每个阶段都会有切换状态的逻辑，在方法的最后逻辑可以看到，启动之后设置场景状态为 Running。
 
 ```go
 // Run until the application is started
@@ -135,9 +135,9 @@ func (stm *StageManager) runParamsParsedStage() {
 }
 ```
 
-可以说Run()方法作用就是场景管理器stageManager来启动应用Application，那这个Run()方法在什么地方被调用呢？梳理一下代码，调用链路是：`control.go cmdStart.Action(就是前面提到的程序启动的入口)->stm.RunAll()->stm.Run()`。这样从上文提到Mosn命令行启动到这个Run()方法就串起来了。
+可以说 _Run()_ 方法作用就是场景管理器 stageManager 来启动应用 Application，那这个 _Run()_ 方法在什么地方被调用呢？梳理一下代码，调用链路是：`control.go cmdStart.Action(就是前面提到的程序启动的入口)->stm.RunAll()->stm.Run()`。这样从上文提到 MOSN 命令行启动到这个 Run() 方法就串起来了。
 
-其中还有一个比较重要的方法是 _stm.RunAll()_ ，该方法是场景管理器中完整的场景都会执行一遍： _Run_ 是启动，之后 _WaitFinish_ 就等待server停止，最后是 _Stop_ 场景。每个过程都会调用若干场景切换。
+其中还有一个比较重要的方法是 _stm.RunAll()_ ，该方法是场景管理器中完整的场景都会执行一遍： _Run_ 是启动，之后 _WaitFinish_ 就等待 server 停止，最后是 _Stop_ 场景。每个过程都会调用若干场景切换。
 
 ```go
 // run all stages
@@ -153,7 +153,7 @@ func (stm *StageManager) RunAll() {
 
 ### 启动逻辑详解
 
-好了现在我们回到最开始的control.go _cmdStart.Action_ 逻辑。
+好了现在我们回到最开始的 control.go _cmdStart.Action_ 逻辑。
 
 ```go
 Action: func(c *cli.Context) error {
@@ -215,27 +215,28 @@ Action: func(c *cli.Context) error {
   },
 ```
 
-* (line160)创建应用 _mosn.NewMosn_ ,
-* (line161)创建场景管理器 _stagemanager.InitStageManager(c, c.String("config"), app)_ 
-* (line213)启动场景管理器 _stm.RunAll()_ ，触发执行启动、等待停止、停止。
-* 而中间(第165行到第212行)的一堆逻辑其实就是在设置StageManager(场景管理器)，为每个状态设置了对应的回调函数，后面启动过程中调用场景切换的时候其实就是调用这里设置的回调函数。
+*  （line160）创建应用 _mosn.NewMosn_ ,
+*  （line161）创建场景管理器 _stagemanager.InitStageManager(c, c.String("config"), app)_ 
+* （line213）启动场景管理器 _stm.RunAll()_ ，触发执行启动、等待停止、停止。
+* 而中间（第165行到第212行）的一堆逻辑其实就是在设置 StageManager（场景管理器），为每个状态设置了对应的回调函数，后面启动过程中调用场景切换的时候其实就是调用这里设置的回调函数。
 
 ### ParamsParsed 阶段
 
-**(stm *StageManager) AppendParamsParsedStage(f func(*cli.Context))**
+__(stm *StageManager) AppendParamsParsedStage(f func(*cli.Context))__
 
 这个阶段是整个生命周期的第一个阶段，如果需要有需要通过命令行参数来初始化的工作，可以在这个阶段完成。这个阶段注册了两个函数 _ExtensionsRegister_ 和 _DefaultParamsParsed_ 这两个函数作用如下：
 
-* _ExtensionsRegister_ ：主要用来初始化一些扩展的组件。这块我理解mosn在落地的时候会根据具体场景来接入一些特定的组件。这些组件如果需要初始化，可以在这个方法里初始化。为什么要在这个函数里初始化呢？一个是函数的参数是cli.Context命令行的封装，可以方便获取命令行参数来初始化组件，另外这个函数执行也是整个生命周期最开始执行，如果需要mosn启动首先初始化的组件可以在这里来实现。而v1.6.0版本里该函数主要用来初始化一些链路追踪的配置，以及网络协议编解码的设置。这里就不展开分析了。
-* _DefaultParamsParsed_ ：这里就是mosn默认的在命令解析阶段进行初始化的内容一般不用修改。目前作用是用来设置日志级别及从命令行里解析各种开关。
+* _ExtensionsRegister_ ：主要用来初始化一些扩展的组件。这块我理解 MOSN 在落地的时候会根据具体场景来接入一些特定的组件。这些组件如果需要初始化，可以在这个方法里初始化。为什么要在这个函数里初始化呢？一个是函数的参数是 cli.Context 命令行的封装，可以方便获取命令行参数来初始化组件，另外这个函数执行也是整个生命周期最开始执行，如果需要 MOSN 启动首先初始化的组件可以在这里来实现。而 v1.6.0 版本里该函数主要用来初始化一些链路追踪的配置，以及网络协议编解码的设置。这里就不展开分析了。
+* _DefaultParamsParsed_ ：这里就是 MOSN 默认的在命令解析阶段进行初始化的内容一般不用修改。目前作用是用来设置日志级别及从命令行里解析各种开关。
 
 ### InitStage阶段
-**(stm *StageManager) AppendInitStage(f func(*v2.MOSNConfig)) *StageManager** 
 
-这个是第二个阶段，这个阶段也是用来初始化，只不过初始化的来源是通过MOSN的配置文件。
+__(stm *StageManager) AppendInitStage(f func(*v2.MOSNConfig)) *StageManager__
 
-* (line168-line197)这部分主要是从Config配置文件中获取运行环境的相关元数据，用这些数据来初始化xds客户端。xds客户端使用xds协议与控制面组件进行交互。(xds是Istio标准的协议)
-* (line198)调用了mosn的默认初始化，这部分逻辑非常的多。里面又细分很多步骤。这里我对每个方法都加上了注释，见下面代码段。
+这个是第二个阶段，这个阶段也是用来初始化，只不过初始化的来源是通过 MOSN 的配置文件。
+
+* （line168-line197）这部分主要是从 Config 配置文件中获取运行环境的相关元数据，用这些数据来初始化 xds 客户端。xds 客户端使用xds协议与控制面组件进行交互。（xds是Istio标准的协议）
+* （line198）调用了 MOSN 的默认初始化，这部分逻辑非常的多。里面又细分很多步骤。这里我对每个方法都加上了注释，见下面代码段。
 
 ```go
 func DefaultInitStage(c *v2.MOSNConfig) {
@@ -249,13 +250,14 @@ func DefaultInitStage(c *v2.MOSNConfig) {
 }
 ```
 
-* (line199-204)这部分比较简单，AppendInitStage 这部分就是初始化metrics初始化统计的组件
-* 接下来(line205)stm.AppendInitStage(holmes.Register) 这句初始化一个蚂蚁开源的可观测性组件holmes。[参考：holmes](https://github.com/mosn/holmes)
+* （line199-204）这部分比较简单，AppendInitStage 这部分就是初始化 metrics 初始化统计的组件
+* 接下来（line205）stm.AppendInitStage(holmes.Register) 这句初始化一个蚂蚁开源的可观测性组件 holmes。[参考：holmes](https://github.com/mosn/holmes)
 
 ### PreStartStage阶段
-**func (stm *StageManager) AppendPreStartStage(f func(Application)) *StageManager**
 
-这个阶段逻辑并不复杂，主要是启动xds客户端。
+__func (stm *StageManager) AppendPreStartStage(f func(Application)) *StageManager__
+
+这个阶段逻辑并不复杂，主要是启动 xds 客户端。
 
 ```go
 // Default Pre-start Stage wrappers
@@ -270,9 +272,10 @@ func DefaultPreStartStage(mosn stagemanager.Application) {
 ```
 
 ### StartStage阶段
-**func (stm *StageManager) AppendStartStage(f func(Application)) *StageManager**
 
-* (line209) _stm.AppendStartStage(mosn.DefaultStartStage)_ 这个阶段启动了mosn的管理服务，通过配置文件进行启动。
+__func (stm *StageManager) AppendStartStage(f func(Application)) *StageManager__
+
+* （line209） _stm.AppendStartStage(mosn.DefaultStartStage)_ 这个阶段启动了 MOSN 的管理服务，通过配置文件进行启动。
 
 ```go
 // Default Start Stage wrappers
@@ -286,6 +289,7 @@ func DefaultStartStage(mosn stagemanager.Application) {
 ```
 
 ### AfterStopStage阶段
-**func (stm *StageManager) AppendAfterStopStage(f func(Application)) *StageManager**
 
-* (line211) _stm.AppendAfterStopStage(holmes.Stop)_ 这个阶段是在mosn服务关闭后调用，这里就直接调用holmes.Stop关闭holmes组件。
+__func (stm *StageManager) AppendAfterStopStage(f func(Application)) *StageManager__
+
+* （line211） _stm.AppendAfterStopStage(holmes.Stop)_ 这个阶段是在 MOSN 服务关闭后调用，这里就直接调用 holmes.Stop 关闭 holmes 组件。
