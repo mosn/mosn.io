@@ -156,69 +156,69 @@ func (stm *StageManager) RunAll() {
 好了现在我们回到最开始的 control.go _cmdStart.Action_ 逻辑。
 
 ```go
-Action: func(c *cli.Context) error {
-   // 创建Application
-   app := mosn.NewMosn()
-   // 创建stagemanager场景管理器
-   stm := stagemanager.InitStageManager(c, c.String("config"), app)
-   // if needs featuregate init in parameter stage or init stage
-   // append a new stage and called featuregate.ExecuteInitFunc(keys...)
-   // parameter parsed registered
-   stm.AppendParamsParsedStage(ExtensionsRegister)
-   stm.AppendParamsParsedStage(DefaultParamsParsed)
-   // initial registered
-   stm.AppendInitStage(func(cfg *v2.MOSNConfig) {
-    drainTime := c.Int("drain-time-s")
-    server.SetDrainTime(time.Duration(drainTime) * time.Second)
-    // istio parameters
-    serviceCluster := c.String("service-cluster")
-    serviceNode := c.String("service-node")
-    serviceType := c.String("service-type")
-    serviceMeta := c.StringSlice("service-meta")
-    metaLabels := c.StringSlice("service-lables")
-    clusterDomain := c.String("cluster-domain")
-    podName := c.String("pod-name")
-    podNamespace := c.String("pod-namespace")
-    podIp := c.String("pod-ip")
-
-    if serviceNode != "" {
-     istio1106.InitXdsInfo(cfg, serviceCluster, serviceNode, serviceMeta, metaLabels)
-    } else {
-     if istio1106.IsApplicationNodeType(serviceType) {
-      sn := podName + "." + podNamespace
-      serviceNode = serviceType + "~" + podIp + "~" + sn + "~" + clusterDomain
-      istio1106.InitXdsInfo(cfg, serviceCluster, serviceNode, serviceMeta, metaLabels)
-     } else {
-      log.StartLogger.Infof("[mosn] [start] xds service type is not router/sidecar, use config only")
-      istio1106.InitXdsInfo(cfg, "", "", nil, nil)
-     }
-    }
-   })
-   stm.AppendInitStage(mosn.DefaultInitStage)
-   stm.AppendInitStage(func(_ *v2.MOSNConfig) {
-    // set version and go version
-    metrics.SetVersion(Version)
-    metrics.SetGoVersion(runtime.Version())
-    admin.SetVersion(Version)
-   })
-   stm.AppendInitStage(holmes.Register)
-   // pre-startup
-   stm.AppendPreStartStage(mosn.DefaultPreStartStage) // called finally stage by default
-   // startup
-   stm.AppendStartStage(mosn.DefaultStartStage)
-   // after-stop
-   stm.AppendAfterStopStage(holmes.Stop)
-            //执行所有场景
-   // execute all stages
-   stm.RunAll()
-   return nil
-  },
+159         Action: func(c *cli.Context) error {
+	            // 创建Application
+160             app := mosn.NewMosn()
+                // 创建stagemanager场景管理器
+161             stm := stagemanager.InitStageManager(c, c.String("config"), app)
+162             // if needs featuregate init in parameter stage or init stage
+163             // append a new stage and called featuregate.ExecuteInitFunc(keys...)
+164             // parameter parsed registered
+165             stm.AppendParamsParsedStage(ExtensionsRegister)
+166             stm.AppendParamsParsedStage(DefaultParamsParsed)
+167             // initial registered
+168             stm.AppendInitStage(func(cfg *v2.MOSNConfig) {
+169                 drainTime := c.Int("drain-time-s")
+170                 server.SetDrainTime(time.Duration(drainTime) * time.Second)
+171                 // istio parameters
+172                 serviceCluster := c.String("service-cluster")
+173                 serviceNode := c.String("service-node")
+174                 serviceType := c.String("service-type")
+175                 serviceMeta := c.StringSlice("service-meta")
+176                 metaLabels := c.StringSlice("service-lables")
+177                 clusterDomain := c.String("cluster-domain")
+178                 podName := c.String("pod-name")
+179                 podNamespace := c.String("pod-namespace")
+180                 podIp := c.String("pod-ip")
+181
+182                 if serviceNode != "" {
+183                     istio1106.InitXdsInfo(cfg, serviceCluster, serviceNode, serviceMeta, metaLabels)
+184                 } else {
+185                     if istio1106.IsApplicationNodeType(serviceType) {
+186                         sn := podName + "." + podNamespace
+187                         serviceNode = serviceType + "~" + podIp + "~" + sn + "~" + clusterDomain
+188                         istio1106.InitXdsInfo(cfg, serviceCluster, serviceNode, serviceMeta, metaLabels)
+189                     } else {
+190                         log.StartLogger.Infof("[mosn] [start] xds service type is not router/sidecar, use config only")
+191                         istio1106.InitXdsInfo(cfg, "", "", nil, nil)
+192                     }
+193                 }
+194             })
+195             stm.AppendInitStage(mosn.DefaultInitStage)
+196             stm.AppendInitStage(func(_ *v2.MOSNConfig) {
+197                 // set version and go version
+198                 metrics.SetVersion(Version)
+199                 metrics.SetGoVersion(runtime.Version())
+200                 admin.SetVersion(Version)
+201             })
+202             stm.AppendInitStage(holmes.Register)
+203             // pre-startup
+204             stm.AppendPreStartStage(mosn.DefaultPreStartStage) // called finally stage by default
+205             // startup
+206             stm.AppendStartStage(mosn.DefaultStartStage)
+207             // after-stop
+208             stm.AppendAfterStopStage(holmes.Stop)
+209             // execute all stages
+                //执行所有场景
+210             stm.RunAll()
+211             return nil
+212  },
 ```
 
 *  （line160）创建应用 _mosn.NewMosn_ ,
 *  （line161）创建场景管理器 _stagemanager.InitStageManager(c, c.String("config"), app)_ 
-* （line213）启动场景管理器 _stm.RunAll()_ ，触发执行启动、等待停止、停止。
-* 而中间（第165行到第212行）的一堆逻辑其实就是在设置 StageManager（场景管理器），为每个状态设置了对应的回调函数，后面启动过程中调用场景切换的时候其实就是调用这里设置的回调函数。
+* （line210）启动场景管理器 _stm.RunAll()_ ，触发执行启动、等待停止、停止。
+* 而中间（第165行到第208行）的一堆逻辑其实就是在设置 StageManager（场景管理器），为每个状态设置了对应的回调函数，后面启动过程中调用场景切换的时候其实就是调用这里设置的回调函数。
 
 ### ParamsParsed 阶段
 
@@ -235,8 +235,8 @@ __(stm *StageManager) AppendInitStage(f func(*v2.MOSNConfig)) *StageManager__
 
 这个是第二个阶段，这个阶段也是用来初始化，只不过初始化的来源是通过 MOSN 的配置文件。
 
-* （line168-line197）这部分主要是从 Config 配置文件中获取运行环境的相关元数据，用这些数据来初始化 xds 客户端。xds 客户端使用xds协议与控制面组件进行交互。（xds是Istio标准的协议）
-* （line198）调用了 MOSN 的默认初始化，这部分逻辑非常的多。里面又细分很多步骤。这里我对每个方法都加上了注释，见下面代码段。
+* （line168-194）这部分主要是从 Config 配置文件中获取运行环境的相关元数据，用这些数据来初始化 xds 客户端。xds 客户端使用xds协议与控制面组件进行交互。（ xds 是 Istio 标准的协议）
+* （line195）调用了 MOSN 的默认初始化，这部分逻辑非常的多。里面又细分很多步骤。这里我对每个方法都加上了注释，见下面代码段。
 
 ```go
 func DefaultInitStage(c *v2.MOSNConfig) {
@@ -250,8 +250,8 @@ func DefaultInitStage(c *v2.MOSNConfig) {
 }
 ```
 
-* （line199-204）这部分比较简单，AppendInitStage 这部分就是初始化 metrics 初始化统计的组件
-* 接下来（line205）stm.AppendInitStage(holmes.Register) 这句初始化一个蚂蚁开源的可观测性组件 holmes。[参考：holmes](https://github.com/mosn/holmes)
+* （line196-201）这部分比较简单，AppendInitStage 这部分就是初始化 metrics 初始化统计的组件
+* 接下来（line202）stm.AppendInitStage(holmes.Register) 这句初始化一个蚂蚁开源的可观测性组件 holmes。[参考：holmes](https://github.com/mosn/holmes)
 
 ### PreStartStage阶段
 
@@ -275,7 +275,7 @@ func DefaultPreStartStage(mosn stagemanager.Application) {
 
 __func (stm *StageManager) AppendStartStage(f func(Application)) *StageManager__
 
-* （line209） _stm.AppendStartStage(mosn.DefaultStartStage)_ 这个阶段启动了 MOSN 的管理服务，通过配置文件进行启动。
+* （line206） _stm.AppendStartStage(mosn.DefaultStartStage)_ 这个阶段启动了 MOSN 的管理服务，通过配置文件进行启动。
 
 ```go
 // Default Start Stage wrappers
@@ -292,4 +292,4 @@ func DefaultStartStage(mosn stagemanager.Application) {
 
 __func (stm *StageManager) AppendAfterStopStage(f func(Application)) *StageManager__
 
-* （line211） _stm.AppendAfterStopStage(holmes.Stop)_ 这个阶段是在 MOSN 服务关闭后调用，这里就直接调用 holmes.Stop 关闭 holmes 组件。
+* （line208） _stm.AppendAfterStopStage(holmes.Stop)_ 这个阶段是在 MOSN 服务关闭后调用，这里就直接调用 holmes.Stop 关闭 holmes 组件。
