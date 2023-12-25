@@ -1,9 +1,9 @@
 ---
-title: MOSN 启动流程v1.6.0
-linkTitle: MOSN 启动流程v1.6.0
+title: MOSN 源码解析 - 启动流程
+linkTitle: MOSN 源码解析 - 启动流程
 date: 2023-12-17
 aliases: "/blog/posts/mosn-startup/v1.6.0"
-weigth: 2
+weigth: 1
 author: "[wp500](https://github.com/wang55www)"
 description: MOSN 源码解析基于v1.6.0版本
 ---
