@@ -4,7 +4,7 @@ linkTitle: "WebAssembly 在 MOSN 中的实践 - 基础框架篇"
 date: 2021-03-22
 author: "[叶永杰](https://github.com/antJack)"
 description: "本文将着重叙述 MOSN 中的 Wasm 扩展框架，并介绍我们在 Proxy-Wasm 这一开源规范上的贡献。"
-aliases: “/zh/blog/posts/mosn-wasm-framework"
+aliases: "/zh/blog/posts/mosn-wasm-framework"
 ---
 
 作为金融级服务网格中的流量代理组件，MOSN 在承载蚂蚁数十万服务容器之间流量的同时，也承载着诸多例如限流、鉴权、路由等中间件基础能力。这些能力以不同的扩展形式与 MOSN 运行于同一进程内。非隔离的运行方式在保障性能的同时，却也给 MOSN 带来了不可预知的安全风险。

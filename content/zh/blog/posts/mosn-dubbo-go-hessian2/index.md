@@ -4,7 +4,7 @@ linkTitle: "记一次在 MOSN 对 Dubbo、dubbo-go-hessian2 的性能优化"
 date: 2020-06-02
 author: "[商宗海](https://github.com/zonghaishang)"
 description: "本文会重点描述在基于 Go 语言库 dubbo-go-hessian2 、Dubbo 协议中对 MOSN 所做的性能优化。"
-aliases: “/zh/blog/posts/mosn-dubbo-go-hessian2"
+aliases: "/zh/blog/posts/mosn-dubbo-go-hessian2"
 ---
 
 蚂蚁集团内部对 Service Mesh 的稳定性和性能要求是比较高的，内部 MOSN 广泛用于生产环境。在云上和开源社区，RPC 领域 Dubbo 和 Spring Cloud 同样广泛用于生产环境，我们在 MOSN 基础上，支持了 Dubbo 和 spring cloud 流量代理。我们发现在支持 Dubbo 协议过程中，经过 Mesh 流量代理后，性能有非常大的性能损耗，在大商户落地 Mesh 中也对性能有较高要求，因此本文会重点描述在基于 Go 语言库 [dubbo-go-hessian2](https://github.com/apache/dubbo-go-hessian2) 、Dubbo 协议中对 [MOSN](https://github.com/mosn/mosn) 所做的性能优化。
