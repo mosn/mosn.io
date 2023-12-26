@@ -12,7 +12,7 @@ description: MOSN 源码解析基于v1.6.0版本
 
 ## MOSN 启动入口
 
-MOSN 利用 cli 组件 （github.com/urfave/cli）来实现命令行的控制。制动之后默认执行 cmdStart 命令，之后就进入下面的启动逻辑。
+MOSN 利用 cli 组件 （github.com/urfave/cli）来实现命令行的控制。启动之后默认执行 cmdStart 命令，之后就进入下面的启动逻辑。
 
 在 control.go 文件中 _cmdStart.Action_ 方法是整个 MOSN 启动的入口方法。首先调用 _NewMosn()_ 这个方法只是返回了一个空的 _Mosn_ 对象，该对象代表着 _Mosn_ 应用，该对象定义如下：
 
