@@ -62,14 +62,14 @@ MOSN 中通过 `cluster_manager` 来管理转发的集群地址，通常与 [Rou
 - `name`，字符串。用作 Cluster 的唯一标识。
 - `type`，字符串。用于表示 Cluster 的类型，目前支持的类型如下：
   - SIMPLE，是最基础的类型。
-  - ORIGINAL_DST，该种类型的
+  - ORIGINAL_DST，该种类型的一般会在透明劫持场景中使用，他会自动的把负载均衡 `lb_type` 修改成 LB_ORIGINAL_DST 类型，具体作用见下文
   - STRICT_DNS，该种类型会动态解析 Cluster 中的域名列表，并将域名对应的 A 记录全部加入转发列表中。
 - `sub_type`，已废弃。
 - `lb_type`，字符串。在集群中选择主机时使用的负载平衡器类型，目前支持的类型如下：
   - LB_ROUNDROBIN，不带权重的轮训转发。
   - LB_RANDOM，随机转发。
   - LB_WEIGHTED_ROUNDROBIN，根据 host 的权重转发。
-  - LB_ORIGINAL_DST，在透明劫持场景下使用原始目标地址做转发，也可以通过请求 header 设置目标地址。
+  - LB_ORIGINAL_DST，在透明劫持场景下使用原始目标地址做转发，也可以通过请求 header 设置目标地址，详情可看 `original_dst_lb_config` 配置项。
   - LB_LEAST_REQUEST，选择请求数最少的 host 转发。
   - LB_MAGLEV，一致性 hash 转发。
   - LB_REQUEST_ROUNDROBIN，同一个请求粒度的轮训转发。
