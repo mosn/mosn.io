@@ -1,6 +1,6 @@
 ---
-title: "以一次RPC请求为例探索 MOSN的 工作流程"
-linkTitle: "以一次RPC请求为例探索 MOSN 的工作流程"
+title: "以一次 RPC 请求为例探索 MOSN的 工作流程"
+linkTitle: "以一次 RPC 请求为例探索 MOSN 的工作流程"
 date: 2024-03-11
 author: "[wangchengming666](https://github.com/wangchengming666)"
 description: "本文以工作中非常常见的一个思路为出发点，详细描述了 MOSN 内部网络转发的详细流程，可以帮助小伙伴加深对 MOSN 的理解。"
