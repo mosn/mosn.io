@@ -1,6 +1,6 @@
 ---
-title: "以一次RPC请求为例探索MOSN的工作流程"
-linkTitle: "以一次RPC请求为例探索MOSN的工作流程"
+title: "以一次RPC请求为例探索 MOSN的 工作流程"
+linkTitle: "以一次RPC请求为例探索 MOSN 的工作流程"
 date: 2024-03-11
 author: "[wangchengming666](https://github.com/wangchengming666)"
 description: "本文以工作中非常常见的一个思路为出发点，详细描述了 MOSN 内部网络转发的详细流程，可以帮助小伙伴加深对 MOSN 的理解。"
@@ -18,7 +18,7 @@ MOSN 作为数据面，整体 NET/IO、Protocol、Stream、Proxy 四个层次组
 - Stream 用于封装请求和响应，在一个 conn 上做连接复用
 - Proxy 做 downstream 和 upstream 之间 stream 的转发
 
-那么 MOSN 是如何工作的呢？下图展示的是使用 Sidecar 方式部署运行 MOSN 的示意图，服务和 MOSN 分别部署在同机部署的 Pod 上， 您可以在配置文件中设置 MOSN 的上游和下游协议，协议可以在 HTTP、HTTP2.0、以及SOFA RPC 等中选择。
+那么 MOSN 是如何工作的呢？下图展示的是使用 Sidecar 方式部署运行 MOSN 的示意图，您可以在配置文件中设置 MOSN 的上游和下游协议，协议可以在 HTTP、HTTP2.0、以及SOFA RPC 等中选择。
 ![img.png](img.png)
 以上内容来自官网 https://mosn.io/
 
@@ -76,7 +76,7 @@ func (c *connection) startRWLoop(lctx context.Context) {
 }
 ```
 ### 3.2 Protocol 处理
-Protocol 作为多协议引擎层，对数据包进行检测，并使用对应协议做 decode/encode 处理。mosn 会循环解码，一旦收到完整的报文就会创建与其关联的 xstream，用于保持 tcp 连接用于后续响应。
+Protocol 作为多协议引擎层，对数据包进行检测，并使用对应协议做 decode/encode 处理。MOSN 会循环解码，一旦收到完整的报文就会创建与其关联的 xstream，用于保持 tcp 连接用于后续响应。
 ```
 // 代码路径 mosn.io/mosn/pkg/stream/xprotocol/conn.go
 func (sc *streamConn) Dispatch(buf types.IoBuffer) {
@@ -197,7 +197,7 @@ func (sc *streamConn) handleFrame(ctx context.Context, frame api.XFrame) {
 	}
 }
 ```
-一旦准备好转发就会通过upstreamRequest选择的下游主机直接发送write请求，请求的协程此时会被阻塞。
+一旦准备好转发就会通过 upstreamRequest 选择的下游主机直接发送 write 请求，请求的协程此时会被阻塞。
 ```
 // 代码路径 mosn.io/mosn/pkg/stream/xprotocol/stream.go
 func (s *xStream) endStream() {
