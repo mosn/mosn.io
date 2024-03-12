@@ -39,7 +39,7 @@ jobs:
         extended: true
     - name: Build
       run: hugo --minify
-    # 设置阿里云OSS的 id/secret，存储到 github 的 secrets 中
+    # 设置阿里云OSS的 id/secret，存储到 github 的 secrets
     - name: setup aliyun oss
       uses: manyuanrong/setup-ossutil@v2.0
       with:
