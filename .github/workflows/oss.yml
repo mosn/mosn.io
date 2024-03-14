@@ -1,6 +1,6 @@
 name: deploy to aliyun oss
 
-on: 
+on:
   push:
     branches:
       - master
@@ -8,48 +8,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    # 切代码到 runner
-    - uses: actions/checkout@v1
-      with:
-        submodules: true
-    - name: Fix git safe.directory in container
-      run: mkdir -p /home/runner/work/_temp/_github_home && printf "[safe]\n\tdirectory = /github/workspace" > /home/runner/work/_temp/_github_home/.gitconfig    
-    # 下载 git submodule
-    - uses: srt32/git-actions@v0.0.3
-      with:
-        args: git submodule update --init --recursive
-    # 使用 node:10
-    - name: use Node.js 10.x
-      uses: actions/setup-node@v1
-      with:
-        node-version: 10.x
-    # npm install
-    - name: npm install and build
-      run: |
-        npm install --save-dev autoprefixer
-        npm install -D postcss
-        npm install --save-dev postcss-cli
-      env:
-        CI: true
-    - name: Setup Hugo
-      uses: peaceiris/actions-hugo@v2
-      with:
-#        hugo-version: '0.119.0'
-        hugo-version: '0.55.5'
-        extended: true
-    - name: Build
-      run: hugo --minify
-    # 设置阿里云OSS的 id/secret，存储到 github 的 secrets
-    - name: setup aliyun oss
-      uses: manyuanrong/setup-ossutil@v2.0
-      with:
-        endpoint: http://oss-cn-beijing.aliyuncs.com
-        access-key-id: ${{ secrets.OSS_ACCESS_KEY_ID }}
-        access-key-secret: ${{ secrets.OSS_ACCESS_KEY_SECRET }}
-    - name: pwd
-      run: pwd && ls 
-    - name: cp files to aliyun
-      run: ossutil cp -rf --acl public-read-write ./public oss://mosnio
-
+      # deploy
+      - uses: 15669072513/gitdoc-build-upload-oss@main
+        with:
+          access_key: ${{ secrets.OSS_ACCESS_KEY_ID }}
+          access_secret: ${{ secrets.OSS_ACCESS_KEY_SECRET }}
+          endpoint: http://oss-cn-beijing.aliyuncs.com
+          bucket: oss://mosnio
 
 
