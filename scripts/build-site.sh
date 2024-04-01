@@ -1,3 +1,3 @@
 #!/bin/bash
-npm run install
+npm  install
 hugo
