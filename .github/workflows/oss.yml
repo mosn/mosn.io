@@ -15,5 +15,6 @@ jobs:
           access_secret: ${{ secrets.OSS_ACCESS_KEY_SECRET }}
           endpoint: http://oss-cn-hongkong.aliyuncs.com
           bucket: oss://mosniohk
+          build_script_path: scripts/build-site.sh
 
 
