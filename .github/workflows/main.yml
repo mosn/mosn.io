@@ -6,7 +6,6 @@ jobs:
     steps:
       - name: Git checkout
         uses: actions/checkout@v2
-
       - name: Setup hugo
         uses: peaceiris/actions-hugo@v2
         with:
@@ -22,6 +21,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: '15669072513/layotto'
+          path: "./layotto"
 
       - run: ls && cd layotto &&   node -v && npm run build --config docs && mv  docs/build/* ../public/layotto && ls ../public/layotto
 
