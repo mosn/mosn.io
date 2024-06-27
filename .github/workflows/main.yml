@@ -17,7 +17,7 @@ jobs:
       - name: Build
         # remove --minify tag if you do not need itasdfsadfas 
         # docs: https://gohugo.io/hugo-pipes/minification/
-        run: hugo
+        run: hugo && rm -rf public/layotto
 #      - name: Deploy
 #        uses: peaceiris/actions-gh-pages@v3
 #        with:
