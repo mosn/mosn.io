@@ -17,7 +17,14 @@ jobs:
       - name: Build
         # remove --minify tag if you do not need itasdfsadfas 
         # docs: https://gohugo.io/hugo-pipes/minification/
-        run: hugo 
+        run: hugo
+      - name: Git checkout
+        uses: actions/checkout@v2
+        with:
+          repository: '15669072513/layotto'
+
+      - run: ls && cd layotto &&   node -v && npm run build --config docs && mv  docs/build/* ../public/layotto && ls ../public/layotto
+
 #      - name: Deploy
 #        uses: peaceiris/actions-gh-pages@v3
 #        with:
