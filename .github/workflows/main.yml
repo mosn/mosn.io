@@ -23,7 +23,7 @@ jobs:
           repository: '15669072513/layotto'
           path: "./layotto"
 
-      - run: ls && cd layotto &&   node -v && npm run build --config docs && mv  docs/build/* ../public/layotto && ls ../public/layotto
+      - run: ls layotto && cd layotto &&  npm install && npm run build --config docs && mv  docs/build/* ../public/layotto && ls ../public/layotto
 
 #      - name: Deploy
 #        uses: peaceiris/actions-gh-pages@v3
